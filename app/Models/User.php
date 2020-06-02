@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -35,5 +35,15 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    const PLAIN_USER_ROLE = 'plain';
+    const ESTATE_USER_ROLE = 'estate';
+    const ADMIN_USER_ROLE = 'admin';
+
+    const ROLES = [
+        self::PLAIN_USER_ROLE => 'Plain User',
+        self::ESTATE_USER_ROLE => 'Estate Agent',
+        self::ADMIN_USER_ROLE => 'Admin',
     ];
 }

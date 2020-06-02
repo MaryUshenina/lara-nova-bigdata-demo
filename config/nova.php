@@ -58,7 +58,7 @@ return [
     |
     */
 
-    'path' => '/nova',
+    'path' => '/',
 
     /*
     |--------------------------------------------------------------------------
@@ -100,6 +100,7 @@ return [
     'middleware' => [
         'web',
         Authenticate::class,
+        'verified',
         DispatchServingNovaEvent::class,
         BootTools::class,
         Authorize::class,
