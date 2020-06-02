@@ -36,4 +36,14 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    const PLAIN_USER_ROLE = 'plain';
+    const ESTATE_USER_ROLE = 'estate';
+    const ADMIN_USER_ROLE = 'admin';
+
+    const ROLES = [
+        self::PLAIN_USER_ROLE => 'Plain User',
+        self::ESTATE_USER_ROLE => 'Estate Agent',
+        self::ADMIN_USER_ROLE => 'Admin',
+    ];
 }
