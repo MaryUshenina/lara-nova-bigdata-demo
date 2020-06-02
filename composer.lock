@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f323a6a3b29b8475fad610c69638275",
+    "content-hash": "7ff40161bc5c5788beaac461624dd6a2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4504,6 +4504,48 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2019-10-24T08:53:34+00:00"
+        },
+        {
+            "name": "treestoneit/text-wrap",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/treeStoneIT/text-wrap.git",
+                "reference": "d3b86d8a5d47bf5b5738754431b7a19f11d27a07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/treeStoneIT/text-wrap/zipball/d3b86d8a5d47bf5b5738754431b7a19f11d27a07",
+                "reference": "d3b86d8a5d47bf5b5738754431b7a19f11d27a07",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Treestoneit\\TextWrap\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Treestoneit\\TextWrap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova Wrapped Text field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "abandoned": true,
+            "time": "2018-08-31T16:33:15+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
