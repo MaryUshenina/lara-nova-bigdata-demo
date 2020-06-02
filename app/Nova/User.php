@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
@@ -65,8 +66,9 @@ class User extends Resource
 
             Select::make(\__('Role'), 'role')->options(self::$model::ROLES)
                 ->displayUsingLabels()
-                ->rules('required', Rule::in(array_keys(self::$model::ROLES)))
-,
+                ->rules('required', Rule::in(array_keys(self::$model::ROLES))),
+
+            HasMany::make('Ads'),
         ];
     }
 
