@@ -13,6 +13,8 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
+use Treestoneit\TextWrap\TextWrap;
+
 //use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Ad extends Resource
@@ -53,13 +55,20 @@ class Ad extends Resource
             Text::make(__('Title'), 'title')
                 ->rules('required', 'max:255'),
 
+            // description for index page
+            TextWrap::make(__('Description'), 'description')
+                ->rules('required', 'max:1000')
+                ->displayUsing(function ($str) {
+                    return Str::limit($str, 255);
+                })
+                ->wrapMethod('length', 100),
+
+            // description for other pages
             Textarea::make(__('Description'), 'description')
                 ->alwaysShow()
-                ->rules('required', 'max:1000')
-                ->showOnIndex()
-                ->displayUsing(function ($str) {
-                    return Str::limit($str, 50);
-                }),
+                ->rules('required', 'max:1000'),
+
+            //end description
 
             Text::make(__('Email'), 'email')
                 ->onlyOnForms()
