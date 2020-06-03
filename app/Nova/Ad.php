@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
@@ -16,6 +17,8 @@ use Laravel\Nova\Fields\Textarea;
 use Treestoneit\TextWrap\TextWrap;
 
 //use Laravel\Nova\Http\Requests\NovaRequest;
+
+use Yassi\NestedForm\NestedForm;
 
 class Ad extends Resource
 {
@@ -92,6 +95,10 @@ class Ad extends Resource
                 ->displayUsing(function ($date) {
                     return $date->format('m.d.y h:i a');
                 }),
+
+            HasMany::make('Photos'),
+
+            NestedForm::make('Photos'),
 
         ];
     }
