@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -54,6 +55,12 @@ class Ad extends Resource
     public function fields(Request $request)
     {
         return [
+
+            Image::make(__('Image'), 'filename')
+                ->displayUsing(function () {
+                    return $this->photos()->first()->filename ?? 'no_image.png';
+                })
+                ->onlyOnIndex(),
 
             Text::make(__('Title'), 'title')
                 ->rules('required', 'max:255'),
