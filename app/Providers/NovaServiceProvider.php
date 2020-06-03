@@ -24,6 +24,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             Ad::observe(AdObserver::class);
         });
 
+        Nova::style('custom-style', public_path('css/custom.css') );
     }
 
     /**
