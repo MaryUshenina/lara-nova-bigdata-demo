@@ -106,10 +106,10 @@ class Ad extends Resource
                 ->onlyOnForms()
                 ->rules('required'),
 
-            Text::make(__('Created'), 'created_at')->readonly()
-                ->displayUsing(function ($date) {
-                    return $date->format('m.d.y h:i a');
-                }),
+            Text::make(__('Created'), function () {
+                return $this->created_at->format('m.d.y h:i a');
+            })
+                ->asHtml(),
 
             HasMany::make('Photos'),
 
