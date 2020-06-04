@@ -62,7 +62,15 @@ class Ad extends Resource
                 })
                 ->onlyOnIndex(),
 
+            Text::make(__('Title'), function () {
+                // todo: optimize getting resource link
+                return "<a href='/resources/ads/$this->id'>$this->title</a>";
+            })
+                ->onlyOnIndex()
+                ->asHtml(),
+
             Text::make(__('Title'), 'title')
+                ->hideFromIndex()
                 ->rules('required', 'max:255'),
 
             // description for index page
