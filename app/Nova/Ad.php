@@ -47,6 +47,9 @@ class Ad extends Resource
         'title',
     ];
 
+
+    public static $perPageOptions = [15];
+
     /**
      * Get the fields displayed by the resource.
      *
