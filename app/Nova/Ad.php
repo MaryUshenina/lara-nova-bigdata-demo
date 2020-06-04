@@ -61,7 +61,10 @@ class Ad extends Resource
                 ->displayUsing(function () {
                     return $this->photos()->first()->filename ?? 'no_image.png';
                 })
-                ->onlyOnIndex(),
+                ->disableDownload()
+                ->exceptOnForms()
+                ->showOnDetail()
+                ->showOnIndex(),
 
             Text::make(__('Title'), function () {
                 // todo: optimize getting resource link
