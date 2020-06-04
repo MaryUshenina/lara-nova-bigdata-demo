@@ -77,6 +77,11 @@ class Ad extends Resource
                 ->hideFromIndex()
                 ->rules('required', 'max:255'),
 
+            Text::make(__('Created'), function () {
+                return $this->created_at->format('m.d.y h:i a');
+            })
+                ->asHtml(),
+            
             // description for index page
             TextWrap::make(__('Description'), 'description')
                 ->rules('required', 'max:1000')
@@ -93,29 +98,25 @@ class Ad extends Resource
             //end description
 
             Text::make(__('Email'), 'email')
-                ->onlyOnForms()
+                ->hideFromIndex()
                 ->rules('required', 'email', 'max:254'),
 
             InputMask::make(__('Phone'), 'phone')
                 ->mask('+1 (###) ###-####')
-                ->raw()
-                ->onlyOnForms()
+                ->hideFromIndex()
                 ->rules('required'),
 
             Select::make(\__('Country'), 'country_id')
                 ->options([1 => 'country1', 2 => 'country2'])
                 ->rules('required')
-                ->onlyOnForms()
+                ->hideFromIndex()
                 ->displayUsingLabels(),
 
             Date::make(__('End date'), 'end_date')
                 ->onlyOnForms()
                 ->rules('required'),
 
-            Text::make(__('Created'), function () {
-                return $this->created_at->format('m.d.y h:i a');
-            })
-                ->asHtml(),
+
 
             HasMany::make('Photos'),
 
