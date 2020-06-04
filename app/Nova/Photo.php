@@ -54,7 +54,8 @@ class Photo extends Resource
                 ->rules('integer', 'nullable')
                 ->onlyOnForms(),
 
-            Image::make(__('File'), 'filename')
+            Image::make(__('Image'), 'filename')
+                ->rules('required')
         ];
     }
 
