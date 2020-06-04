@@ -20,6 +20,7 @@ use Treestoneit\TextWrap\TextWrap;
 //use Laravel\Nova\Http\Requests\NovaRequest;
 
 use Yassi\NestedForm\NestedForm;
+use Wemersonrv\InputMask\InputMask;
 
 class Ad extends Resource
 {
@@ -92,7 +93,9 @@ class Ad extends Resource
                 ->onlyOnForms()
                 ->rules('required', 'email', 'max:254'),
 
-            Text::make(__('Phone'), 'phone')
+            InputMask::make(__('Phone'), 'phone')
+                ->mask('+1 (###) ###-####')
+                ->raw()
                 ->onlyOnForms()
                 ->rules('required'),
 
