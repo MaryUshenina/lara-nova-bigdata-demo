@@ -50,7 +50,9 @@ class Photo extends Resource
 
             BelongsTo::make(__('Ad'), 'ad', Ad::class),
 
-            Text::make(__('Order'), 'order')->onlyOnForms(),
+            Text::make(__('Order'), 'order')
+                ->rules('integer', 'nullable')
+                ->onlyOnForms(),
 
             Image::make(__('File'), 'filename')
         ];
