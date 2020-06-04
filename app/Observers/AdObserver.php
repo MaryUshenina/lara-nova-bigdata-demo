@@ -17,5 +17,12 @@ class AdObserver
         return true;
     }
 
+    public function deleting(Ad $item)
+    {
+        foreach ($item->photos as $photo) {
+            $photo->delete(); // to fire events for children
+        }
+        return true;
+    }
 
 }

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Ad;
+use App\Models\User;
 use App\Observers\AdObserver;
+use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -22,6 +24,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
         Nova::serving(function () {
             Ad::observe(AdObserver::class);
+            User::observe(UserObserver::class);
         });
 
         Nova::style('custom-style', public_path('css/custom.css') );
