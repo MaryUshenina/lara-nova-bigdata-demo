@@ -176,6 +176,7 @@ return [
         App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Monarobase\CountryList\CountryListServiceProvider::class,
     ],
 
     /*

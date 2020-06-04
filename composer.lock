@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f323a6a3b29b8475fad610c69638275",
+    "content-hash": "5c69506421449bb4d9b879cadc18a16d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1549,6 +1549,63 @@
                 "storage"
             ],
             "time": "2020-05-18T15:13:39+00:00"
+        },
+        {
+            "name": "monarobase/country-list",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Monarobase/country-list.git",
+                "reference": "b5e6d1b237c4fa38c989b4bdb9917c803824c77d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Monarobase/country-list/zipball/b5e6d1b237c4fa38c989b4bdb9917c803824c77d",
+                "reference": "b5e6d1b237c4fa38c989b4bdb9917c803824c77d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.8|^6|^7",
+                "php": ">=5.6.0",
+                "umpirsky/country-list": "2.0.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Monarobase\\CountryList\\CountryListServiceProvider"
+                    ],
+                    "aliases": {
+                        "Countries": "Monarobase\\CountryList\\CountryListFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monarobase\\CountryList\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Thuau",
+                    "email": "jonathan@monarobase.net",
+                    "homepage": "https://monarobase.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "List of all countries with names and ISO 3166-1 codes in all languages and data formats for Laravel",
+            "keywords": [
+                "countries",
+                "laravel"
+            ],
+            "time": "2020-03-10T15:42:14+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4506,6 +4563,90 @@
             "time": "2019-10-24T08:53:34+00:00"
         },
         {
+            "name": "treestoneit/text-wrap",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/treeStoneIT/text-wrap.git",
+                "reference": "d3b86d8a5d47bf5b5738754431b7a19f11d27a07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/treeStoneIT/text-wrap/zipball/d3b86d8a5d47bf5b5738754431b7a19f11d27a07",
+                "reference": "d3b86d8a5d47bf5b5738754431b7a19f11d27a07",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Treestoneit\\TextWrap\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Treestoneit\\TextWrap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova Wrapped Text field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "abandoned": true,
+            "time": "2018-08-31T16:33:15+00:00"
+        },
+        {
+            "name": "umpirsky/country-list",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/umpirsky/country-list.git",
+                "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/umpirsky/country-list/zipball/05fda51cd97b3294e8175ffed06104c44b3c71d7",
+                "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "slowprog/composer-copy-file": "^0.2",
+                "symfony/intl": "^4.2",
+                "umpirsky/list-generator": "^1.2"
+            },
+            "type": "library",
+            "extra": {
+                "copy-file": {
+                    "vendor/umpirsky/list-generator/Dockerfile": "./",
+                    "vendor/umpirsky/list-generator/docker-compose.yml": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Saša Stamenković",
+                    "email": "umpirsky@gmail.com"
+                }
+            ],
+            "description": "List of all countries with names and ISO 3166-1 codes in all languages and data formats.",
+            "time": "2019-04-12T14:29:29+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v4.1.6",
             "source": {
@@ -4616,6 +4757,96 @@
                 "php"
             ],
             "time": "2020-05-26T06:40:44+00:00"
+        },
+        {
+            "name": "wemersonrv/input-mask",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wemersonrv/input-mask.git",
+                "reference": "1db6ea224bcd4a56e8bccf9a38b975d126a651a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wemersonrv/input-mask/zipball/1db6ea224bcd4a56e8bccf9a38b975d126a651a9",
+                "reference": "1db6ea224bcd4a56e8bccf9a38b975d126a651a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wemersonrv\\InputMask\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wemersonrv\\InputMask\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "A Laravel Nova custom field text with masks on input",
+            "keywords": [
+                "field",
+                "laravel",
+                "mask",
+                "nova"
+            ],
+            "time": "2019-05-16T17:15:26+00:00"
+        },
+        {
+            "name": "yassi/nova-nested-form",
+            "version": "v3.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yassipad/laravel-nova-nested-form.git",
+                "reference": "98e9ef2b84a94440a9ac022ca0b0b996a251ab25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yassipad/laravel-nova-nested-form/zipball/98e9ef2b84a94440a9ac022ca0b0b996a251ab25",
+                "reference": "98e9ef2b84a94440a9ac022ca0b0b996a251ab25",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "laravel/nova": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Yassi\\NestedForm\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yassi\\NestedForm\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova package that allows you to create/update/delete nested related fields from a parent form.",
+            "keywords": [
+                "form",
+                "laravel",
+                "nested",
+                "nova",
+                "relationship"
+            ],
+            "time": "2020-03-14T07:13:09+00:00"
         }
     ],
     "packages-dev": [
@@ -6618,5 +6849,6 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use SoftDeletes;
+    
     use Notifiable;
 
     /**
@@ -46,4 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
         self::ESTATE_USER_ROLE => 'Estate Agent',
         self::ADMIN_USER_ROLE => 'Admin',
     ];
+
+    public function ads()
+    {
+        return $this->hasMany(Ad::class);
+    }
 }
