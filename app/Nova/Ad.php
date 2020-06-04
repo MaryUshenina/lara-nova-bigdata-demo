@@ -79,7 +79,7 @@ class Ad extends Resource
                 ->displayUsing(function ($str) {
                     return Str::limit($str, 255);
                 })
-                ->wrapMethod('length', 100),
+                ->wrapMethod('length', 60),
 
             // description for other pages
             Textarea::make(__('Description'), 'description')
