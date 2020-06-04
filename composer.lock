@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc3b84db3d3e983d3c10d68af383a687",
+    "content-hash": "60103136c54c2a53eb8d46f4ccb80c1a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4660,6 +4660,49 @@
             "time": "2020-05-26T06:40:44+00:00"
         },
         {
+            "name": "wemersonrv/input-mask",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wemersonrv/input-mask.git",
+                "reference": "1db6ea224bcd4a56e8bccf9a38b975d126a651a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wemersonrv/input-mask/zipball/1db6ea224bcd4a56e8bccf9a38b975d126a651a9",
+                "reference": "1db6ea224bcd4a56e8bccf9a38b975d126a651a9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wemersonrv\\InputMask\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wemersonrv\\InputMask\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "A Laravel Nova custom field text with masks on input",
+            "keywords": [
+                "field",
+                "laravel",
+                "mask",
+                "nova"
+            ],
+            "time": "2019-05-16T17:15:26+00:00"
+        },
+        {
             "name": "yassi/nova-nested-form",
             "version": "v3.0.7",
             "source": {
@@ -6707,5 +6750,6 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
