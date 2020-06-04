@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60103136c54c2a53eb8d46f4ccb80c1a",
+    "content-hash": "5c69506421449bb4d9b879cadc18a16d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1549,6 +1549,63 @@
                 "storage"
             ],
             "time": "2020-05-18T15:13:39+00:00"
+        },
+        {
+            "name": "monarobase/country-list",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Monarobase/country-list.git",
+                "reference": "b5e6d1b237c4fa38c989b4bdb9917c803824c77d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Monarobase/country-list/zipball/b5e6d1b237c4fa38c989b4bdb9917c803824c77d",
+                "reference": "b5e6d1b237c4fa38c989b4bdb9917c803824c77d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.8|^6|^7",
+                "php": ">=5.6.0",
+                "umpirsky/country-list": "2.0.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Monarobase\\CountryList\\CountryListServiceProvider"
+                    ],
+                    "aliases": {
+                        "Countries": "Monarobase\\CountryList\\CountryListFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monarobase\\CountryList\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Thuau",
+                    "email": "jonathan@monarobase.net",
+                    "homepage": "https://monarobase.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "List of all countries with names and ISO 3166-1 codes in all languages and data formats for Laravel",
+            "keywords": [
+                "countries",
+                "laravel"
+            ],
+            "time": "2020-03-10T15:42:14+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4546,6 +4603,48 @@
             ],
             "abandoned": true,
             "time": "2018-08-31T16:33:15+00:00"
+        },
+        {
+            "name": "umpirsky/country-list",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/umpirsky/country-list.git",
+                "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/umpirsky/country-list/zipball/05fda51cd97b3294e8175ffed06104c44b3c71d7",
+                "reference": "05fda51cd97b3294e8175ffed06104c44b3c71d7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "slowprog/composer-copy-file": "^0.2",
+                "symfony/intl": "^4.2",
+                "umpirsky/list-generator": "^1.2"
+            },
+            "type": "library",
+            "extra": {
+                "copy-file": {
+                    "vendor/umpirsky/list-generator/Dockerfile": "./",
+                    "vendor/umpirsky/list-generator/docker-compose.yml": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Saša Stamenković",
+                    "email": "umpirsky@gmail.com"
+                }
+            ],
+            "description": "List of all countries with names and ISO 3166-1 codes in all languages and data formats.",
+            "time": "2019-04-12T14:29:29+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

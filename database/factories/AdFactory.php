@@ -23,7 +23,7 @@ $factory->define(Ad::class, function (Faker $faker) {
         'title' => $faker->sentence,
         'description' => $faker->text(1000),
         'phone' => $faker->phoneNumber,
-        'country_id' => 1,
+        'country' => 'US',
         'email' =>$faker->email,
         'end_date' =>$faker->date(),
     ];

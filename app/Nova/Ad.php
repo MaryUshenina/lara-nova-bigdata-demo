@@ -106,8 +106,8 @@ class Ad extends Resource
                 ->hideFromIndex()
                 ->rules('required'),
 
-            Select::make(\__('Country'), 'country_id')
-                ->options([1 => 'country1', 2 => 'country2'])
+            Select::make(\__('Country'), 'country')
+                ->options(\Countries::getList('en'))
                 ->rules('required')
                 ->hideFromIndex()
                 ->displayUsingLabels(),
