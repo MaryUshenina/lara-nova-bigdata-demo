@@ -127,6 +127,10 @@ class Ad extends Resource
             NestedForm::make('Photos'),
 
             NovaGoogleMaps::make(__('Address'), 'location')
+                ->hideFromIndex()
+                ->hideFromDetail(function () {
+                    return is_null($this->location_lat) || !$this->location_lat;
+                })
                 ->setValue($this->location_lat, $this->location_lng),
         ];
     }
