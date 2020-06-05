@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Jfeid\NovaGoogleMaps\NovaGoogleMaps;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
@@ -84,7 +85,7 @@ class Ad extends Resource
                 return $this->created_at->format('m.d.y h:i a');
             })
                 ->asHtml(),
-            
+
             // description for index page
             TextWrap::make(__('Description'), 'description')
                 ->rules('required', 'max:1000')
@@ -125,6 +126,8 @@ class Ad extends Resource
 
             NestedForm::make('Photos'),
 
+            NovaGoogleMaps::make(__('Address'), 'location')
+                ->setValue($this->location_lat, $this->location_lng),
         ];
     }
 
