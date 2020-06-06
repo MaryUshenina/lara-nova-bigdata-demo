@@ -20,10 +20,14 @@ class UserPolicy
         //
     }
 
-
-    public function viewAny(User $authUser)
+    public function view(User $authUser, User $user)
     {
-        return $authUser->isAdmin();
+        return $authUser->isAdmin() || ($user->id == $authUser->id);
+    }
+
+    public function detail(User $authUser, User $user)
+    {
+        return $authUser->isAdmin() || ($user->id == $authUser->id);
     }
 
     public function update(User $authUser, User $user)

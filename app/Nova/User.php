@@ -115,4 +115,10 @@ class User extends Resource
     {
         return [];
     }
+
+    public static function availableForNavigation(Request $request)
+    {
+        return Auth::user()->isAdmin();
+    }
+
 }
