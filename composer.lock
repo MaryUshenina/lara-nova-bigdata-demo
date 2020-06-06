@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c60713b7d574b481d3763830569ccad",
+    "content-hash": "59629565c32f81a4ca7ec3cbb9fb3528",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1068,16 +1068,16 @@
         },
         {
             "name": "jfeid/nova-google-maps",
-            "version": "v1.2",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MaryUshenina/nova-google-maps.git",
-                "reference": "e803c32b5054f289d9d5c83e7c09a8f46f324bb6"
+                "reference": "3aab3499f1c7cafe433855a92257415e473a92ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MaryUshenina/nova-google-maps/zipball/e803c32b5054f289d9d5c83e7c09a8f46f324bb6",
-                "reference": "e803c32b5054f289d9d5c83e7c09a8f46f324bb6",
+                "url": "https://api.github.com/repos/MaryUshenina/nova-google-maps/zipball/3aab3499f1c7cafe433855a92257415e473a92ae",
+                "reference": "3aab3499f1c7cafe433855a92257415e473a92ae",
                 "shasum": ""
             },
             "require": {
@@ -1117,9 +1117,9 @@
                 "nova"
             ],
             "support": {
-                "source": "https://github.com/MaryUshenina/nova-google-maps/tree/v1.2"
+                "source": "https://github.com/MaryUshenina/nova-google-maps/tree/v1.2.1"
             },
-            "time": "2020-06-05T07:59:17+00:00"
+            "time": "2020-06-05T13:51:35+00:00"
         },
         {
             "name": "laravel/framework",

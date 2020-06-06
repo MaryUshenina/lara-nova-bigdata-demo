@@ -4,7 +4,9 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Jfeid\NovaGoogleMaps\NovaGoogleMaps;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\HasMany;
@@ -16,6 +18,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Treestoneit\TextWrap\TextWrap;
 
 //use Laravel\Nova\Http\Requests\NovaRequest;
@@ -128,10 +131,19 @@ class Ad extends Resource
 
             NovaGoogleMaps::make(__('Address'), 'location')
                 ->hideFromIndex()
+                ->rules([Rule::requiredIf(function () use ($request) {
+                    if($request->location_lat){
+                        return false;
+                    }
+                    return !$request->save_without_address;
+                })])
                 ->hideFromDetail(function () {
                     return is_null($this->location_lat) || !$this->location_lat;
                 })
                 ->setValue($this->location_lat, $this->location_lng),
+
+            Boolean::make(__('Save without address'), 'save_without_address')
+                ->onlyOnForms()
         ];
     }
 
@@ -178,4 +190,23 @@ class Ad extends Resource
     {
         return [];
     }
+
+
+    protected static function fillFields(NovaRequest $request, $model, $fields)
+    {
+        $fillFields = parent::fillFields($request, $model, $fields);
+
+        // first element should be model object
+        $modelObject = $fillFields[0];
+
+        if($modelObject->save_without_address){
+            $modelObject->location_lat = null;
+            $modelObject->location_lng = null;
+        }
+        unset($modelObject->save_without_address);
+
+        return $fillFields;
+    }
+
+
 }
