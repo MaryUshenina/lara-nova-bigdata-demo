@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Jfeid\NovaGoogleMaps\NovaGoogleMaps;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -130,6 +131,12 @@ class Ad extends Resource
 
             NovaGoogleMaps::make(__('Address'), 'location')
                 ->hideFromIndex()
+                ->rules([Rule::requiredIf(function () use ($request) {
+                    if($request->location_lat){
+                        return false;
+                    }
+                    return !$request->save_without_address;
+                })])
                 ->hideFromDetail(function () {
                     return is_null($this->location_lat) || !$this->location_lat;
                 })
@@ -193,8 +200,8 @@ class Ad extends Resource
         $modelObject = $fillFields[0];
 
         if($modelObject->save_without_address){
-            unset($modelObject->location_lat);
-            unset($modelObject->location_lng);
+            $modelObject->location_lat = null;
+            $modelObject->location_lng = null;
         }
         unset($modelObject->save_without_address);
 
