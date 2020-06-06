@@ -22,22 +22,27 @@ class UserPolicy
 
     public function view(User $authUser, User $user)
     {
-        return $authUser->isAdmin() || ($user->id == $authUser->id);
+        return $authUser->isAdmin() || $this->isEqUsers($authUser, $user);
     }
 
     public function detail(User $authUser, User $user)
     {
-        return $authUser->isAdmin() || ($user->id == $authUser->id);
+        return $authUser->isAdmin() || $this->isEqUsers($authUser, $user);
     }
 
     public function update(User $authUser, User $user)
     {
-        return $authUser->isAdmin() || ($user->id == $authUser->id);
+        return $authUser->isAdmin() || $this->isEqUsers($authUser, $user);
     }
 
     public function delete(User $authUser, User $user)
     {
         // admin user cant delete himself for security reasons
-        return $authUser->isAdmin() && ($user->id != $authUser->id);
+        return $authUser->isAdmin() && !$this->isEqUsers($authUser, $user);
+    }
+
+    private function isEqUsers(User $authUser, User $user)
+    {
+        return $user->id == $authUser->id;
     }
 }
