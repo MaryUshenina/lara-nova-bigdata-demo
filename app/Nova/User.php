@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\RequestForEstateRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -72,11 +73,15 @@ class User extends Resource
 
             Select::make(\__('Role'), 'role')->options(self::$model::ROLES)
                 ->displayUsingLabels()
-                ->onlyOnIndex()
+                ->showOnIndex()
+                ->showOnDetail()
                 ->sortable()
                 ->rules('required', Rule::in(array_keys(self::$model::ROLES))),
 
-            HasMany::make('Ads'),
+            HasMany::make('Ads')
+                ->canSee(function () {
+                    return !$this->isPlain();
+                }),
         ];
     }
 
@@ -121,7 +126,12 @@ class User extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            (new RequestForEstateRole())
+                ->canSee(function ($request) {
+                    return $request->user()->can('seeEstateRequestButton', \App\Models\User::class);
+                }),
+        ];
     }
 
     public static function availableForNavigation(Request $request)

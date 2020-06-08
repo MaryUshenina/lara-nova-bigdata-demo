@@ -45,4 +45,19 @@ class UserPolicy
     {
         return $user->id == $authUser->id;
     }
+
+    public function seeEstateRequestButton(User $authUser)
+    {
+        return $authUser->isPlain();
+    }
+
+    public function runEstateRequest(User $authUser)
+    {
+        return $authUser->isPlain()
+            && !$authUser->estateRequests()
+                ->exists();
+    }
+
+
+
 }

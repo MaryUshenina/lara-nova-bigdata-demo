@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use SoftDeletes;
-    
+
     use Notifiable;
 
     /**
@@ -65,8 +65,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role == self::ESTATE_USER_ROLE;
     }
 
+    public function isPlain()
+    {
+        return $this->role == self::PLAIN_USER_ROLE;
+    }
+
     public function isAuthor(Ad $ad)
     {
         return $this->id == $ad->user_id;
+    }
+
+    public function estateRequests()
+    {
+        return $this->hasMany(EstateRequest::class);
     }
 }
