@@ -64,14 +64,11 @@ class Ad extends Resource
     {
         return [
 
-            Image::make(__('Image'), 'filename')
+            Image::make(__('Image'), 'photo')
                 ->displayUsing(function () {
-                    return $this->photos()->first()->filename ?? 'no_image.png';
+                    return $this->photo ?? $this->photos()->first()->filename ?? 'no_image.png';
                 })
-                ->disableDownload()
-                ->exceptOnForms()
-                ->showOnDetail()
-                ->showOnIndex(),
+                ->disableDownload(),
 
             Text::make(__('Title'), function () {
                 // todo: optimize getting resource link
@@ -125,9 +122,9 @@ class Ad extends Resource
 
 
 
-            HasMany::make('Photos'),
+//            HasMany::make('Photos'),
 
-            NestedForm::make('Photos'),
+//            NestedForm::make('Photos'),
 
             NovaGoogleMaps::make(__('Address'), 'location')
                 ->hideFromIndex()
