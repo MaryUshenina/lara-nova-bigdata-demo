@@ -26,6 +26,8 @@ use Treestoneit\TextWrap\TextWrap;
 use Yassi\NestedForm\NestedForm;
 use Wemersonrv\InputMask\InputMask;
 
+use Klepak\NovaRouterLink\RouterLink;
+
 class Ad extends Resource
 {
     /**
@@ -70,12 +72,15 @@ class Ad extends Resource
                 })
                 ->disableDownload(),
 
-            Text::make(__('Title'), function () {
-                // todo: optimize getting resource link
-                return "<a href='/resources/ads/$this->id'>$this->title</a>";
-            })
-                ->onlyOnIndex()
-                ->asHtml(),
+            RouterLink::make(__('Title'), 'title')
+                ->route('detail',
+                    [
+                        'resourceName' => 'ads',
+                        'resourceId' => $this->id,
+                    ]
+                )
+                ->withMeta(['value' => $this->title])
+                ->onlyOnIndex(),
 
             Text::make(__('Title'), 'title')
                 ->hideFromIndex()
