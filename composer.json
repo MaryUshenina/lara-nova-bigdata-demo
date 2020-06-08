@@ -26,6 +26,7 @@
         "laravel/framework": "^7.0",
         "laravel/nova": "^3.6",
         "laravel/tinker": "^2.0",
+        "laravelrotebal/nova-router-link": "^1.1",
         "monarobase/country-list": "^3.1",
         "treestoneit/text-wrap": "^1.1",
         "wemersonrv/input-mask": "^0.1.2",
