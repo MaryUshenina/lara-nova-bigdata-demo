@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Ad;
 use App\Models\User;
+use App\Nova\Metrics\NewAds;
+use App\Nova\Metrics\NewUsers;
 use App\Observers\AdObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Gate;
@@ -67,7 +69,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function cards()
     {
         return [
-            new Help,
+            NewUsers::make(),
+            NewAds::make(),
         ];
     }
 
