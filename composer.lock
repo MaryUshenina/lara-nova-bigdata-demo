@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59629565c32f81a4ca7ec3cbb9fb3528",
+    "content-hash": "cea7bd7cc3d30473a848449495662b55",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -876,6 +876,49 @@
                 "laravel"
             ],
             "time": "2020-04-28T08:47:37+00:00"
+        },
+        {
+            "name": "gobrightspot/nova-detached-actions",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gobrightspot/nova-detached-actions.git",
+                "reference": "f058da01b6250a0eb5204adab5943075b2ebb2b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gobrightspot/nova-detached-actions/zipball/f058da01b6250a0eb5204adab5943075b2ebb2b9",
+                "reference": "f058da01b6250a0eb5204adab5943075b2ebb2b9",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^3.0",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Brightspot\\Nova\\Tools\\DetachedActions\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Brightspot\\Nova\\Tools\\DetachedActions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova tool to allow for placing actions in the Nova toolbar detached from the checkbox selection mechanism.",
+            "keywords": [
+                "detached actions",
+                "laravel",
+                "nova"
+            ],
+            "time": "2020-05-14T20:17:50+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
