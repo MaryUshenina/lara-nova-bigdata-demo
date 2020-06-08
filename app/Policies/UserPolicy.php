@@ -20,20 +20,44 @@ class UserPolicy
         //
     }
 
-
-    public function viewAny(User $authUser)
+    public function view(User $authUser, User $user)
     {
-        return $authUser->isAdmin();
+        return $authUser->isAdmin() || $this->isEqUsers($authUser, $user);
+    }
+
+    public function detail(User $authUser, User $user)
+    {
+        return $authUser->isAdmin() || $this->isEqUsers($authUser, $user);
     }
 
     public function update(User $authUser, User $user)
     {
-        return $authUser->isAdmin() || ($user->id == $authUser->id);
+        return $authUser->isAdmin() || $this->isEqUsers($authUser, $user);
     }
 
     public function delete(User $authUser, User $user)
     {
         // admin user cant delete himself for security reasons
-        return $authUser->isAdmin() && ($user->id != $authUser->id);
+        return $authUser->isAdmin() && !$this->isEqUsers($authUser, $user);
     }
+
+    private function isEqUsers(User $authUser, User $user)
+    {
+        return $user->id == $authUser->id;
+    }
+
+    public function seeEstateRequestButton(User $authUser)
+    {
+        return $authUser->isPlain();
+    }
+
+    public function runEstateRequest(User $authUser)
+    {
+        return $authUser->isPlain()
+            && !$authUser->estateRequests()
+                ->exists();
+    }
+
+
+
 }
