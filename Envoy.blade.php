@@ -1,7 +1,7 @@
 @servers(['web' => 'ushenina-ma@192.168.11.86'])
 
 @setup
-$releases_dir = $server_dir . '/releases/' . $remove_dir . '/src';
+$releases_dir = $server_dir . '/releases/' . $remove_dir ;
 $releases_git_dir = $server_dir . '/releases/' . $remove_dir . '/.git';
 $app_dir = $server_dir . '/app';
 @endsetup
@@ -24,7 +24,7 @@ mkdir -p storage
 
 @task('run_composer')
 echo "composer install"
-cd {{ $releases_dir }} /src
+cd {{ $releases_dir }}
 composer install --prefer-dist --no-scripts -q -o
 @endtask
 
