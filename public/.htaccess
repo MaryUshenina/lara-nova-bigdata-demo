@@ -1,3 +1,8 @@
+AuthType Basic
+AuthName "Rent Dashboard(test project)"
+AuthUserFile /var/www/ushenina-ma/data/.htpasswd
+require valid-user
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
