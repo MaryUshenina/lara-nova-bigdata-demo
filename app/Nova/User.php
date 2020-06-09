@@ -73,8 +73,8 @@ class User extends Resource
 
             Select::make(\__('Role'), 'role')->options(self::$model::ROLES)
                 ->displayUsingLabels()
-                ->showOnIndex()
-                ->showOnDetail()
+                ->onlyOnIndex()
+                ->readonly()
                 ->sortable()
                 ->rules('required', Rule::in(array_keys(self::$model::ROLES))),
 

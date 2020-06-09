@@ -26,6 +26,8 @@ use Treestoneit\TextWrap\TextWrap;
 use Yassi\NestedForm\NestedForm;
 use Wemersonrv\InputMask\InputMask;
 
+use Klepak\NovaRouterLink\RouterLink;
+
 class Ad extends Resource
 {
     /**
@@ -64,21 +66,21 @@ class Ad extends Resource
     {
         return [
 
-            Image::make(__('Image'), 'filename')
+            Image::make(__('Image'), 'photo')
                 ->displayUsing(function () {
-                    return $this->photos()->first()->filename ?? 'no_image.png';
+                    return $this->photo ?? $this->photos()->first()->filename ?? 'no_image.png';
                 })
-                ->disableDownload()
-                ->exceptOnForms()
-                ->showOnDetail()
-                ->showOnIndex(),
+                ->disableDownload(),
 
-            Text::make(__('Title'), function () {
-                // todo: optimize getting resource link
-                return "<a href='/resources/ads/$this->id'>$this->title</a>";
-            })
-                ->onlyOnIndex()
-                ->asHtml(),
+            RouterLink::make(__('Title'), 'title')
+                ->route('detail',
+                    [
+                        'resourceName' => 'ads',
+                        'resourceId' => $this->id,
+                    ]
+                )
+                ->withMeta(['value' => $this->title])
+                ->onlyOnIndex(),
 
             Text::make(__('Title'), 'title')
                 ->hideFromIndex()
@@ -125,9 +127,9 @@ class Ad extends Resource
 
 
 
-            HasMany::make('Photos'),
+//            HasMany::make('Photos'),
 
-            NestedForm::make('Photos'),
+//            NestedForm::make('Photos'),
 
             NovaGoogleMaps::make(__('Address'), 'location')
                 ->hideFromIndex()

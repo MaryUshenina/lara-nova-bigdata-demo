@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cea7bd7cc3d30473a848449495662b55",
+    "content-hash": "3b28220a315b795591111e6e4157b533",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1503,6 +1503,47 @@
                 "ui"
             ],
             "time": "2020-04-29T15:06:45+00:00"
+        },
+        {
+            "name": "laravelrotebal/nova-router-link",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravelrotebal/nova-router-link.git",
+                "reference": "05df55e02f447e63e2af649ad82407d6952d2085"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravelrotebal/nova-router-link/zipball/05df55e02f447e63e2af649ad82407d6952d2085",
+                "reference": "05df55e02f447e63e2af649ad82407d6952d2085",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Klepak\\NovaRouterLink\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Klepak\\NovaRouterLink\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds a field that generates a link using the Nova Router",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2020-01-27T09:06:17+00:00"
         },
         {
             "name": "league/commonmark",
