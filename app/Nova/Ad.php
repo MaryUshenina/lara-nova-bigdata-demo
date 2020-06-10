@@ -123,9 +123,8 @@ class Ad extends Resource
 
             Date::make(__('End date'), 'end_date')
                 ->onlyOnForms()
-                ->rules('required'),
-
-
+                ->rules('required', 'date_format:Y-m-d'),
+            
 
 //            HasMany::make('Photos'),
 
