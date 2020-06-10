@@ -2,3 +2,9 @@
     padding-top: 10px;
     padding-bottom: 10px
 }
+
+
+table[data-testid="resource-table"] img.w-8.h-8{
+    width: 150px;
+    height: 150px;
+}
