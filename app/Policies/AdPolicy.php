@@ -41,14 +41,4 @@ class AdPolicy
         return $user->isAdmin();
     }
 
-
-//viewAny
-//view
-//create
-//update
-//delete
-//restore
-//forceDelete
-
-
 }
