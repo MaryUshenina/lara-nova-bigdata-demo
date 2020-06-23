@@ -9,6 +9,7 @@ use App\Nova\Metrics\NewUsers;
 use App\Observers\AdObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
@@ -23,6 +24,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+        Route::middleware(['nova'])->get('/nova-api/' . \App\Nova\Category::uriKey(),
+            '\App\Nova\Controllers\CategoryResourceIndexController@handle');
 
         Nova::serving(function () {
             Ad::observe(AdObserver::class);
