@@ -97,6 +97,8 @@ class testTree extends Command
 
         $this->test2to0();
         $this->test2to9();
+
+        $this->test2to1();
     }
 
     private function draw($pid, $data)
@@ -228,7 +230,7 @@ class testTree extends Command
 
     private function test2to9()
     {
-        $this->info("\ntest2to1");
+        $this->info("\ntest2to9");
         $item = Category::find(2);
         $item->pid = 9;
         $item->save();
