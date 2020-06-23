@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Ad;
+use App\Models\EagerCategory;
 use App\Models\User;
 use App\Nova\Metrics\NewAds;
 use App\Nova\Metrics\NewUsers;
 use App\Observers\AdObserver;
+use App\Observers\EagerCategoryObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +33,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Nova::serving(function () {
             Ad::observe(AdObserver::class);
             User::observe(UserObserver::class);
+            EagerCategory::observe(EagerCategoryObserver::class);
         });
 
         Nova::style('custom-style', public_path('css/custom.css') );
