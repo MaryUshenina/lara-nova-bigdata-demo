@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Ad;
+use App\Models\Category;
+use App\Models\EagerCategory;
 use App\Models\EstateRequest;
 use App\Models\Photo;
 use App\Models\User;
 use App\Policies\AdPolicy;
+use App\Policies\CategoryPolicy;
+use App\Policies\EagerCategoryPolicy;
 use App\Policies\EstateRequestPolicy;
 use App\Policies\PhotoPolicy;
 use App\Policies\UserPolicy;
@@ -26,6 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Photo::class => PhotoPolicy::class,
         EstateRequest::class => EstateRequestPolicy::class,
+        Category::class => CategoryPolicy::class,
+        EagerCategory::class => EagerCategoryPolicy::class,
     ];
 
     /**

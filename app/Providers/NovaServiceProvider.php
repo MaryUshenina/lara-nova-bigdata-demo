@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use App\Models\Ad;
+use App\Models\EagerCategory;
 use App\Models\User;
 use App\Nova\Metrics\NewAds;
 use App\Nova\Metrics\NewUsers;
 use App\Observers\AdObserver;
+use App\Observers\EagerCategoryObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
@@ -24,9 +27,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
+        Route::middleware(['nova'])->get('/nova-api/' . \App\Nova\Category::uriKey(),
+            '\App\Nova\Controllers\CategoryResourceIndexController@handle');
+
         Nova::serving(function () {
             Ad::observe(AdObserver::class);
             User::observe(UserObserver::class);
+            EagerCategory::observe(EagerCategoryObserver::class);
         });
 
         Nova::style('custom-style', public_path('css/custom.css') );

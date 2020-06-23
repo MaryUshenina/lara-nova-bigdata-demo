@@ -3,10 +3,11 @@
 namespace App\Policies;
 
 use App\Models\Ad;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AdPolicy
+class CategoryPolicy
 {
     use HandlesAuthorization;
 
@@ -20,23 +21,22 @@ class AdPolicy
         //
     }
 
-    public function view(User $user, Ad $ad)
+    public function view(User $user, Category $category)
     {
         return true;
     }
 
     public function create(User $user)
     {
-        return $user->isEstate();
+        return $user->isAdmin();
     }
 
-    public function update(User $user, Ad $ad)
+    public function update(User $user, Category $category)
     {
-        return $user->isAdmin() || $user->isAuthor($ad);
+        return $user->isAdmin();
     }
 
-
-    public function delete(User $user, Ad $ad)
+    public function delete(User $user, Category $category)
     {
         return $user->isAdmin();
     }

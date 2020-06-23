@@ -8,11 +8,6 @@ use Illuminate\Validation\Rule;
 use Jfeid\NovaGoogleMaps\NovaGoogleMaps;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasOne;
-use Laravel\Nova\Fields\Hidden;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -21,9 +16,6 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Treestoneit\TextWrap\TextWrap;
 
-//use Laravel\Nova\Http\Requests\NovaRequest;
-
-use Yassi\NestedForm\NestedForm;
 use Wemersonrv\InputMask\InputMask;
 
 use Klepak\NovaRouterLink\RouterLink;
@@ -124,7 +116,7 @@ class Ad extends Resource
             Date::make(__('End date'), 'end_date')
                 ->onlyOnForms()
                 ->rules('required', 'date_format:Y-m-d'),
-            
+
 
 //            HasMany::make('Photos'),
 
