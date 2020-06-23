@@ -13,12 +13,14 @@ class UsersSeed extends Seeder
      */
     public function run()
     {
-        factory(User::class, 700)->create([
-            'role' => User::PLAIN_USER_ROLE,
-        ]);
+        if (User::count() < 1000) {
+            factory(User::class, 700)->create([
+                'role' => User::PLAIN_USER_ROLE,
+            ]);
 
-        factory(User::class, 300)->create([
-            'role' => User::ESTATE_USER_ROLE,
-        ]);
+            factory(User::class, 300)->create([
+                'role' => User::ESTATE_USER_ROLE,
+            ]);
+        }
     }
 }
