@@ -58,85 +58,33 @@ class Ad extends Resource
     {
         return [
 
-            Image::make(__('Image'), 'photo')
-                ->displayUsing(function () {
-                    return $this->photo ?? $this->photos()->first()->filename ?? 'no_image.png';
-                })
-                ->disableDownload(),
+            $this->getMainImageField(),
 
-            RouterLink::make(__('Title'), 'title')
-                ->route('detail',
-                    [
-                        'resourceName' => 'ads',
-                        'resourceId' => $this->id,
-                    ]
-                )
-                ->withMeta(['value' => $this->title])
-                ->onlyOnIndex(),
+            //title
+            $this->getTitleLinkField(),
+            $this->getTitleField(),
 
-            Text::make(__('Title'), 'title')
-                ->hideFromIndex()
-                ->rules('required', 'max:255'),
+            $this->getCreatedField(),
 
-            Text::make(__('Created'), function () {
-                return $this->created_at->format('m.d.y h:i a');
-            })
-                ->asHtml(),
+            // description
+            $this->getDescriptionIndexField(),
+            $this->getDescriptionOtherField(),
 
-            // description for index page
-            TextWrap::make(__('Description'), 'description')
-                ->rules('required', 'max:1000')
-                ->displayUsing(function ($str) {
-                    return Str::limit($str, 255);
-                })
-                ->wrapMethod('length', 60),
+            $this->getEmailField(),
 
-            // description for other pages
-            Textarea::make(__('Description'), 'description')
-                ->alwaysShow()
-                ->rules('required', 'max:1000'),
+            $this->getPhoneField(),
 
-            //end description
+            $this->getCountryField(),
 
-            Text::make(__('Email'), 'email')
-                ->hideFromIndex()
-                ->rules('required', 'email', 'max:254'),
-
-            InputMask::make(__('Phone'), 'phone')
-                ->mask('+1 (###) ###-####')
-                ->hideFromIndex()
-                ->rules('required'),
-
-            Select::make(\__('Country'), 'country')
-                ->options(\Countries::getList('en'))
-                ->rules('required')
-                ->hideFromIndex()
-                ->displayUsingLabels(),
-
-            Date::make(__('End date'), 'end_date')
-                ->onlyOnForms()
-                ->rules('required', 'date_format:Y-m-d'),
-
+            $this->getEndDateField(),
 
 //            HasMany::make('Photos'),
 
 //            NestedForm::make('Photos'),
 
-            NovaGoogleMaps::make(__('Address'), 'location')
-                ->hideFromIndex()
-                ->rules([Rule::requiredIf(function () use ($request) {
-                    if($request->location_lat){
-                        return false;
-                    }
-                    return !$request->save_without_address;
-                })])
-                ->hideFromDetail(function () {
-                    return is_null($this->location_lat) || !$this->location_lat;
-                })
-                ->setValue($this->location_lat, $this->location_lng),
+            $this->getGoogleMapFiled($request),
 
-            Boolean::make(__('Save without address'), 'save_without_address')
-                ->onlyOnForms()
+            $this->getWithoutAddressField()
         ];
     }
 
@@ -202,4 +150,153 @@ class Ad extends Resource
     }
 
 
+    /**
+     * @return Image
+     */
+    private function getMainImageField()
+    {
+        return Image::make(__('Image'), 'photo')
+            ->displayUsing(function () {
+                return $this->photo ?? $this->photos()->first()->filename ?? 'no_image.png';
+            })
+            ->disableDownload();
+    }
+
+    /**
+     * @return RouterLink
+     */
+    private function getTitleLinkField()
+    {
+        return RouterLink::make(__('Title'), 'title')
+            ->route('detail',
+                [
+                    'resourceName' => 'ads',
+                    'resourceId' => $this->id,
+                ]
+            )
+            ->withMeta(['value' => $this->title])
+            ->onlyOnIndex();
+    }
+
+    /**
+     * @return Text
+     */
+    private function getTitleField()
+    {
+        return Text::make(__('Title'), 'title')
+            ->hideFromIndex()
+            ->rules('required', 'max:255');
+
+    }
+
+    /**
+     * @return Text
+     */
+    private function getCreatedField()
+    {
+        return Text::make(__('Created'), function () {
+            return $this->created_at->format('m.d.y h:i a');
+        })
+            ->asHtml();
+    }
+
+    /**
+     *  description for index page
+     *
+     * @return TextWrap
+     */
+    private function getDescriptionIndexField()
+    {
+        return TextWrap::make(__('Description'), 'description')
+            ->rules('required', 'max:1000')
+            ->displayUsing(function ($str) {
+                return Str::limit($str, 255);
+            })
+            ->wrapMethod('length', 60);
+    }
+
+    /**
+     * description for other pages
+     *
+     * @return Textarea
+     */
+    private function getDescriptionOtherField()
+    {
+        return Textarea::make(__('Description'), 'description')
+            ->alwaysShow()
+            ->rules('required', 'max:1000');
+    }
+
+    /**
+     * @return Text
+     */
+    private function getEmailField()
+    {
+        return Text::make(__('Email'), 'email')
+            ->hideFromIndex()
+            ->rules('required', 'email', 'max:254');
+    }
+
+    /**
+     * @return InputMask
+     */
+    private function getPhoneField()
+    {
+        return InputMask::make(__('Phone'), 'phone')
+            ->mask('+1 (###) ###-####')
+            ->hideFromIndex()
+            ->rules('required');
+    }
+
+    /**
+     * @return Select
+     */
+    private function getCountryField()
+    {
+        return Select::make(\__('Country'), 'country')
+            ->options(\Countries::getList('en'))
+            ->rules('required')
+            ->hideFromIndex()
+            ->displayUsingLabels();
+    }
+
+
+    /**
+     * @return Date
+     */
+    private function getEndDateField()
+    {
+        return Date::make(__('End date'), 'end_date')
+            ->onlyOnForms()
+            ->rules('required', 'date_format:Y-m-d');
+    }
+
+    /**
+     * @param Request $request
+     * @return NovaGoogleMaps
+     */
+    private function getGoogleMapFiled(Request $request)
+    {
+        return NovaGoogleMaps::make(__('Address'), 'location')
+            ->hideFromIndex()
+            ->rules([Rule::requiredIf(function () use ($request) {
+                if ($request->location_lat) {
+                    return false;
+                }
+                return !$request->save_without_address;
+            })])
+            ->hideFromDetail(function () {
+                return is_null($this->location_lat) || !$this->location_lat;
+            })
+            ->setValue($this->location_lat, $this->location_lng);
+    }
+
+    /**
+     * @return Boolean
+     */
+    private function getWithoutAddressField()
+    {
+        return Boolean::make(__('Save without address'), 'save_without_address')
+            ->onlyOnForms();
+    }
 }
