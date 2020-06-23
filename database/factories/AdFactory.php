@@ -18,14 +18,17 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(Ad::class, function (Faker $faker) {
+$user =  User::first();
+
+$factory->define(Ad::class, function (Faker $faker) use ($user) {
     return [
-        'user_id' => User::first()->id ?? 1,
+        'user_id' => $user->id ?? 1,
         'title' => $faker->sentence,
         'description' => $faker->text(1000),
         'phone' => '+1 ' . $faker->numerify('(###) ###-####'),
         'country' => 'US',
         'email' =>$faker->email,
         'end_date' =>$faker->date(),
+        'created_at'=> $faker->dateTime
     ];
 });
