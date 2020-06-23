@@ -34,4 +34,9 @@ class Ad extends Model
         return $this->hasMany(Photo::class, 'ad_id', 'id')->orderby('order');
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'ads_category');
+    }
+
 }
