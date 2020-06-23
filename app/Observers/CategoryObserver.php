@@ -29,4 +29,12 @@ class CategoryObserver
         return true;
     }
 
+
+    public function deleting(Category $item)
+    {
+        foreach ($item->childrenCategories as $subCat) {
+            $subCat->delete(); // to fire events for children
+        }
+        return true;
+    }
 }
