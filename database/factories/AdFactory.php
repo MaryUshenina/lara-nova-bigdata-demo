@@ -3,6 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Models\Ad;
+use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,7 @@ use Illuminate\Support\Str;
 
 $factory->define(Ad::class, function (Faker $faker) {
     return [
-        'user_id' => 1,
+        'user_id' => User::first()->id ?? 1,
         'title' => $faker->sentence,
         'description' => $faker->text(1000),
         'phone' => '+1 ' . $faker->numerify('(###) ###-####'),
