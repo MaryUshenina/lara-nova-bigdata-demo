@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8e6e48840ebd83dac51b08de210788d",
+    "content-hash": "28bccce07037d1d49b22ee272d591cac",
     "packages": [
+        {
+            "name": "angauber/nova-select2-filter",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/angauber/nova-select2-filter.git",
+                "reference": "1ee81b10bd5ae7c1120e652f3783c996e5c18d54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/angauber/nova-select2-filter/zipball/1ee81b10bd5ae7c1120e652f3783c996e5c18d54",
+                "reference": "1ee81b10bd5ae7c1120e652f3783c996e5c18d54",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Angauber\\NovaSelect2Filter\\FilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Angauber\\NovaSelect2Filter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova filter.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2019-12-15T21:09:07+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "1.3.0",
