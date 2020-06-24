@@ -7,8 +7,6 @@ use \Illuminate\Support\Facades\DB;
 use \App\Models\Category;
 use \App\Models\EagerCategory;
 
-//use \App\Models\CategoryTree;
-
 use Illuminate\Support\Facades\Schema;
 
 class CategoriesSeed extends Seeder
@@ -20,11 +18,6 @@ class CategoriesSeed extends Seeder
      */
     public function run()
     {
-        DB::statement("SET FOREIGN_KEY_CHECKS=0;");
-        DB::statement("TRUNCATE TABLE `categories_tree`; ");
-        DB::statement("TRUNCATE TABLE `categories`; ");
-        DB::statement("SET FOREIGN_KEY_CHECKS=1;");
-
         $coef = 15;
         $allowed = 1000;
         $maxNestingLevel = 5;

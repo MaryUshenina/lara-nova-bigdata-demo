@@ -27,7 +27,7 @@ class AdPolicy
 
     public function create(User $user)
     {
-        return $user->isEstate();
+        return $user->isAdmin() || $user->isEstate() ;
     }
 
     public function update(User $user, Ad $ad)

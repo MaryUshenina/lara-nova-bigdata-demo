@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class EagerCategory extends Model
 {
+    protected $appends = ['tree_name'];
+
+    public function getTreeNameAttribute()
+    {
+        $indent = '';
+        if ($this->max_level) {
+            $indent = str_repeat('-', $this->max_level) . " ";
+        }
+        return $indent . $this->name;
+    }
+
     protected $table = 'categories_tree_view';
 
     public function scopeOrderByTree($query)

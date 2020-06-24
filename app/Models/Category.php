@@ -32,4 +32,8 @@ class Category extends Model
             ->wherePivot('level', '=', 1);
     }
 
+    public function ads()
+    {
+        return $this->belongsToMany(Ad::class, 'ads_category');
+    }
 }
