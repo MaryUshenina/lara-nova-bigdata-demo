@@ -120,6 +120,7 @@ class Ad extends Resource
         return [
             new Filters\CategoriesFilter,
             new Filters\AgentFilter,
+            new Filters\CountryFilter,
         ];
     }
 
