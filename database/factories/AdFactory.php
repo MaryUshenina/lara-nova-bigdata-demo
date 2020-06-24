@@ -27,6 +27,7 @@ $factory->define(Ad::class, function (Faker $faker) use ($user) {
         'description' => $faker->text(1000),
         'phone' => '+1 ' . $faker->numerify('(###) ###-####'),
         'country' => 'US',
+        'price' => $faker->randomFloat(2, 0, 99999.99),
         'email' =>$faker->email,
         'end_date' =>$faker->date(),
         'created_at'=> $faker->dateTime

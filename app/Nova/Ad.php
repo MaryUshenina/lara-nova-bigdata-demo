@@ -78,6 +78,8 @@ class Ad extends Resource
             $this->getDescriptionIndexField(),
             $this->getDescriptionOtherField(),
 
+            $this->getPriceField(),
+
             $this->getEmailField(),
 
             $this->getPhoneField(),
@@ -252,6 +254,16 @@ class Ad extends Resource
         return Textarea::make(__('Description'), 'description')
             ->alwaysShow()
             ->rules('required', 'max:1000');
+    }
+
+    /**
+     * @return Text
+     */
+    private function getPriceField()
+    {
+        return Text::make(__('Price'), 'price')
+            ->hideFromIndex()
+            ->rules('required', 'numeric', 'between:0,99999.99', 'regex:/^\d+(\.\d{1,2})?$/');
     }
 
     /**
