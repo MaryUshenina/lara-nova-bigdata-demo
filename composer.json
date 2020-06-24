@@ -19,6 +19,7 @@
     ],
     "require": {
         "php": "^7.2.5",
+        "benjacho/belongs-to-many-field": "^1.7",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "gobrightspot/nova-detached-actions": "^1.0",
