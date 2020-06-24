@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class EagerCategory extends Model
 {
+    protected $table = 'categories_tree_view';
+
     protected $appends = ['tree_name'];
 
     public function getTreeNameAttribute()
@@ -16,9 +18,7 @@ class EagerCategory extends Model
         }
         return $indent . $this->name;
     }
-
-    protected $table = 'categories_tree_view';
-
+    
     public function scopeOrderByTree($query)
     {
         return $query->orderBy('tree_order', 'asc');;
@@ -43,7 +43,5 @@ class EagerCategory extends Model
     {
         return $this->belongsTo(Category::class, 'id', 'id');
     }
-
-
 
 }
