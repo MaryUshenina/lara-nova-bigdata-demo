@@ -19,14 +19,15 @@ use Illuminate\Support\Str;
 */
 
 $user =  User::first();
+$countries = \Countries::getList('en');
 
-$factory->define(Ad::class, function (Faker $faker) use ($user) {
+$factory->define(Ad::class, function (Faker $faker) use ($user, $countries) {
     return [
         'user_id' => $user->id ?? 1,
         'title' => $faker->sentence,
         'description' => $faker->text(1000),
         'phone' => '+1 ' . $faker->numerify('(###) ###-####'),
-        'country' => 'US',
+        'country' => $faker->randomElement($countries),
         'price' => $faker->randomFloat(2, 0, 99999.99),
         'email' =>$faker->email,
         'end_date' =>$faker->date(),
