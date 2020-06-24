@@ -121,6 +121,7 @@ class Ad extends Resource
             new Filters\CategoriesFilter,
             new Filters\AgentFilter,
             new Filters\CountryFilter,
+            new Filters\CreatedAtFilter,
         ];
     }
 
