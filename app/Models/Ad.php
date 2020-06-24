@@ -37,7 +37,7 @@ class Ad extends Model
     public function categories()
     {
         return $this->belongsToMany(EagerCategory::class, 'ads_category', 'ad_id', 'category_id')
-            ->using(CustomPivot::class);
+            ->using(AdsCategoryPivot::class);
     }
 
 }
