@@ -36,7 +36,8 @@ class Ad extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'ads_category');
+        return $this->belongsToMany(EagerCategory::class, 'ads_category', 'ad_id', 'category_id')
+            ;
     }
 
 }

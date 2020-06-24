@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\EagerCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -13,6 +14,8 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
+use Benjacho\BelongsToManyField\BelongsToManyField;
+
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Treestoneit\TextWrap\TextWrap;
 
@@ -22,6 +25,9 @@ use Klepak\NovaRouterLink\RouterLink;
 
 class Ad extends Resource
 {
+
+    private static $allCategoriesOptions = [];
+
     /**
      * The model the resource corresponds to.
      *
@@ -57,6 +63,8 @@ class Ad extends Resource
     public function fields(Request $request)
     {
         return [
+
+            $this->getCategoryField($request),
 
             $this->getMainImageField(),
 
@@ -149,6 +157,25 @@ class Ad extends Resource
         return $fillFields;
     }
 
+
+    /**
+     * @param Request $request
+     * @return BelongsToManyField
+     */
+    private function getCategoryField(Request $request)
+    {
+        if (!count(self::$allCategoriesOptions)) {
+            self::$allCategoriesOptions = EagerCategory::orderByTree()->get();
+        }
+
+        $isForm = !($request->isResourceIndexRequest() || $request->isResourceDetailRequest());
+
+        return BelongsToManyField::make(__('Categories'), 'categories', Category::class)
+            ->options(self::$allCategoriesOptions)
+            ->optionsLabel($isForm ? 'tree_name' : 'name')
+            ->rules('nullable')
+            ->hideFromIndex();
+    }
 
     /**
      * @return Image
