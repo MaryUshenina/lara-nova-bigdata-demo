@@ -30,7 +30,7 @@ $factory->define(Ad::class, function (Faker $faker) use ($user, $countries) {
         'country' => $faker->randomElement($countries),
         'price' => $faker->randomFloat(2, 0, 99999.99),
         'email' =>$faker->email,
-        'end_date' =>$faker->date(),
-        'created_at'=> $faker->dateTime
+        'end_date' =>$faker->dateTimeBetween('-1 month', '+3 months'),
+        'created_at'=> $faker->dateTimeBetween('-3 month')
     ];
 });
