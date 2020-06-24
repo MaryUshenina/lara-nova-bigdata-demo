@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\CalendarPrice;
 use Illuminate\Database\Seeder;
 use \App\Models\Ad;
 use \App\Models\User;
@@ -26,11 +25,6 @@ class AdsSeed extends Seeder
             'password' => Hash::make('admin'),
             'email_verified_at' => now(),
         ]);
-
-        DB::statement("SET FOREIGN_KEY_CHECKS=0;");
-        DB::statement("TRUNCATE TABLE `ads`; ");
-        DB::statement("TRUNCATE TABLE `ads_category`; ");
-        DB::statement("SET FOREIGN_KEY_CHECKS=1;");
 
         $count = 3000000;
         $part = 100;
