@@ -51,7 +51,7 @@ class Category extends Resource
         return [
             $this->getParentField(),
 
-            $this->getNameField(),
+            $this->getNameField($request),
 
             HasMany::make(__('Children categories'), 'childrenCategories', Category::class),
         ];
@@ -135,11 +135,8 @@ class Category extends Resource
     private function getParentField()
     {
         if (!count(self::$allCategoriesOptions)) {
-            $all = \App\Models\EagerCategory::select('id')
-                ->addSelect(\DB::raw("CONCAT(REPEAT('--', max_level), ' ',`name`) AS `name` "))
-                ->orderByTree()
-                ->get()
-                ->pluck('name', 'id')->toArray();
+            $all = \App\Models\EagerCategory::orderByTree()->get()
+                ->pluck('tree_name', 'id')->toArray();
 
             self::$allCategoriesOptions = [0 => 'root'] + $all; // dont use array_merge to keep keys
         }
@@ -152,18 +149,14 @@ class Category extends Resource
     }
 
     /**
+     * @param Request $request
      * @return Text
      */
-    private function getNameField()
+    private function getNameField(Request $request)
     {
         return Text::make(__('Name'), 'name')
-            ->displayUsing(function () {
-
-                $indent = '';
-                if ($this->max_level) {
-                    $indent = str_repeat('--', $this->max_level) . '&nbsp;';
-                }
-                return $indent . $this->name;
+            ->displayUsing(function () use ($request) {
+                return $request->isResourceIndexRequest() ? $this->tree_name : $this->name;
             })
             ->rules('required', 'max:255')
             ->asHtml()
