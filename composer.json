@@ -15,12 +15,17 @@
         {
             "type": "vcs",
             "url":  "https://github.com/MaryUshenina/nova-google-maps.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "https://github.com/MaryUshenina/nova-range-input-filter.git"
         }
     ],
     "require": {
         "php": "^7.2.5",
         "angauber/nova-select2-filter": "^1.1",
         "benjacho/belongs-to-many-field": "^1.7",
+        "digital-creative/nova-range-input-filter": "^0.1.6",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "gobrightspot/nova-detached-actions": "^1.0",

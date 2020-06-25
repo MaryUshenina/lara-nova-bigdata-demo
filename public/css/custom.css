@@ -12,3 +12,7 @@ table[data-testid="resource-table"] img.w-8.h-8{
 div[dusk="ads-detail-component"] .vue-map-container{
     width: 700px
 }
+
+.range-input-filter input.w-full{
+    width: 45%
+}

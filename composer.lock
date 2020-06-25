@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "28bccce07037d1d49b22ee272d591cac",
+    "content-hash": "dec975f50fd931bc9e45d89caf59594f",
     "packages": [
         {
             "name": "angauber/nova-select2-filter",
@@ -288,6 +288,60 @@
                 "time"
             ],
             "time": "2020-05-26T01:27:20+00:00"
+        },
+        {
+            "name": "digital-creative/nova-range-input-filter",
+            "version": "v0.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MaryUshenina/nova-range-input-filter.git",
+                "reference": "75fbe0a03b3f6a7fc31335482b266c67eecd27ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MaryUshenina/nova-range-input-filter/zipball/75fbe0a03b3f6a7fc31335482b266c67eecd27ac",
+                "reference": "75fbe0a03b3f6a7fc31335482b266c67eecd27ac",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DigitalCreative\\RangeInputFilter\\RangeInputFilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DigitalCreative\\RangeInputFilter\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Milewski"
+                },
+                {
+                    "name": "littlemiaor"
+                }
+            ],
+            "description": "A Laravel Nova range input filter.",
+            "keywords": [
+                "filter",
+                "input",
+                "laravel",
+                "nova",
+                "range"
+            ],
+            "support": {
+                "source": "https://github.com/MaryUshenina/nova-range-input-filter/tree/v0.1.6"
+            },
+            "time": "2020-06-25T06:43:36+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
