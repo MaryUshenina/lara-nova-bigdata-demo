@@ -15,6 +15,8 @@ class AgentFilter extends Filter
      */
     public $component = 'select-filter';
 
+    public $name = 'Agent';
+
     /**
      * Apply the filter to the given query.
      *

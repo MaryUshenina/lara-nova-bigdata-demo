@@ -14,6 +14,8 @@ class CountryFilter extends Filter
      */
     public $component = 'select-filter';
 
+    public $name = 'Country';
+
     /**
      * Apply the filter to the given query.
      *

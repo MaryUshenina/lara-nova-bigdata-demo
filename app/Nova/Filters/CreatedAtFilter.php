@@ -8,6 +8,8 @@ use Laravel\Nova\Filters\DateFilter;
 
 class CreatedAtFilter extends DateFilter
 {
+    public $name = 'Created at';
+
     /**
      * Apply the filter to the given query.
      *
