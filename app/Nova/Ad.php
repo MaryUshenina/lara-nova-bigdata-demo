@@ -4,7 +4,7 @@ namespace App\Nova;
 
 use App\Models\EagerCategory;
 use App\Nova\Metrics\AdsAvailability;
-use App\Nova\Metrics\CountAds;
+use App\Nova\Metrics\AdsCount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -109,7 +109,7 @@ class Ad extends Resource
     public function cards(Request $request)
     {
         return [
-            CountAds::make(),
+            AdsCount::make(),
             AdsAvailability::make(),
         ];
     }

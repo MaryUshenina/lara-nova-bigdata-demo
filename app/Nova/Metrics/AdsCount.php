@@ -6,10 +6,10 @@ use App\Models\Ad;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class CountAds extends CustomValue
+class AdsCount extends CustomValue
 {
 
-    public $name = 'Count Ads';
+    public $name = 'Count';
 
     /**
      * Calculate the value of the metric.
