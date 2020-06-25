@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8e6e48840ebd83dac51b08de210788d",
+    "content-hash": "dec975f50fd931bc9e45d89caf59594f",
     "packages": [
+        {
+            "name": "angauber/nova-select2-filter",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/angauber/nova-select2-filter.git",
+                "reference": "1ee81b10bd5ae7c1120e652f3783c996e5c18d54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/angauber/nova-select2-filter/zipball/1ee81b10bd5ae7c1120e652f3783c996e5c18d54",
+                "reference": "1ee81b10bd5ae7c1120e652f3783c996e5c18d54",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Angauber\\NovaSelect2Filter\\FilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Angauber\\NovaSelect2Filter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova filter.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2019-12-15T21:09:07+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "1.3.0",
@@ -247,6 +288,60 @@
                 "time"
             ],
             "time": "2020-05-26T01:27:20+00:00"
+        },
+        {
+            "name": "digital-creative/nova-range-input-filter",
+            "version": "v0.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MaryUshenina/nova-range-input-filter.git",
+                "reference": "75fbe0a03b3f6a7fc31335482b266c67eecd27ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MaryUshenina/nova-range-input-filter/zipball/75fbe0a03b3f6a7fc31335482b266c67eecd27ac",
+                "reference": "75fbe0a03b3f6a7fc31335482b266c67eecd27ac",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DigitalCreative\\RangeInputFilter\\RangeInputFilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DigitalCreative\\RangeInputFilter\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rafael Milewski"
+                },
+                {
+                    "name": "littlemiaor"
+                }
+            ],
+            "description": "A Laravel Nova range input filter.",
+            "keywords": [
+                "filter",
+                "input",
+                "laravel",
+                "nova",
+                "range"
+            ],
+            "support": {
+                "source": "https://github.com/MaryUshenina/nova-range-input-filter/tree/v0.1.6"
+            },
+            "time": "2020-06-25T06:43:36+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

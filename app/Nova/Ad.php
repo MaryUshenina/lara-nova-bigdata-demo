@@ -117,7 +117,13 @@ class Ad extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new Filters\CategoriesFilter,
+            new Filters\AgentFilter,
+            new Filters\PriceRangeFilter,
+            new Filters\CountryFilter,
+            new Filters\CreatedAtFilter,
+        ];
     }
 
     /**
