@@ -66,6 +66,6 @@ class AdsCount extends CustomValue
      */
     public function uriKey()
     {
-        return 'count-ads';
+        return 'ads-count';
     }
 }
