@@ -34,6 +34,9 @@ class AdsAvailability extends CustomValue
         }
 
         $total = $model->count();
+        if(!$total){
+            return $this->result(0);
+        }
         $available = $model->available()->count();
         return $this->result(100 * $available/$total)->suffix('%')->withoutSuffixInflection();
     }
