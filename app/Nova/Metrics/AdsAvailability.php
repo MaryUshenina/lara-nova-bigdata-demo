@@ -11,6 +11,13 @@ class AdsAvailability extends CustomValue
     public $name = 'Availability';
 
     /**
+     * The width of the card (1/3, 1/2, or full).
+     *
+     * @var string
+     */
+    public $width = '1/5';
+
+    /**
      * Calculate the value of the metric.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
