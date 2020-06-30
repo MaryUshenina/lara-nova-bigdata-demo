@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Ad;
 use App\Models\Category;
 use App\Models\EagerCategory;
 use Illuminate\Console\Command;
@@ -43,8 +44,74 @@ class testTree extends Command
         DB::statement("SET FOREIGN_KEY_CHECKS=0;");
         DB::statement("TRUNCATE TABLE `categories_tree`; ");
         DB::statement("TRUNCATE TABLE `categories`; ");
+        DB::statement("TRUNCATE TABLE `ads_category`; ");
+        DB::statement("TRUNCATE TABLE `ads`; ");
         DB::statement("SET FOREIGN_KEY_CHECKS=1;");
 
+        $this->testInitial();
+
+        // test on moving
+        $this->test2to13();
+        $this->test2to1();
+
+        $this->test2to0();
+        $this->test2to9();
+
+        $this->test2to1();
+    }
+
+    private function draw($pid, $data)
+    {
+        foreach ($data as $name => $children) {
+            $item = Category::firstOrCreate(['name' => $name]);
+
+            if ($pid > 0) {
+                $item->pid = $pid;
+                $item->save();
+            }
+            if (count($children)) {
+                $this->draw($item->id, $children);
+            }
+        }
+
+    }
+
+    private function testIsEqualData($data)
+    {
+        foreach ($data as $id => $row) {
+            $item = EagerCategory::find($id);
+            if (!$item) {
+                $this->error("item $id not found");
+                continue;
+            }
+            foreach ($row as $field => $value) {
+                if ($item->$field <> $value) {
+                    $this->info("ERROR [$field] found:{$item->$field} <> must:$value");
+                    continue;
+                }
+            }
+
+        }
+    }
+
+    private function testAdsCategories($data)
+    {
+        $ads_category_data = collect(\DB::select("SELECT ad_id, GROUP_CONCAT(LPAD(category_id, 4, 0)) AS 'tree_order'FROM ads_category GROUP BY ad_id;"))->keyBy('ad_id');
+        foreach ($ads_category_data as $i => $row) {
+            $temp1 = explode(',', $row->tree_order);
+            $temp2 = explode(',', $data[$i]['tree_order']);
+            $dif1 = array_diff($temp1, $temp2);
+            $dif2 = array_diff($temp2, $temp1);
+            if (count($dif1) || count($dif2)) {
+                $this->info("ERROR [ads_category_data] found:$row->tree_order <> must:{$data[$i]['tree_order']}");
+            }
+        }
+    }
+
+    private function testInitial()
+    {
+
+        $this->info("testInitial");
         $data = [
             111 => [
                 '111.1' => [
@@ -91,48 +158,16 @@ class testTree extends Command
         ];
         $this->testIsEqualData($testData);
 
-        // test on moving
-        $this->test2to13();
-        $this->test2to1();
 
-        $this->test2to0();
-        $this->test2to9();
-
-        $this->test2to1();
-    }
-
-    private function draw($pid, $data)
-    {
-        foreach ($data as $name => $children) {
-            $item = Category::firstOrCreate(['name' => $name]);
-
-            if ($pid > 0) {
-                $item->pid = $pid;
-                $item->save();
-            }
-            if (count($children)) {
-                $this->draw($item->id, $children);
-            }
+        //add ads
+        for ($i = 1; $i <= 15; $i++) {
+            $ad = factory(Ad::class)->create([
+                'title' => "testAd#$i"
+            ]);
+            $ad->categories()->attach([$i]);
         }
 
-    }
-
-    private function testIsEqualData($data)
-    {
-        foreach ($data as $id => $row) {
-            $item = EagerCategory::find($id);
-            if (!$item) {
-                $this->error("item $id not found");
-                continue;
-            }
-            foreach ($row as $field => $value) {
-                if ($item->$field <> $value) {
-                    $this->info("ERROR [$field] found:{$item->$field} <> must:$value");
-                    continue;
-                }
-            }
-
-        }
+        $this->testAdsCategories($testData);
     }
 
     private function test2to13()
@@ -164,6 +199,7 @@ class testTree extends Command
             15 => ['name' => '444', 'tree_order' => '0015'],
         ];
         $this->testIsEqualData($testData);
+        $this->testAdsCategories($testData);
     }
 
     private function test2to1()
@@ -192,6 +228,7 @@ class testTree extends Command
         ];
 
         $this->testIsEqualData($testData);
+        $this->testAdsCategories($testData);
     }
 
 
@@ -225,6 +262,7 @@ class testTree extends Command
         ];
 
         $this->testIsEqualData($testData);
+        $this->testAdsCategories($testData);
     }
 
 
@@ -257,6 +295,7 @@ class testTree extends Command
         ];
 
         $this->testIsEqualData($testData);
+        $this->testAdsCategories($testData);
     }
 
 
