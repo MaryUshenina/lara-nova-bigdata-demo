@@ -3,6 +3,7 @@
 namespace App\Nova\Metrics;
 
 use App\Models\Ad;
+use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomPartitionValue;
 
@@ -42,11 +43,18 @@ class AdsPrices extends CustomPartitionValue
                 }
             }
 
+
         $label = ', $';
+        $result = $model
+            ->addSelect(DB::raw( 'min(price) as min_price'))
+            ->addSelect(DB::raw( 'max(price) as max_price'))
+            ->addSelect(DB::raw( 'avg(price) as avg_price'))
+            ->first();
+
         return $this->result([
-            "Min{$label}" => $model->min('price'),
-            "Max{$label}" => $model->max('price'),
-            "Avg{$label}" => $model->avg('price')
+            "Min{$label}" => $result->min_price,
+            "Max{$label}" => $result->max_price,
+            "Avg{$label}" => $result->avg_price
         ])->colors([
             "Min{$label}" => '#000',
             "Max{$label}" => '#000',
