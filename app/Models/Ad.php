@@ -23,6 +23,8 @@ class Ad extends Model
         'created_at' => 'datetime',
     ];
 
+    protected $with = ['photos'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
