@@ -39,6 +39,7 @@ class RedrawTheTree implements ShouldQueue
     {
         $parent = Category::find($this->parent_id);
         $child = Category::find($this->child_id);
+        $originalPid = $child->eagerCategory()->first()->pid;
 
         $child->parentCategories()->wherePivot('level', '<>', 0)->detach();
 
@@ -58,6 +59,16 @@ class RedrawTheTree implements ShouldQueue
         }
         // draw children
         $this->drawForChildren($child, $all_parents, 1);
+
+        //move ads to new category
+        foreach($child->ads()->get() as $ad) {
+            if ($originalPid > 0){
+                $ad->categories()->detach($originalPid);
+            }
+            if ($this->parent_id > 0) {
+                $ad->categories()->syncWithoutDetaching([$this->parent_id]);
+            }
+        }
     }
 
     /**
