@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Models\EagerCategory;
 use App\Nova\Metrics\AdsAvailability;
 use App\Nova\Metrics\AdsCount;
+use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\AdsTopAgent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -111,6 +112,7 @@ class Ad extends Resource
     {
         return [
             AdsCount::make(),
+            AdsPrices::make(),
             AdsTopAgent::make(),
             AdsAvailability::make(),
         ];

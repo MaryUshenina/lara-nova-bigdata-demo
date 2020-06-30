@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8dad667658e7f6e4f56b9fa4d02ed1a",
+    "content-hash": "ccd461aeeb1ad5d3d71b8386ef2b52e5",
     "packages": [
         {
             "name": "angauber/nova-select2-filter",
@@ -2955,16 +2955,16 @@
         },
         {
             "name": "square1/nova-metrics",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/square1-io/nova-metrics.git",
-                "reference": "0690dcef691248f63cd4d1411743be408a44567e"
+                "url": "https://github.com/MaryUshenina/nova-metrics.git",
+                "reference": "0f5e2b720a848c8fe4cb21e7cf9fdefce3e566e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/square1-io/nova-metrics/zipball/0690dcef691248f63cd4d1411743be408a44567e",
-                "reference": "0690dcef691248f63cd4d1411743be408a44567e",
+                "url": "https://api.github.com/repos/MaryUshenina/nova-metrics/zipball/0f5e2b720a848c8fe4cb21e7cf9fdefce3e566e2",
+                "reference": "0f5e2b720a848c8fe4cb21e7cf9fdefce3e566e2",
                 "shasum": ""
             },
             "require": {
@@ -2983,18 +2983,20 @@
                     "Square1\\NovaMetrics\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Add support for resource-filters on your laravel nova metrics",
             "keywords": [
-                "Metrics",
                 "filters",
                 "laravel",
+                "metrics",
                 "nova"
             ],
-            "time": "2020-02-03T14:57:30+00:00"
+            "support": {
+                "source": "https://github.com/MaryUshenina/nova-metrics/tree/1.0.1"
+            },
+            "time": "2020-06-30T09:49:30+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
