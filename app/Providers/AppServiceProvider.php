@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() !== 'production') {
+        if (config('app.debug', false)) {
             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         }
     }
