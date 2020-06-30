@@ -42,5 +42,21 @@ class ChangeTableViewCategoriesTreeForSoftDelete extends Migration
     {
         DB::statement('DROP VIEW IF EXISTS `categories_tree_view`;');
 
+        DB::statement("CREATE VIEW `categories_tree_view` AS
+                SELECT
+                  `categories`.id,
+                  `categories`.name,
+                  IF(`categories`.id <> MIN(ct.parent_id), MIN(ct.parent_id), 0) AS min_pid,
+                  MAX(IF(ct.parent_id < `categories`.id, ct.parent_id, 0)) AS 'pid',
+
+                GROUP_CONCAT(LPAD(ct.parent_id, 4, 0) ORDER BY ct.level DESC) AS 'tree_order',
+                MAX(ct.level) AS 'max_level'
+                FROM
+                  `categories`
+                  INNER JOIN `categories_tree` AS `ct`
+                    ON `ct`.`child_id` = `categories`.`id`
+                GROUP BY `categories`.`id`,
+                  `categories`.`name`");
+
     }
 }
