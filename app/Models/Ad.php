@@ -40,4 +40,9 @@ class Ad extends Model
             ->using(AdsCategoryPivot::class);
     }
 
+    public function scopeAvailable($query)
+    {
+        return $query->whereRaw('end_date > now()');
+    }
+
 }

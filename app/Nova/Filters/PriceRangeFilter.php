@@ -16,6 +16,9 @@ class PriceRangeFilter extends RangeInputFilter
 
     public function apply(Request $request, $query, $value)
     {
+        if(is_object($value)){
+            $value = (array) $value;
+        }
         return $query->when(isset($value['from']), function ($q) use ($value) {
             return $q->where('price', '>=', $value['from']);
         })

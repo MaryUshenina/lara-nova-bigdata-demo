@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 */
 
 $user =  User::first();
-$countries = \Countries::getList('en');
+$countries = array_flip(\Countries::getList('en'));
 
 $factory->define(Ad::class, function (Faker $faker) use ($user, $countries) {
     return [
