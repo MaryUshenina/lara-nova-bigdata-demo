@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Ad;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AdObserver
 {
@@ -14,6 +15,7 @@ class AdObserver
             $item->user_id = Auth::user() ? Auth::user()->id : null;
 
         }
+        Cache::flush();
         return true;
     }
 
@@ -22,6 +24,8 @@ class AdObserver
         foreach ($item->photos as $photo) {
             $photo->delete(); // to fire events for children
         }
+
+        Cache::flush();
         return true;
     }
 

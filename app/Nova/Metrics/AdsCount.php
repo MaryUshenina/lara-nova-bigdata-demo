@@ -2,12 +2,16 @@
 
 namespace App\Nova\Metrics;
 
+use App\Cache\CacheCallbackInterface;
+use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class AdsCount extends CustomValue
+class AdsCount extends CustomValue implements CacheCallbackInterface
 {
+
+    use CacheCallbackTrait;
 
     public $name = 'Count';
 
@@ -28,22 +32,37 @@ class AdsCount extends CustomValue
     {
         $model = Ad::make();
 
-            if ($request->has('filters')) {
-                // Get the decoded list of filters
-                $filters = json_decode(base64_decode($request->filters)) ?? [];
+        if ($request->has('filters')) {
+            // Get the decoded list of filters
+            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
 
-                foreach ($filters as $filter) {
-                    if (empty($filter->value)) {
-                        continue;
-                    }
-                    // Create a new instance of the filter and apply the query to your model
-                    $model = (new $filter->class)->apply($request, $model, $filter->value);
+            foreach ($filters as $filter) {
+                if (empty($filter->value)) {
+                    continue;
                 }
+                // Create a new instance of the filter and apply the query to your model
+                $model = (new $filter->class)->apply($request, $model, $filter->value);
             }
+        }else{
+            $filterKey = 'all';
+        }
 
+        return $this->result(self::getCalculatedData($filterKey, $model))->suffix('ad');
+    }
 
-        return $this->result($model->count())->suffix('ad');
-
+    /**
+     * get cached data or calculate and cache
+     *
+     * @param $filterKey
+     * @param $model
+     * @return mixed
+     */
+    public static function getCalculatedData($filterKey, $model)
+    {
+        return self::getCachedOrRetrieve($filterKey, function ($parameters) {
+            list($model) = $parameters;
+            return $model->count();
+        }, [$model], null, get_class($model));
     }
 
     /**
