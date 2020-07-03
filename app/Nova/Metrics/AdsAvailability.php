@@ -32,6 +32,7 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface
     {
         $model = Ad::make();
 
+        $appliedFilters = 0;
         if ($request->has('filters')) {
             // Get the decoded list of filters
             $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
@@ -40,10 +41,12 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface
                 if (empty($filter->value)) {
                     continue;
                 }
+                $appliedFilters++;
                 // Create a new instance of the filter and apply the query to your model
                 $model = (new $filter->class)->apply($request, $model, $filter->value);
             }
-        }else{
+        }
+        if(!$appliedFilters){
             $filterKey = 'all';
         }
 

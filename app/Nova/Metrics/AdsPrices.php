@@ -35,20 +35,23 @@ class AdsPrices extends CustomPartitionValue implements CacheCallbackInterface
 
         $model = Ad::make();
 
-            if ($request->has('filters')) {
-                // Get the decoded list of filters
-                $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
+        $appliedFilters = 0;
+        if ($request->has('filters')) {
+            // Get the decoded list of filters
+            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
 
-                foreach ($filters as $filter) {
-                    if (empty($filter->value)) {
-                        continue;
-                    }
-                    // Create a new instance of the filter and apply the query to your model
-                    $model = (new $filter->class)->apply($request, $model, $filter->value);
+            foreach ($filters as $filter) {
+                if (empty($filter->value)) {
+                    continue;
                 }
-            }else{
-                $filterKey = 'all';
+                $appliedFilters++;
+                // Create a new instance of the filter and apply the query to your model
+                $model = (new $filter->class)->apply($request, $model, $filter->value);
             }
+        }
+        if(!$appliedFilters){
+            $filterKey = 'all';
+        }
 
 
         return $this->result(self::getCalculatedData($filterKey, $model));
