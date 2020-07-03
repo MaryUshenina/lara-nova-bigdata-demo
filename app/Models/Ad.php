@@ -12,6 +12,7 @@ class Ad extends Model
 
     protected $table = 'ads';
 
+    const CREATED_AT = 'created_at_date';
 
     protected $fillable = [
         'title', 'description', 'phone', 'country_id', 'email', 'end_date'
@@ -20,7 +21,8 @@ class Ad extends Model
 
     protected $casts = [
         'end_date' => 'date',
-        'created_at' => 'datetime',
+        'created_at_date' => 'date',
+        'created_at_time' => 'date',
     ];
 
     protected $with = ['photos'];

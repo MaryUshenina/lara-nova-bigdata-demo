@@ -32,6 +32,6 @@ $factory->define(Ad::class, function (Faker $faker) use ($user, $countries, $use
         'price' => $faker->randomFloat(2, 0, 99999.99),
         'email' =>$faker->email,
         'end_date' =>$faker->dateTimeBetween('-1 month', '+3 months'),
-        'created_at'=> $faker->dateTimeBetween('-3 month')
+        'created_at_date'=> $faker->dateTimeBetween('-3 month')
     ];
 });

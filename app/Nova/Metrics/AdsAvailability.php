@@ -65,24 +65,13 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface
     {
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
 
-            list($model, $filterKey) = $parameters;
+            list($model) = $parameters;
 
-            if (class_exists(AdsCount::class) && is_callable(array(AdsCount::class, 'getCalculatedData'))) {
-                $total = AdsCount::getCalculatedData($filterKey, $model);
-            } else {
-                $total = self::getCachedOrRetrieve($filterKey, function ($parameters) {
-                    list($model) = $parameters;
-                    return $model->count();
-                }, [$model], null, get_class($model));
-            }
+            return  $model->select(
+                \DB::raw("COUNT( if (end_date > now(), 1, NULL))/COUNT(*) as available")
+            )->first()->available * 100 ?? 0;
 
-            if (!$total) {
-                return 0;
-            }
-            $available = $model->available()->count();
-
-            return 100 * $available / $total;
-        }, [$model, $filterKey], Carbon::now()->endOfDay());
+        }, [$model], Carbon::now()->endOfDay());
 
     }
 
