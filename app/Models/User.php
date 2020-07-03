@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\AgentsData;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,6 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail
         self::ADMIN_USER_ROLE => 'Admin',
     ];
 
+    const ROLES_WITH_ADS = [
+        self::ESTATE_USER_ROLE,
+        self::ADMIN_USER_ROLE
+    ];
+
     public function ads()
     {
         return $this->hasMany(Ad::class);
@@ -79,4 +85,32 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(EstateRequest::class);
     }
+
+    public function agentData()
+    {
+        return $this->hasOne(AgentData::class, 'user_id', 'id');
+    }
+
+
+
+    /**
+     * update related calculated Data
+     */
+    public function updateAgentData()
+    {
+        if(!in_array($this->role, self::ROLES_WITH_ADS)){
+            return;
+
+        }
+        if (!$this->agentData) {
+            $data = new AgentData();
+            $data->user_id = $this->id;
+            $data->save();
+            $this->refresh();
+        }
+
+        $this->agentData->ads_count = $this->ads()->count();
+        $this->agentData->save();
+    }
+
 }
