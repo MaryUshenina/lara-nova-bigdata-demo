@@ -20,10 +20,11 @@ use Illuminate\Support\Str;
 
 $user =  User::first();
 $countries = array_flip(\Countries::getList('en'));
+$users = User::where('role', User::ESTATE_USER_ROLE)->get()->pluck('id');
 
-$factory->define(Ad::class, function (Faker $faker) use ($user, $countries) {
+$factory->define(Ad::class, function (Faker $faker) use ($user, $countries, $users) {
     return [
-        'user_id' => $user->id ?? 1,
+        'user_id' => $faker->randomElement($users),
         'title' => $faker->sentence,
         'description' => $faker->text(1000),
         'phone' => '+1 ' . $faker->numerify('(###) ###-####'),

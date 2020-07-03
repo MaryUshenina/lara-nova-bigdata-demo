@@ -52,15 +52,31 @@ class EstateRequest extends Resource
             BelongsTo::make(__('User'), 'user', User::class)
                 ->readonly(),
 
-            Select::make(\__('Status'), 'status')->options(self::$model::STATUSES)
-                ->displayUsingLabels()
-                ->sortable()
-                ->rules('required', Rule::in(array_keys(self::$model::STATUSES))),
+            $this->getStatusField(),
 
-            Textarea::make(__('Comment'), 'comment')
-                ->alwaysShow()
-                ->rules('max:255'),
+            $this->getCommentField(),
         ];
+    }
+
+    /**
+     * @return Select
+     */
+    private function getStatusField()
+    {
+        return Select::make(\__('Status'), 'status')->options(self::$model::STATUSES)
+            ->displayUsingLabels()
+            ->sortable()
+            ->rules('required', Rule::in(array_keys(self::$model::STATUSES)));
+    }
+
+    /**
+     * @return Textarea
+     */
+    private function getCommentField()
+    {
+        return Textarea::make(__('Comment'), 'comment')
+            ->alwaysShow()
+            ->rules('max:255');
     }
 
     /**

@@ -51,38 +51,84 @@ class User extends Resource
     public function fields(Request $request)
     {
         return [
+            $this->getAvatarField(),
 
-            Avatar::make(__('Avatar'), 'avatar')
-                ->disableDownload(),
+            $this->getNameField(),
 
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            $this->getEmailField(),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+            $this->getPasswordField(),
+            $this->getPasswordConfirmField(),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->updateRules('nullable', 'confirmed', 'string', 'min:8'),
-
-            PasswordConfirmation::make(\__('Password Confirmation')),
-
-            Select::make(\__('Role'), 'role')->options(self::$model::ROLES)
-                ->displayUsingLabels()
-                ->onlyOnIndex()
-                ->readonly()
-                ->sortable()
-                ->rules('required', Rule::in(array_keys(self::$model::ROLES))),
+            $this->getRoleField(),
 
             HasMany::make('Ads')
                 ->canSee(function () {
                     return !$this->isPlain();
                 }),
         ];
+    }
+
+    /**
+     * @return Avatar
+     */
+    private function getAvatarField()
+    {
+        return Avatar::make(__('Avatar'), 'avatar')
+            ->disableDownload();
+    }
+
+    /**
+     * @return Text
+     */
+    private function getNameField()
+    {
+        return Text::make('Name')
+            ->sortable()
+            ->rules('required', 'max:255');
+    }
+
+    /**
+     * @return Text
+     */
+    private function getEmailField()
+    {
+        return Text::make('Email')
+            ->sortable()
+            ->rules('required', 'email', 'max:254')
+            ->creationRules('unique:users,email')
+            ->updateRules('unique:users,email,{{resourceId}}');
+    }
+
+    /**
+     * @return Password
+     */
+    private function getPasswordField()
+    {
+        return Password::make('Password')
+            ->onlyOnForms()
+            ->updateRules('nullable', 'confirmed', 'string', 'min:8');
+    }
+
+    /**
+     * @return PasswordConfirmation
+     */
+    private function getPasswordConfirmField()
+    {
+        return PasswordConfirmation::make(\__('Password Confirmation'));
+    }
+
+    /**
+     * @return Select
+     */
+    private function getRoleField()
+    {
+        return Select::make(\__('Role'), 'role')->options(self::$model::ROLES)
+            ->displayUsingLabels()
+            ->onlyOnIndex()
+            ->readonly()
+            ->sortable()
+            ->rules('required', Rule::in(array_keys(self::$model::ROLES)));
     }
 
     /**
