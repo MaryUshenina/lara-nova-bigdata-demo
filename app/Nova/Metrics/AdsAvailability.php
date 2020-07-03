@@ -2,12 +2,17 @@
 
 namespace App\Nova\Metrics;
 
+use App\Cache\CacheCallbackInterface;
+use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use Carbon\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class AdsAvailability extends CustomValue
+class AdsAvailability extends CustomValue implements CacheCallbackInterface
 {
+    use CacheCallbackTrait;
+
     public $name = 'Availability';
 
     /**
@@ -29,7 +34,7 @@ class AdsAvailability extends CustomValue
 
         if ($request->has('filters')) {
             // Get the decoded list of filters
-            $filters = json_decode(base64_decode($request->filters)) ?? [];
+            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
 
             foreach ($filters as $filter) {
                 if (empty($filter->value)) {
@@ -38,14 +43,44 @@ class AdsAvailability extends CustomValue
                 // Create a new instance of the filter and apply the query to your model
                 $model = (new $filter->class)->apply($request, $model, $filter->value);
             }
+        }else{
+            $filterKey = 'all';
         }
 
-        $total = $model->count();
-        if(!$total){
-            return $this->result(0);
-        }
-        $available = $model->available()->count();
-        return $this->result(100 * $available/$total)->suffix('%')->withoutSuffixInflection();
+        return $this->result(self::getCalculatedData($filterKey, $model))->suffix('%')->withoutSuffixInflection();
+    }
+
+
+    /**
+     * get cached data or calculate and cache
+     *
+     * @param $filterKey
+     * @param $model
+     * @return mixed
+     */
+    public static function getCalculatedData($filterKey, $model)
+    {
+        return self::getCachedOrRetrieve($filterKey, function ($parameters) {
+
+            list($model, $filterKey) = $parameters;
+
+            if (class_exists(AdsCount::class) && is_callable(array(AdsCount::class, 'getCalculatedData'))) {
+                $total = AdsCount::getCalculatedData($filterKey, $model);
+            } else {
+                $total = self::getCachedOrRetrieve($filterKey, function ($parameters) {
+                    list($model) = $parameters;
+                    return $model->count();
+                }, [$model], null, get_class($model));
+            }
+
+            if (!$total) {
+                return 0;
+            }
+            $available = $model->available()->count();
+
+            return 100 * $available / $total;
+        }, [$model, $filterKey], Carbon::now()->endOfDay());
+
     }
 
     /**
