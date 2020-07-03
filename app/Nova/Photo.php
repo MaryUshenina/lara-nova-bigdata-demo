@@ -50,13 +50,29 @@ class Photo extends Resource
 
             BelongsTo::make(__('Ad'), 'ad', Ad::class),
 
-            Text::make(__('Order'), 'order')
-                ->rules('integer', 'nullable')
-                ->onlyOnForms(),
+            $this->getOrderField(),
 
-            Image::make(__('Image'), 'filename')
-                ->rules('required')
+            $this->getImageField()
         ];
+    }
+
+    /**
+     * @return Text
+     */
+    private function getOrderField()
+    {
+        return Text::make(__('Order'), 'order')
+            ->rules('integer', 'nullable')
+            ->onlyOnForms();
+    }
+
+    /**
+     * @return Image
+     */
+    private function getImageField()
+    {
+        return Image::make(__('Image'), 'filename')
+            ->rules('required');
     }
 
     /**
