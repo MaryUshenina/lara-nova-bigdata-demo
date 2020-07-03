@@ -27,7 +27,7 @@ class AdsSeed extends Seeder
         ]);
 
         $count = 3000000;
-        $part = 100;
+        $part = 10;
 
         $this->command->getOutput()->progressStart($count);
         $allCategories = Category::with('parentCategories')->get()->keyBy('id');
@@ -36,11 +36,7 @@ class AdsSeed extends Seeder
 
         for ($i = 0; $i < $count; $i += $part) {
             $ads_category_data = [];
-            $user = User::where('role', User::ESTATE_USER_ROLE)->get()->random(1)->first();
-
-            factory(Ad::class, $part)->create([
-                'user_id' => $user->id
-            ])
+            factory(Ad::class, $part)->create()
                 ->each(function ($ad) use ($allCategories, $allCategoriesKeys, &$ads_category_data) {
                     $count = mt_rand(0, 3);
                     if (!$count) {
