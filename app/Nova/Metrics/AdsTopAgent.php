@@ -2,14 +2,21 @@
 
 namespace App\Nova\Metrics;
 
+use App\Cache\CacheCallbackInterface;
+use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use App\Models\User;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class AdsTopAgent extends CustomValue
+class AdsTopAgent extends CustomValue implements CacheCallbackInterface
 {
+
+    use CacheCallbackTrait;
+
     public $name = 'Top Agent';
 
+    const FILTER_ALL = 'all';
     /**
      * The width of the card (1/3, 1/2, or full).
      *
@@ -27,30 +34,67 @@ class AdsTopAgent extends CustomValue
     {
         $model = Ad::make();
 
+        $appliedFilters = 0;
         if ($request->has('filters')) {
             // Get the decoded list of filters
-            $filters = json_decode(base64_decode($request->filters)) ?? [];
-
+            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
             foreach ($filters as $filter) {
                 if (empty($filter->value)) {
                     continue;
                 }
+
+                $appliedFilters++;
                 // Create a new instance of the filter and apply the query to your model
                 $model = (new $filter->class)->apply($request, $model, $filter->value);
             }
         }
+        if(!$appliedFilters){
+            $filterKey = self::FILTER_ALL;
+        }
 
+        $data = self::getCalculatedData($filterKey, $model);
+        $agentName = $data->name ?? 'no agent';
 
-        $topAgent = $model
-            ->select('user_id')
-            ->addSelect(\DB::raw('COUNT(id) as count'))
-            ->groupBy('user_id')
-            ->orderByRaw('COUNT(id) desc')
-            ->first();
-
-        $agentName = $topAgent->user->name ?? 'no agent';
-        return $this->result($topAgent->count ?? 0)->prefix("$agentName - ")->suffix('ad');
+        return $this->result($data->count ?? 0)->prefix("$agentName - ")->suffix('ad');
     }
+
+
+    /**
+     * get cached data or calculate and cache
+     *
+     * @param $filterKey
+     * @param $model
+     * @return mixed
+     */
+    public static function getCalculatedData($filterKey, $model)
+    {
+        if ($filterKey == self::FILTER_ALL) {
+            return User::join('agents_data', 'users.id', 'agents_data.user_id')
+                ->select([
+                    'users.name',
+                    'agents_data.ads_count as count'
+                ])->orderBy('agents_data.ads_count', 'desc')
+                ->first();
+        }
+
+        return self::getCachedOrRetrieve($filterKey, function ($parameters) {
+            list($model) = $parameters;
+
+            $topAgent = $model
+                ->select('user_id')
+                ->addSelect(\DB::raw('COUNT(id) as count'))
+                ->groupBy('user_id')
+                ->orderByRaw('COUNT(id) desc')
+                ->first();
+
+            return (object)[
+                'name' => $topAgent->user->name ?? 'no agent',
+                'count' => $topAgent->count ?? 0,
+            ];
+
+        }, [$model]);
+    }
+
 
     /**
      * Get the ranges available for the metric.
