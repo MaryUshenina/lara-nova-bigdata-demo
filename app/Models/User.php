@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\AgentsData;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +12,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use SoftDeletes;
 
     use Notifiable;
+
+    const CREATED_AT = 'created_at_date';
 
     /**
      * The attributes that are mass assignable.

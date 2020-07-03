@@ -22,6 +22,6 @@ class CreatedAtFilter extends DateFilter
     {
         $value = (Carbon::parse($value))->format('Y-m-d');
 
-        return $query->whereRaw("date(created_at) = '$value' ");
+        return $query->where('created_at_date', $value);
     }
 }

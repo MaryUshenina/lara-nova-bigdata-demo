@@ -8,6 +8,8 @@ use Laravel\Nova\Metrics\Value;
 
 class NewAds extends Value
 {
+    use SplitDatesAggregateValueTrait;
+
     /**
      * Calculate the value of the metric.
      *
@@ -17,6 +19,12 @@ class NewAds extends Value
     public function calculate(NovaRequest $request)
     {
         return $this->count($request, Ad::class);
+    }
+
+
+    protected function aggregate($request, $model, $function, $column = null, $dateColumn = null)
+    {
+        return $this->aggregateSplit($request, $model, $function, $column, $dateColumn);
     }
 
     /**

@@ -239,7 +239,7 @@ class Ad extends Resource
     private function getCreatedField()
     {
         return Text::make(__('Created'), function () {
-            return $this->created_at->format('m.d.y h:i a');
+            return $this->created_at_date->format('m.d.y');
         })
             ->asHtml();
     }
