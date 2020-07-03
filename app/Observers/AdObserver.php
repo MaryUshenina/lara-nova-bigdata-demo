@@ -16,6 +16,14 @@ class AdObserver
 
         }
         Cache::flush();
+        $item->user->updateAgentData();
+
+        return true;
+    }
+
+    public function updating(Ad $item)
+    {
+        $item->user->updateAgentData();
         return true;
     }
 
@@ -26,6 +34,8 @@ class AdObserver
         }
 
         Cache::flush();
+        $item->user->updateAgentData();
+
         return true;
     }
 
