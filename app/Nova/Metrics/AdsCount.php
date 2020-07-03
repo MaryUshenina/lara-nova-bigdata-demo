@@ -5,6 +5,7 @@ namespace App\Nova\Metrics;
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use App\Models\AgentData;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
@@ -12,6 +13,8 @@ class AdsCount extends CustomValue implements CacheCallbackInterface
 {
 
     use CacheCallbackTrait;
+
+    const FILTER_ALL = 'all';
 
     public $name = 'Count';
 
@@ -62,6 +65,9 @@ class AdsCount extends CustomValue implements CacheCallbackInterface
      */
     public static function getCalculatedData($filterKey, $model)
     {
+        if ($filterKey == self::FILTER_ALL) {
+            return AgentData::all()->sum('ads_count');
+        }
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
             list($model) = $parameters;
             return $model->count();
