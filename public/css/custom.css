@@ -1,0 +1,18 @@
+.whitespace-no-wrap {
+    padding-top: 10px;
+    padding-bottom: 10px
+}
+
+
+table[data-testid="resource-table"] img.w-8.h-8{
+    width: 150px;
+    height: 150px;
+}
+
+div[dusk="ads-detail-component"] .vue-map-container{
+    width: 700px
+}
+
+.range-input-filter input.w-full{
+    width: 45%
+}
