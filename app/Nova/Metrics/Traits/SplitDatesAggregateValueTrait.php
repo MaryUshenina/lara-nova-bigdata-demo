@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Nova\Metrics;
+namespace App\Nova\Metrics\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Nova;
 
 trait SplitDatesAggregateValueTrait
 {
-
-
-    protected function aggregateSplit($request, $model, $function, $column = null, $dateColumn = null)
+    public function aggregateSplit($request, $queryOrModel, $function, $column = null, $dateColumn = null)
     {
-        $query = $model instanceof Builder ? $model : (new $model)->newQuery();
+        $query = $queryOrModel instanceof Builder ? $queryOrModel : (new $queryOrModel)->newQuery();
 
         $column = $column ?? $query->getModel()->getQualifiedKeyName();
 

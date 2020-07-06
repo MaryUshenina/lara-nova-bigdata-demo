@@ -5,13 +5,19 @@ namespace App\Nova\Metrics;
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
+use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
 use Carbon\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class AdsAvailability extends CustomValue implements CacheCallbackInterface
+use \Illuminate\Database\Eloquent\Builder;
+
+class AdsAvailability extends CustomValue implements CacheCallbackInterface, FilteredBuilderMetricsInterface
 {
     use CacheCallbackTrait;
+
+    use FilteredBuilderMetricsTrait;
 
     public $name = 'Availability';
 
@@ -25,32 +31,14 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
     {
-        $model = Ad::make();
+        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, Ad::query());
 
-        $appliedFilters = 0;
-        if ($request->has('filters')) {
-            // Get the decoded list of filters
-            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
-
-            foreach ($filters as $filter) {
-                if (empty($filter->value)) {
-                    continue;
-                }
-                $appliedFilters++;
-                // Create a new instance of the filter and apply the query to your model
-                $model = (new $filter->class)->apply($request, $model, $filter->value);
-            }
-        }
-        if(!$appliedFilters){
-            $filterKey = 'all';
-        }
-
-        return $this->result(self::getCalculatedData($filterKey, $model))->suffix('%')->withoutSuffixInflection();
+        return $this->result(self::getCalculatedData($filterKey, $query))->suffix('%')->withoutSuffixInflection();
     }
 
 
@@ -58,20 +46,20 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface
      * get cached data or calculate and cache
      *
      * @param $filterKey
-     * @param $model
+     * @param Builder $query
      * @return mixed
      */
-    public static function getCalculatedData($filterKey, $model)
+    public static function getCalculatedData($filterKey, Builder $query)
     {
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
 
-            list($model) = $parameters;
+            list($query) = $parameters;
 
-            return  $model->select(
-                \DB::raw("COUNT( if (end_date > now(), 1, NULL))/COUNT(*) as available")
-            )->first()->available * 100 ?? 0;
+            return $query->select(
+                    \DB::raw("COUNT( if (end_date > now(), 1, NULL))/COUNT(*) as available")
+                )->first()->available * 100 ?? 0;
 
-        }, [$model], Carbon::now()->endOfDay());
+        }, [$query], Carbon::now()->endOfDay());
 
     }
 
