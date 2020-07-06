@@ -2,25 +2,43 @@
 
 namespace App\Nova\Metrics;
 
+use App\Cache\CacheCallbackInterface;
+use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
 use App\Nova\Metrics\Interfaces\SplitDatesAggregateValueInterface;
 use App\Nova\Metrics\Traits\SplitDatesAggregateValueTrait;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 
-class NewAds extends Value implements SplitDatesAggregateValueInterface
+class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCallbackInterface
 {
     use SplitDatesAggregateValueTrait;
+    use CacheCallbackTrait;
 
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->count($request, Ad::class);
+        return $this->getCalculatedDataByRange($request->range, $request);
+    }
+
+    /**
+     * @param $filterKey
+     * @param $request
+     * @return mixed
+     */
+    public function getCalculatedDataByRange($filterKey, $request)
+    {
+        return self::getCachedOrRetrieve($filterKey, function ($parameters) {
+            list($object, $request) = $parameters;
+
+            return $object->count($request, Ad::class);
+
+        }, [$this, $request]);
     }
 
 

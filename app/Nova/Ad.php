@@ -201,7 +201,7 @@ class Ad extends Resource
     {
         return Image::make(__('Image'), 'photo')
             ->displayUsing(function () {
-                return $this->photo ?? $this->photos[0]->filename ?? 'no_image.png';
+                return $this->photo ?? 'no_image.png';
             })
             ->disableDownload();
     }
