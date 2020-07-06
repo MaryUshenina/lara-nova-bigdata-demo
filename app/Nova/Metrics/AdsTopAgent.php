@@ -6,13 +6,18 @@ use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
 use App\Models\User;
+use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
+use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class AdsTopAgent extends CustomValue implements CacheCallbackInterface
+class AdsTopAgent extends CustomValue implements CacheCallbackInterface, FilteredBuilderMetricsInterface
 {
 
     use CacheCallbackTrait;
+
+    use FilteredBuilderMetricsTrait;
 
     public $name = 'Top Agent';
 
@@ -27,32 +32,14 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
     {
-        $model = Ad::make();
+        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, Ad::query());
 
-        $appliedFilters = 0;
-        if ($request->has('filters')) {
-            // Get the decoded list of filters
-            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
-            foreach ($filters as $filter) {
-                if (empty($filter->value)) {
-                    continue;
-                }
-
-                $appliedFilters++;
-                // Create a new instance of the filter and apply the query to your model
-                $model = (new $filter->class)->apply($request, $model, $filter->value);
-            }
-        }
-        if(!$appliedFilters){
-            $filterKey = self::FILTER_ALL;
-        }
-
-        $data = self::getCalculatedData($filterKey, $model);
+        $data = self::getCalculatedData($filterKey, $query);
         $agentName = $data->name ?? 'no agent';
 
         return $this->result($data->count ?? 0)->prefix("$agentName - ")->suffix('ad');
@@ -63,10 +50,10 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface
      * get cached data or calculate and cache
      *
      * @param $filterKey
-     * @param $model
+     * @param Builder $query
      * @return mixed
      */
-    public static function getCalculatedData($filterKey, $model)
+    public static function getCalculatedData($filterKey, Builder $query)
     {
         if ($filterKey == self::FILTER_ALL) {
             return User::join('agents_data', 'users.id', 'agents_data.user_id')
@@ -78,9 +65,9 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface
         }
 
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
-            list($model) = $parameters;
+            list($query) = $parameters;
 
-            $topAgent = $model
+            $topAgent = $query
                 ->select('user_id')
                 ->addSelect(\DB::raw('COUNT(id) as count'))
                 ->groupBy('user_id')
@@ -92,7 +79,7 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface
                 'count' => $topAgent->count ?? 0,
             ];
 
-        }, [$model]);
+        }, [$query]);
     }
 
 

@@ -6,13 +6,18 @@ use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
 use App\Models\AgentData;
+use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
+use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
 
-class AdsCount extends CustomValue implements CacheCallbackInterface
+class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBuilderMetricsInterface
 {
 
     use CacheCallbackTrait;
+
+    use FilteredBuilderMetricsTrait;
 
     const FILTER_ALL = 'all';
 
@@ -28,50 +33,32 @@ class AdsCount extends CustomValue implements CacheCallbackInterface
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
     {
-        $model = Ad::make();
+        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, Ad::query());
 
-        $appliedFilters = 0;
-        if ($request->has('filters')) {
-            // Get the decoded list of filters
-            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
-
-            foreach ($filters as $filter) {
-                if (empty($filter->value)) {
-                    continue;
-                }
-                $appliedFilters++;
-                // Create a new instance of the filter and apply the query to your model
-                $model = (new $filter->class)->apply($request, $model, $filter->value);
-            }
-        }
-        if(!$appliedFilters){
-            $filterKey = 'all';
-        }
-
-        return $this->result(self::getCalculatedData($filterKey, $model))->suffix('ad');
+        return $this->result(self::getCalculatedData($filterKey, $query))->suffix('ad');
     }
 
     /**
      * get cached data or calculate and cache
      *
      * @param $filterKey
-     * @param $model
+     * @param Builder $query
      * @return mixed
      */
-    public static function getCalculatedData($filterKey, $model)
+    public static function getCalculatedData($filterKey, Builder $query)
     {
         if ($filterKey == self::FILTER_ALL) {
             return AgentData::all()->sum('ads_count');
         }
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
-            list($model) = $parameters;
-            return $model->count();
-        }, [$model], null, get_class($model));
+            list($query) = $parameters;
+            return $query->count();
+        }, [$query], null, get_class($query));
     }
 
     /**
