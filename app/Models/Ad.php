@@ -25,7 +25,7 @@ class Ad extends Model
         'created_at_time' => 'date',
     ];
 
-    protected $with = ['photos'];
+    protected $with = [];
 
     public function user()
     {
