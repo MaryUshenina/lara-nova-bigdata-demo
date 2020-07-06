@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\GenerateMetricsCache;
 use App\Models\Ad;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,7 @@ class AdObserver
 
         Cache::flush();
         $item->user->updateAgentData();
+        dispatch(new GenerateMetricsCache());
 
         return true;
     }
@@ -28,6 +30,8 @@ class AdObserver
     public function updating(Ad $item)
     {
         $item->user->updateAgentData();
+        dispatch(new GenerateMetricsCache());
+
         return true;
     }
 
@@ -39,6 +43,7 @@ class AdObserver
 
         Cache::flush();
         $item->user->updateAgentData();
+        dispatch(new GenerateMetricsCache());
 
         return true;
     }

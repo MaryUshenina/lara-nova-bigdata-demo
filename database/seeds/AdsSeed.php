@@ -75,9 +75,9 @@ class AdsSeed extends Seeder
     private function addCategoriesToAds()
     {
         $adsIdsCollection = collect(Db::select("SELECT ads.id FROM ads
-                    LEFT JOIN ads_category ON ads.id = ads_category.ad_id
+                    LEFT JOIN ads_categories ON ads.id = ads_categories.ad_id
                     GROUP BY ads.id
-                    HAVING COUNT(ads_category.category_id) = 0
+                    HAVING COUNT(ads_categories.category_id) = 0
                     LIMIT 1000"
             . ($this->adsWithNoCategories ? " offset $this->adsWithNoCategories" : '')));
 
@@ -111,7 +111,7 @@ class AdsSeed extends Seeder
             $this->command->getOutput()->progressAdvance(1);
         };
 
-        DB::table('ads_category')->insertOrIgnore($adsCategoriesData);
+        DB::table('ads_categories')->insertOrIgnore($adsCategoriesData);
         $this->command->getOutput()->progressFinish();
 
         // repeat for next part

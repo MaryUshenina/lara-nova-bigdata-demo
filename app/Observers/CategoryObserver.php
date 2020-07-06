@@ -23,7 +23,7 @@ class CategoryObserver
     {
         if (!is_null($item->pid)) {
             // attach parent
-            dispatch_now(new RedrawTheTree($item->id, $item->pid));
+            dispatch(new RedrawTheTree($item->id, $item->pid));
         }
 
         return true;
