@@ -25,7 +25,7 @@ class Ad extends Model
         'created_at_time' => 'date',
     ];
 
-    protected $with = ['photos'];
+    protected $with = [];
 
     public function user()
     {
@@ -40,7 +40,7 @@ class Ad extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(EagerCategory::class, 'ads_category', 'ad_id', 'category_id')
+        return $this->belongsToMany(EagerCategory::class, 'ads_categories', 'ad_id', 'category_id')
             ->using(AdsCategoryPivot::class);
     }
 

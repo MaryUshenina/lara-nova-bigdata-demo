@@ -29,8 +29,8 @@ class CategoriesFilter extends NovaSelect2Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->join('ads_category', 'ads_category.ad_id', '=', 'ads.id')
-            ->whereIn('ads_category.category_id', $value);
+        return $query->join('ads_categories', 'ads_categories.ad_id', '=', 'ads.id')
+            ->whereIn('ads_categories.category_id', $value);
     }
 
     /**
