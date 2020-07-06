@@ -3,10 +3,12 @@
 namespace App\Nova\Metrics;
 
 use App\Models\Ad;
+use App\Nova\Metrics\Interfaces\SplitDatesAggregateValueInterface;
+use App\Nova\Metrics\Traits\SplitDatesAggregateValueTrait;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 
-class NewAds extends Value
+class NewAds extends Value implements SplitDatesAggregateValueInterface
 {
     use SplitDatesAggregateValueTrait;
 
