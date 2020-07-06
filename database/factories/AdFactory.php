@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 
 $user =  User::first();
 $countries = array_flip(\Countries::getList('en'));
-$users = User::where('role', User::ESTATE_USER_ROLE)->get()->pluck('id');
+$users = User::where('role', User::ESTATE_USER_ROLE)->pluck('id');
 
 $factory->define(Ad::class, function (Faker $faker) use ($user, $countries, $users) {
     return [
