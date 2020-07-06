@@ -44,7 +44,7 @@ class testTree extends Command
         DB::statement("SET FOREIGN_KEY_CHECKS=0;");
         DB::statement("TRUNCATE TABLE `categories_tree`; ");
         DB::statement("TRUNCATE TABLE `categories`; ");
-        DB::statement("TRUNCATE TABLE `ads_category`; ");
+        DB::statement("TRUNCATE TABLE `ads_categories`; ");
         DB::statement("TRUNCATE TABLE `ads`; ");
         DB::statement("SET FOREIGN_KEY_CHECKS=1;");
 
@@ -96,7 +96,7 @@ class testTree extends Command
 
     private function testAdsCategories($data)
     {
-        $ads_category_data = collect(\DB::select("SELECT ad_id, GROUP_CONCAT(LPAD(category_id, 4, 0)) AS 'tree_order'FROM ads_category GROUP BY ad_id;"))->keyBy('ad_id');
+        $ads_category_data = collect(\DB::select("SELECT ad_id, GROUP_CONCAT(LPAD(category_id, 4, 0)) AS 'tree_order'FROM ads_categories GROUP BY ad_id;"))->keyBy('ad_id');
         foreach ($ads_category_data as $i => $row) {
             $temp1 = explode(',', $row->tree_order);
             $temp2 = explode(',', $data[$i]['tree_order']);
