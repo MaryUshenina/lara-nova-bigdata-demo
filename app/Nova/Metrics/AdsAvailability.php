@@ -5,6 +5,7 @@ namespace App\Nova\Metrics;
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use App\Models\AdMetaData;
 use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
 use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
 use Carbon\Carbon;
@@ -36,7 +37,7 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
      */
     public function calculate(NovaRequest $request)
     {
-        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, Ad::query());
+        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, AdMetaData::query());
 
         return $this->result(self::getCalculatedData($filterKey, $query))->suffix('%')->withoutSuffixInflection();
     }
@@ -55,8 +56,9 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
 
             list($query) = $parameters;
 
+            $nowYmd= Carbon::now()->format('ymd');
             return $query->select(
-                    \DB::raw("COUNT( if (end_date > now(), 1, NULL))/COUNT(*) as available")
+                    \DB::raw("COUNT( if (end_date_ymd > $nowYmd, 1, NULL))/COUNT(*) as available")
                 )->first()->available * 100 ?? 0;
 
         }, [$query], Carbon::now()->endOfDay());

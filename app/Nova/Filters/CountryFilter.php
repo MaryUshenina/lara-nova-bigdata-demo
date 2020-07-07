@@ -26,7 +26,7 @@ class CountryFilter extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('country', $value);
+        return $query->where('ads_meta.country', $value);
     }
 
     /**

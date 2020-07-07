@@ -21,7 +21,9 @@ class AdObserver
         $item->created_at_time = Carbon::now()->format('H:i:s');
 
         Cache::flush();
-        $item->user->updateAgentData();
+        if($item->user) {
+            $item->user->updateAgentData();
+        }
         dispatch(new GenerateMetricsCache());
 
         return true;
@@ -42,7 +44,9 @@ class AdObserver
         }
 
         Cache::flush();
-        $item->user->updateAgentData();
+        if($item->user) {
+            $item->user->updateAgentData();
+        }
         dispatch(new GenerateMetricsCache());
 
         return true;

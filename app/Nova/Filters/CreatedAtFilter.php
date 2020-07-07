@@ -20,8 +20,8 @@ class CreatedAtFilter extends DateFilter
      */
     public function apply(Request $request, $query, $value)
     {
-        $value = (Carbon::parse($value))->format('Y-m-d');
+        $value = (Carbon::parse($value))->format('ymd');
 
-        return $query->where('created_at_date', $value);
+        return $query->where('ads_meta.created_at_ymd', $value);
     }
 }

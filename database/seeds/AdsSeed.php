@@ -22,7 +22,7 @@ class AdsSeed extends Seeder
     public function __construct()
     {
         $this->countriesList = array_flip(\Countries::getList('en'));
-        $this->usersList = User::where('role', User::ESTATE_USER_ROLE)->pluck('id');
+        $this->usersList = $users = User::whereIn('role', User::ROLES_WITH_ADS)->pluck('id');
         $this->faker = Faker\Factory::create();
 
         $this->allCategories = Category::with('parentCategories')->get()->keyBy('id');
@@ -74,12 +74,14 @@ class AdsSeed extends Seeder
      */
     private function addCategoriesToAds()
     {
-        $adsIdsCollection = collect(Db::select("SELECT ads.id FROM ads
-                    LEFT JOIN ads_categories ON ads.id = ads_categories.ad_id
-                    GROUP BY ads.id
-                    HAVING COUNT(ads_categories.category_id) = 0
-                    LIMIT 1000"
-            . ($this->adsWithNoCategories ? " offset $this->adsWithNoCategories" : '')));
+        $adsIdsCollection = DB::table('ads')
+                ->leftJoin('ads_categories', 'ads.id', '=', 'ads_categories.ad_id')
+                ->select('ads.id')
+                ->groupBy('ads.id')
+                ->having(DB::Raw('COUNT(ads_categories.category_id)'), 0)
+                ->limit(1000)
+                ->offset($this->adsWithNoCategories)
+                ->get();
 
         if (!$count = $adsIdsCollection->count()) {
             return;
