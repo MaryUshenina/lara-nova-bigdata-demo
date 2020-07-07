@@ -27,7 +27,7 @@ class AgentFilter extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('user_id', $value);
+        return $query->where('ads_meta.user_id', $value);
     }
 
     /**

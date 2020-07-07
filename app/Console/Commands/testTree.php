@@ -8,6 +8,8 @@ use App\Models\EagerCategory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Schema;
+
 class testTree extends Command
 {
     /**
@@ -22,7 +24,7 @@ class testTree extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'test the category tree';
 
     /**
      * Create a new command instance.
@@ -41,12 +43,14 @@ class testTree extends Command
      */
     public function handle()
     {
-        DB::statement("SET FOREIGN_KEY_CHECKS=0;");
-        DB::statement("TRUNCATE TABLE `categories_tree`; ");
-        DB::statement("TRUNCATE TABLE `categories`; ");
-        DB::statement("TRUNCATE TABLE `ads_categories`; ");
-        DB::statement("TRUNCATE TABLE `ads`; ");
-        DB::statement("SET FOREIGN_KEY_CHECKS=1;");
+        Schema::disableForeignKeyConstraints();
+
+        DB::table('categories_tree')->truncate();
+        DB::table('categories')->truncate();
+        DB::table('ads_categories')->truncate();
+        DB::table('ads')->truncate();
+
+        Schema::enableForeignKeyConstraints();
 
         $this->testInitial();
 
@@ -96,8 +100,16 @@ class testTree extends Command
 
     private function testAdsCategories($data)
     {
-        $ads_category_data = collect(\DB::select("SELECT ad_id, GROUP_CONCAT(LPAD(category_id, 4, 0)) AS 'tree_order'FROM ads_categories GROUP BY ad_id;"))->keyBy('ad_id');
-        foreach ($ads_category_data as $i => $row) {
+        $adsCategoryData = DB::table('ads_categories')
+            ->select([
+                'ad_id',
+                DB::raw("GROUP_CONCAT(LPAD(category_id, 4, 0)) AS 'tree_order' ")
+            ])
+            ->groupBy('ad_id')
+            ->get()
+            ->keyBy('ad_id');
+
+        foreach ($adsCategoryData as $i => $row) {
             $temp1 = explode(',', $row->tree_order);
             $temp2 = explode(',', $data[$i]['tree_order']);
             $dif1 = array_diff($temp1, $temp2);

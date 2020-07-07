@@ -4,8 +4,7 @@ namespace App\Nova\Metrics;
 
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
-use App\Models\Ad;
-
+use App\Models\AdMetaData;
 use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
 use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,7 +39,7 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
      */
     public function calculate(NovaRequest $request)
     {
-        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, Ad::query());
+        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, AdMetaData::query());
 
         return $this->result(self::getCalculatedData($filterKey, $query))->suffix('ad');
     }
@@ -55,7 +54,9 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
     public static function getCalculatedData($filterKey, Builder $query)
     {
         if ($filterKey == self::FILTER_ALL) {
-            return collect(DB::select('select sum(ads_count) as total from agents_data'))->first()->total ?? 0;
+            return DB::table('agents_data')
+                    ->select(DB::raw('sum(ads_count) as total'))
+                    ->first()->total ?? 0;
         }
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
             list($query) = $parameters;

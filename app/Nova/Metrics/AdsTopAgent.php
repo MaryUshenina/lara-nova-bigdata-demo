@@ -5,6 +5,7 @@ namespace App\Nova\Metrics;
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use App\Models\AdMetaData;
 use App\Models\User;
 use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
 use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
@@ -37,7 +38,7 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
      */
     public function calculate(NovaRequest $request)
     {
-        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, Ad::query());
+        list($filterKey, $query) = $this->applyFiltersToQueryBuilder($request, AdMetaData::query());
 
         $data = self::getCalculatedData($filterKey, $query);
         $agentName = $data->name ?? 'no agent';
@@ -69,9 +70,9 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
 
             $topAgent = $query
                 ->select('user_id')
-                ->addSelect(\DB::raw('COUNT(id) as count'))
+                ->addSelect(\DB::raw('COUNT(ad_id) as count'))
                 ->groupBy('user_id')
-                ->orderByRaw('COUNT(id) desc')
+                ->orderByRaw('COUNT(ad_id) desc')
                 ->first();
 
             return (object)[
