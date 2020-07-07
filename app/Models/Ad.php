@@ -54,4 +54,25 @@ class Ad extends Model
         return $this->hasOne(AdMetaData::class, 'ad_id', 'id');
     }
 
+    /***
+     * update related meta Data
+     */
+    public function updateMetaData()
+    {
+        AdMetaData::updateOrCreate([
+            //Add unique field combo to match here
+            //For example, perhaps you only want one entry per user:
+            'ad_id'=> $this->id,
+        ],
+        [
+            'ad_id'=> $this->id,
+            'user_id' => $this->user_id,
+            'country' => $this->country,
+            'created_at_ymd' => $this->created_at_date->format('ymd'),
+            'end_date_ymd' => $this->end_date->format('ymd'),
+            'price' => $this->price,
+            'price_group' => ceil($this->price / 10000),
+        ]);
+
+    }
 }
