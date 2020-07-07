@@ -49,9 +49,4 @@ class Ad extends Model
         return $query->whereRaw('end_date > now()');
     }
 
-    public function metaData()
-    {
-        return $this->hasOne(AdMetaData::class, 'ad_id', 'id');
-    }
-
 }

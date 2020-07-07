@@ -175,13 +175,6 @@ class Ad extends Resource
     }
 
 
-    protected static function applyFilters(NovaRequest $request, $query, array $filters)
-    {
-        $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
-
-        return parent::applyFilters( $request, $query, $filters);
-    }
-
     /**
      * @param Request $request
      * @return BelongsToManyField
