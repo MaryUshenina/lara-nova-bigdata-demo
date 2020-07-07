@@ -22,7 +22,7 @@ class AdsSeed extends Seeder
     public function __construct()
     {
         $this->countriesList = array_flip(\Countries::getList('en'));
-        $this->usersList = User::where('role', User::ESTATE_USER_ROLE)->pluck('id');
+        $this->usersList = $users = User::whereIn('role', User::ROLES_WITH_ADS)->pluck('id');
         $this->faker = Faker\Factory::create();
 
         $this->allCategories = Category::with('parentCategories')->get()->keyBy('id');
