@@ -16,14 +16,21 @@ class PriceRangeFilter extends RangeInputFilter
 
     public function apply(Request $request, $query, $value)
     {
-        if(is_object($value)){
-            $value = (array) $value;
+        if (is_object($value)) {
+            $value = (array)$value;
         }
-        return $query->when(isset($value['from']), function ($q) use ($value) {
-            return $q->where('price', '>=', $value['from']);
+
+        $calcPriceGroup = function ($price) {
+            return ceil($price / 10000);
+        };
+
+        return $query->when(isset($value['from']), function ($q) use ($value, $calcPriceGroup) {
+            return $q->where('ads_meta.price_group', '>=', $calcPriceGroup($value['from']))
+                ->where('ads_meta.price', '>=', $value['from']);
         })
-            ->when(isset($value['to']), function ($q) use ($value) {
-                return $q->where('price', '<=', $value['to']);
+            ->when(isset($value['to']), function ($q) use ($value, $calcPriceGroup) {
+                return $q->where('ads_meta.price_group', '<=', $calcPriceGroup($value['to']))
+                    ->where('ads_meta.price', '<=', $value['to']);
             });
     }
 
