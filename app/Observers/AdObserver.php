@@ -20,18 +20,16 @@ class AdObserver
 
         $item->created_at_time = Carbon::now()->format('H:i:s');
 
-        Cache::flush();
-        if($item->user) {
-            $item->user->updateAgentData();
-        }
-        dispatch(new GenerateMetricsCache());
-
         return true;
     }
 
-    public function updating(Ad $item)
-    {
-        $item->user->updateAgentData();
+    public function saved(Ad $item){
+
+        if ($item->user) {
+            $item->user->updateAgentData();
+        }
+        $item->updateMetaData();
+
         dispatch(new GenerateMetricsCache());
 
         return true;
@@ -47,6 +45,10 @@ class AdObserver
         if($item->user) {
             $item->user->updateAgentData();
         }
+        if($item->metaData) {
+            $item->metaData->delete();
+        }
+
         dispatch(new GenerateMetricsCache());
 
         return true;

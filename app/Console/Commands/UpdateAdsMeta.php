@@ -50,7 +50,8 @@ class UpdateAdsMeta extends Command
         while (count($ads)) {
 
             foreach ($ads as $ad) {
-                $ad->touch();
+//                $ad->touch(); // for trigger
+                $ad->updateMetaData();
                 $this->output->progressAdvance();
             }
             $offset += $limit;
