@@ -101,17 +101,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if(!in_array($this->role, self::ROLES_WITH_ADS)){
             return;
-
-        }
-        if (!$this->agentData) {
-            $data = new AgentData();
-            $data->user_id = $this->id;
-            $data->save();
-            $this->refresh();
         }
 
-        $this->agentData->ads_count = $this->ads()->count();
-        $this->agentData->save();
+        AgentData::updateOrCreate([
+            //Add unique field combo to match here
+            'user_id' => $this->id,
+        ],
+            ['ads_count' => $this->ads->count()]);
+
     }
 
 }
