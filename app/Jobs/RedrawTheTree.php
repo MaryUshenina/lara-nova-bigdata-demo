@@ -3,11 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\Category;
+use App\Models\EagerCategory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class RedrawTheTree implements ShouldQueue
 {
@@ -31,71 +34,132 @@ class RedrawTheTree implements ShouldQueue
     }
 
     /**
-     * Execute the job.
-     *
-     * @return void
+     * # ancestor - parent_id
+     * # descendant - child_id
      */
     public function handle()
     {
-        $parent = Category::find($this->parent_id);
         $child = Category::find($this->child_id);
-        $originalPid = $child->eagerCategory()->first()->pid;
+        $originalPid = $child->parentCategories()->where('level', 1)->first()->id ?? 0;
 
-        $child->parentCategories()->wherePivot('level', '<>', 0)->detach();
+        if ($originalPid != 0) {
 
-        //inherit tree from all parents to current child
-        $all_parents = [];
-        if ($parent) {
-            foreach ($parent->parentCategories()->get() as $subParentCategory) {
-                if ($subParentCategory->id == $child->id) {
-                    continue;
-                }
+            // unlink node
+            Db::statement("delete from categories_tree
+                where child_id in (
+                    select child_id from (
+                        select child_id from categories_tree where parent_id=$this->child_id
+                    ) as t1
+                )and parent_id in (
+                    select parent_id from (
+                        select parent_id from categories_tree where child_id = $this->child_id
+                        and  parent_id != child_id
+                    ) as t2
+                )");
 
-                $newLevel = $subParentCategory->pivot->level + 1;
-                $child->parentCategories()->attach($subParentCategory, ['level' => $newLevel]);
 
-                $all_parents[$subParentCategory->id] = $newLevel;
-            }
+            // link orphan node
+            Db::statement("insert into categories_tree(parent_id, child_id, level)
+                select supertree.parent_id, subtree.child_id, subtree.level+1
+                from categories_tree as supertree
+                cross join categories_tree as subtree
+                where supertree.child_id = $this->parent_id
+                    and subtree.parent_id = $this->child_id");
+
+        } elseif ($childsCount = $child->childrenCategories->count()) {
+
+            // if child is not leaf but is located on root level
+            Db::statement("insert into categories_tree(parent_id, child_id, level)
+                select supertree.parent_id, subtree.child_id, subtree.level+supertree.level+1
+                from categories_tree as supertree
+                cross join categories_tree as subtree
+                where supertree.child_id = $this->parent_id
+                    and subtree.parent_id = $this->child_id");
+
+        } else {
+            //moving leaf
+            Db::statement("insert into categories_tree(parent_id, child_id, level)
+                    select t.parent_id, $this->child_id, t.level+1
+                    from categories_tree as t
+                    where t.child_id = $this->parent_id");
         }
-        // draw children
-        $this->drawForChildren($child, $all_parents, 1);
 
+        // handle ads
+        $this->moveAdsToNewCategory($child, $originalPid);
+    }
+
+    /**
+     * @param Category $child
+     * @param Category $parent
+     * @param $originalPid
+     */
+    private function moveAdsToNewCategory(Category $child, $originalPid)
+    {
+        $child->refresh();
+
+        if ($this->parent_id) {
+            $parent = Category::find($this->parent_id);
+            $nestedParents = $parent->parentCategories()->pluck('id');
+        }
         //move ads to new category
-        foreach($child->ads()->get() as $ad) {
-            if ($originalPid > 0){
+        $adsCategoriesData = [];
+        foreach ($child->ads as $ad) {
+            if ($originalPid > 0) {
+
                 $ad->categories()->detach($originalPid);
             }
             if ($this->parent_id > 0) {
-                $ad->categories()->syncWithoutDetaching([$this->parent_id]);
+                $adsCategoriesData[] = [
+                    'ad_id' => $ad->id,
+                    'category_id' => $this->parent_id,
+                ];
+
+                foreach ($nestedParents ?? [] as $nestedParent) {
+                    $adsCategoriesData[] = [
+                        'ad_id' => $ad->id,
+                        'category_id' => $nestedParent,
+                    ];
+                }
             }
         }
+
+        \DB::table('ads_categories')->insertOrIgnore($adsCategoriesData);
     }
 
     /**
      * inherit to children
      *
      * @param $child
-     * @param array $all_parents
+     * @param array $allParents
      * @param int $i
      */
-    private function drawForChildren($child, $all_parents = [], $i = 1)
+    private function drawForChildren($child, $allParents = [], $i = 1)
     {
-        foreach ($all_parents as $parent_id => $level) {
-            $all_parents[$parent_id] = $level + 1;
+        foreach ($allParents as $parent_id => $level) {
+            $allParents[$parent_id] = $level + 1;
         }
-        $all_parents[$child->id] = 1;
+        $allParents[$child->id] = 1;
 
-        foreach ($child->childrenCategories()->get() as $subChild) {
+        foreach ($child->childrenCategories as $subChild) {
+
             $subChild->parentCategories()->wherePivot('level', '<>', 0)->detach();
 
-            foreach ($all_parents as $parent_id => $level) {
+            $treeData = [];
+            foreach ($allParents as $parent_id => $level) {
                 if ($subChild->id == $parent_id) {
                     continue;
                 }
 
-                $subChild->parentCategories()->attach($parent_id, ['level' => $level]);
+                $treeData[] = [
+                    'parent_id' => $parent_id,
+                    'child_id' => $subChild->id,
+                    'level' => $level
+                ];
+//                $subChild->parentCategories()->attach($parent_id, ['level' => $level]);
             }
-            $this->drawForChildren($subChild, $all_parents, $i + 1);
+            \DB::table('categories_tree')->insertOrIgnore($treeData);
+
+            $this->drawForChildren($subChild, $allParents, $i + 1);
         }
 
     }
