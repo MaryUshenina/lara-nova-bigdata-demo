@@ -52,14 +52,18 @@ class UpdateAdsMeta extends Command
 
     private function generateData()
     {
+        $countAds = DB::table('ads')->selectRaw('MAX(id) as max')->first()->max ?? 0;
+        $this->output->progressStart($countAds);
 
-        $count = DB::table('ads')->selectRaw('MAX(id) as max')->first()->max ?? 0;
-        $this->output->progressStart($count);
+        $countMeta = DB::table('ads_meta')->selectRaw('MAX(ad_id) as max')->first()->max ?? 0;
+        $this->output->progressAdvance($countMeta);
 
-        $limit = 100;
+        $limit = 500;
+
         DB::table('ads')->whereNull('deleted_at')
             ->select('id')
             ->orderBy('id')
+            ->where('id', '>=', $countMeta)
             ->chunk($limit, function ($ads) use ($limit) {
 
                 $ids = $ads->pluck('id');
