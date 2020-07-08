@@ -30,7 +30,9 @@ class AdObserver
         }
         $item->updateMetaData();
 
-        dispatch(new GenerateMetricsCache());
+        if($this->checkIfDataForCachingIsChanged($item)){
+            dispatch(new GenerateMetricsCache());
+        }
 
         return true;
     }
@@ -54,4 +56,16 @@ class AdObserver
         return true;
     }
 
+
+    public function checkIfDataForCachingIsChanged(Ad $item)
+    {
+        $fields = ['price', 'user_id', 'country', 'created_at_date'];
+
+        foreach ($fields as $field) {
+            if ($item->$field != $item->getOriginal($field)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
