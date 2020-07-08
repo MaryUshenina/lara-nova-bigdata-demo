@@ -49,6 +49,7 @@ class testTree extends Command
         DB::table('categories')->truncate();
         DB::table('ads_categories')->truncate();
         DB::table('ads')->truncate();
+        DB::table('ads_meta')->truncate();
 
         Schema::enableForeignKeyConstraints();
 
@@ -82,12 +83,15 @@ class testTree extends Command
 
     private function testIsEqualData($data)
     {
+        $items = EagerCategory::all()->keyBy('id');
         foreach ($data as $id => $row) {
-            $item = EagerCategory::find($id);
-            if (!$item) {
+
+            if (!isset($items[$id])) {
                 $this->error("item $id not found");
                 continue;
             }
+
+            $item = $items[$id];
             foreach ($row as $field => $value) {
                 if ($item->$field <> $value) {
                     $this->info("ERROR [$field] found:{$item->$field} <> must:$value");
@@ -115,7 +119,7 @@ class testTree extends Command
             $dif1 = array_diff($temp1, $temp2);
             $dif2 = array_diff($temp2, $temp1);
             if (count($dif1) || count($dif2)) {
-                $this->info("ERROR [ads_category_data] found:$row->tree_order <> must:{$data[$i]['tree_order']}");
+                $this->info("ERROR [ads_category_data $i] found:$row->tree_order <> must:{$data[$i]['tree_order']}");
             }
         }
     }
