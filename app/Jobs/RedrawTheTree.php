@@ -86,6 +86,8 @@ class RedrawTheTree implements ShouldQueue
 
         // handle ads
         $this->moveAdsToNewCategory($child, $originalPid);
+
+        dispatch(new GenerateMetricsCache());
     }
 
     /**
