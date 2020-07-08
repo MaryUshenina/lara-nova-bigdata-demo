@@ -6,6 +6,8 @@ use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 
 class UpdateAdsMeta extends Command
 {
@@ -14,7 +16,7 @@ class UpdateAdsMeta extends Command
      *
      * @var string
      */
-    protected $signature = 'ads:meta:update';
+    protected $signature = 'ads:meta:update {--reset=0}';
 
     /**
      * The console command description.
@@ -40,24 +42,65 @@ class UpdateAdsMeta extends Command
      */
     public function handle()
     {
-        AdMetaData::truncate();
-
-        $limit = 1000;
-        $offset = 0;
-
-        $ads = Ad::limit($limit)->get();
-        $this->output->progressStart(Ad::count());
-        while (count($ads)) {
-
-            foreach ($ads as $ad) {
-//                $ad->touch(); // for trigger
-                $ad->updateMetaData();
-                $this->output->progressAdvance();
-            }
-            $offset += $limit;
-            $ads = Ad::limit($limit)->offset($offset)->get();
+        if ($reset = $this->option('reset')) {
+            $this->info('reset data');
+            AdMetaData::truncate();
         }
-        $this->output->progressFinish();
 
+        $this->generateData();
+    }
+
+    private function generateData()
+    {
+        $countAds = DB::table('ads')->selectRaw('MAX(id) as max')->first()->max ?? 0;
+        $this->output->progressStart($countAds);
+
+        $countMeta = DB::table('ads_meta')->selectRaw('MAX(ad_id) as max')->first()->max ?? 0;
+        $this->output->progressAdvance($countMeta);
+
+        $limit = 500;
+
+        DB::table('ads')->whereNull('deleted_at')
+            ->select('id')
+            ->orderBy('id')
+            ->where('id', '>=', $countMeta)
+            ->chunk($limit, function ($ads) use ($limit) {
+
+                $ids = $ads->pluck('id');
+
+                DB::table('ads_meta')->insertUsing(
+                    ['ad_id', 'user_id', 'country', 'created_at_ymd', 'end_date_ymd', 'price', 'price_group'],
+                    function (Builder $query) use ($limit, $ids) {
+                        $query->select([
+                            'ads.id', 'ads.user_id', 'ads.country',
+                            Db::raw("CONCAT(
+                            right(YEAR(ads.created_at_date), 2),
+                            LPAD(MONTH(ads.created_at_date), 2, 0),
+                            LPAD(Day(ads.created_at_date), 2, 0)
+                        )"),
+                            Db::raw("CONCAT(
+                            right(YEAR(ads.end_date), 2),
+                            LPAD(MONTH(ads.end_date), 2, 0),
+                            LPAD(Day(ads.end_date), 2, 0)
+                        )"),
+                            'ads.price',
+
+                            DB::raw('CEIL (ads.price / 10000) AS price_group')
+                        ])->from('ads')
+                            ->leftJoin('ads_meta', function ($join) {
+                                $join->on('ads_meta.ad_id', '=', 'ads.id')
+                                    ->whereNull('ads.deleted_at');
+                            })
+                            ->whereNull('ads_meta.ad_id')
+                            ->whereIn('id', $ids)
+                            ->limit($limit);
+                    }
+                );
+
+                $this->output->progressAdvance($limit);
+
+            });
+
+        $this->output->progressFinish();
     }
 }
