@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Ad;
+use App\Models\AdMetaData;
 use App\Nova\Metrics\AdsAvailability;
 use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\NewAds;
@@ -37,8 +38,8 @@ class GenerateMetricsCache implements ShouldQueue
      */
     public function handle()
     {
-        AdsPrices::getCalculatedData('all', Ad::query());
-        AdsAvailability::getCalculatedData('all', Ad::query());
+        AdsPrices::getCalculatedData('all', AdMetaData::query());
+        AdsAvailability::getCalculatedData('all', AdMetaData::query());
 
         $newAdsMetric = new NewAds();
         foreach($newAdsMetric->ranges() as $range => $rangeLabel){
