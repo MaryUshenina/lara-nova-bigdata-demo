@@ -41,7 +41,7 @@ class CategoriesFilter extends NovaSelect2Filter
      */
     public function options(Request $request)
     {
-        return EagerCategory::orderByTree()->get()->pluck('tree_name', 'id');
+        return EagerCategory::getRawDataArray(true);
     }
 
 

@@ -8,6 +8,7 @@ use App\Nova\Metrics\AdsCount;
 use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\AdsTopAgent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Jfeid\NovaGoogleMaps\NovaGoogleMaps;
@@ -188,11 +189,11 @@ class Ad extends Resource
      */
     private function getCategoryField(Request $request)
     {
-        if (!count(self::$allCategoriesOptions)) {
-            self::$allCategoriesOptions = EagerCategory::orderByTree()->get();
-        }
-
         $isForm = !($request->isResourceIndexRequest() || $request->isResourceDetailRequest());
+
+        if (!count(self::$allCategoriesOptions) && !$request->isResourceIndexRequest()) {
+            self::$allCategoriesOptions = EagerCategory::getRawDataArray($isForm, false);
+        }
 
         return BelongsToManyField::make(__('Categories'), 'categories', Category::class)
             ->options(self::$allCategoriesOptions)

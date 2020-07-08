@@ -68,17 +68,14 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
             list($query) = $parameters;
 
-            $topAgent = $query
-                ->select('user_id')
-                ->addSelect(\DB::raw('COUNT(ad_id) as count'))
+            return $query->join('users', 'users.id', 'ads_meta.user_id')
+                ->select( [
+                     'users.name',
+                     \DB::raw('COUNT(distinct ads_meta.ad_id) as count')
+                ])
                 ->groupBy('user_id')
-                ->orderByRaw('COUNT(ad_id) desc')
+                ->orderByRaw('COUNT(ads_meta.ad_id) desc')
                 ->first();
-
-            return (object)[
-                'name' => $topAgent->user->name ?? 'no agent',
-                'count' => $topAgent->count ?? 0,
-            ];
 
         }, [$query]);
     }

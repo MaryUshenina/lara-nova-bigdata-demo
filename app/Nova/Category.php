@@ -2,7 +2,9 @@
 
 namespace App\Nova;
 
+use App\Models\EagerCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
@@ -49,7 +51,7 @@ class Category extends Resource
     public function fields(Request $request)
     {
         return [
-            $this->getParentField(),
+            $this->getParentField($request),
 
             $this->getNameField($request),
 
@@ -130,13 +132,13 @@ class Category extends Resource
 
 
     /**
+     * @param Request $request
      * @return Select
      */
-    private function getParentField()
+    private function getParentField(Request $request)
     {
-        if (!count(self::$allCategoriesOptions)) {
-            $all = \App\Models\EagerCategory::orderByTree()->get()
-                ->pluck('tree_name', 'id')->toArray();
+        if (!count(self::$allCategoriesOptions) && !$request->isResourceIndexRequest()) {
+            $all = EagerCategory::getRawDataArray(true);
 
             self::$allCategoriesOptions = [0 => 'root'] + $all; // dont use array_merge to keep keys
         }
