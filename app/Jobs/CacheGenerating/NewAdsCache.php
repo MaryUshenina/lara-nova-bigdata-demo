@@ -1,11 +1,7 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\CacheGenerating;
 
-use App\Jobs\CacheGenerating\AdsAvailabilityWithNoFilterCache;
-use App\Jobs\CacheGenerating\AdsPriceWithNoFilterCache;
-use App\Jobs\CacheGenerating\NewAdsCache;
-use App\Jobs\CacheGenerating\NewUsersCache;
 use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Nova\Metrics\AdsAvailability;
@@ -22,7 +18,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use \Laravel\Nova\Http\Requests\NovaRequest;
 
-class GenerateMetricsCache implements ShouldQueue
+class NewAdsCache implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -43,10 +39,13 @@ class GenerateMetricsCache implements ShouldQueue
      */
     public function handle()
     {
-        dispatch(new AdsAvailabilityWithNoFilterCache());
-        dispatch(new AdsPriceWithNoFilterCache());
-        dispatch(new NewAdsCache());
-        dispatch(new NewUsersCache());
+        $newAdsMetric = new NewAds();
+        foreach($newAdsMetric->ranges() as $range => $rangeLabel){
+            $fakeRequest = new NovaRequest();
+            $fakeRequest->range = $range;
+            $newAdsMetric->getCalculatedDataByRange($range, $fakeRequest);
+        }
+
 
     }
 }

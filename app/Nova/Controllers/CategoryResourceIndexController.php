@@ -3,8 +3,11 @@
 namespace App\Nova\Controllers;
 
 
+use App\Models\EagerCategory;
 use App\Nova\Category;
+use App\Observers\EagerCategoryObserver;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Contracts\RelatableField;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
 use Laravel\Nova\TrashedStatus;
@@ -26,13 +29,30 @@ class CategoryResourceIndexController extends \Laravel\Nova\Http\Controllers\Res
             $request, $resource = $request->resource()
         );
 
+        $idsLevel0 = [];
+        $paginator->getCollection()->map(function ($item) use (&$idsLevel0) {
+            $idsLevel0[] = $item->id;
+        });
+
+        $allChildren = EagerCategory::whereIn('min_pid', $idsLevel0)
+            ->select('*')
+            ->addSelect(DB::raw("CONCAT(repeat('-', max_level),' ', name) tree_name"))
+            ->orderByTree()->get();
+
+        $childrenPerRootLevel = [];
+        $allChildren->map(function ($item) use (&$childrenPerRootLevel) {
+            $childrenPerRootLevel[$item->min_pid][] = $item;
+        });;
+
         $totalData = new Collection();
-        $paginator->getCollection()->map(function($item) use (&$totalData, $request){
+        $paginator->getCollection()->map(function ($item) use (&$totalData, $request, $childrenPerRootLevel) {
             $totalData->add($item);
 
-            $totalData = $totalData->merge(
-                $item->childrenCategoriesByRootView()->orderByTree()->get()
-            );
+            if (isset($childrenPerRootLevel[$item->id])) {
+                $totalData = $totalData->merge(
+                    collect($childrenPerRootLevel[$item->id])
+                );
+            }
         });
 
         return response()->json([

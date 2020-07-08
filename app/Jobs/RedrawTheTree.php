@@ -97,72 +97,41 @@ class RedrawTheTree implements ShouldQueue
      */
     private function moveAdsToNewCategory(Category $child, $originalPid)
     {
-        $child->refresh();
-
-        if ($this->parent_id) {
-            $parent = Category::find($this->parent_id);
-            $nestedParents = $parent->parentCategories()->pluck('id');
+        $adIds = DB::table('ads_categories')->where('category_id', $child->id)->pluck('ad_id');
+        if (!count($adIds)) {
+            return;  // no ads are attached
         }
-        //move ads to new category
+
+        // detach old pid from all ads
+        if ($originalPid > 0) {
+            \DB::table('ads_categories')->where('category_id', $originalPid)
+                ->whereIn('ad_id', $adIds)
+                ->delete();
+        }
+
+        if (!$this->parent_id) {
+            return; // new parent is root
+        }
+
+        $nestedParents = DB::table('categories_tree')->where('child_id', $this->parent_id)->pluck('parent_id');
+
+        // attach new parents tree
         $adsCategoriesData = [];
-        foreach ($child->ads as $ad) {
-            if ($originalPid > 0) {
+        foreach ($adIds as $adId) {
+            $adsCategoriesData[] = [
+                'ad_id' => $adId,
+                'category_id' => $this->parent_id,
+            ];
 
-                $ad->categories()->detach($originalPid);
-            }
-            if ($this->parent_id > 0) {
+            foreach ($nestedParents ?? [] as $nestedParent) {
                 $adsCategoriesData[] = [
-                    'ad_id' => $ad->id,
-                    'category_id' => $this->parent_id,
+                    'ad_id' => $adId,
+                    'category_id' => $nestedParent,
                 ];
-
-                foreach ($nestedParents ?? [] as $nestedParent) {
-                    $adsCategoriesData[] = [
-                        'ad_id' => $ad->id,
-                        'category_id' => $nestedParent,
-                    ];
-                }
             }
         }
 
         \DB::table('ads_categories')->insertOrIgnore($adsCategoriesData);
     }
 
-    /**
-     * inherit to children
-     *
-     * @param $child
-     * @param array $allParents
-     * @param int $i
-     */
-    private function drawForChildren($child, $allParents = [], $i = 1)
-    {
-        foreach ($allParents as $parent_id => $level) {
-            $allParents[$parent_id] = $level + 1;
-        }
-        $allParents[$child->id] = 1;
-
-        foreach ($child->childrenCategories as $subChild) {
-
-            $subChild->parentCategories()->wherePivot('level', '<>', 0)->detach();
-
-            $treeData = [];
-            foreach ($allParents as $parent_id => $level) {
-                if ($subChild->id == $parent_id) {
-                    continue;
-                }
-
-                $treeData[] = [
-                    'parent_id' => $parent_id,
-                    'child_id' => $subChild->id,
-                    'level' => $level
-                ];
-//                $subChild->parentCategories()->attach($parent_id, ['level' => $level]);
-            }
-            \DB::table('categories_tree')->insertOrIgnore($treeData);
-
-            $this->drawForChildren($subChild, $allParents, $i + 1);
-        }
-
-    }
 }
