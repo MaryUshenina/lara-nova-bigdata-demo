@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -61,41 +62,28 @@ class UpdateAdsMeta extends Command
         $limit = $this->option('limit');
 
         DB::table('ads')->whereNull('deleted_at')
-            ->select('id')
+            ->select(['id', 'user_id', 'country', 'created_at_date', 'end_date', 'price'])
             ->orderBy('id')
             ->where('id', '>=', $countMeta)
             ->chunk($limit, function ($ads) use ($limit) {
 
-                $ids = $ads->pluck('id');
+                $insertData = [];
+                foreach($ads as $ad){
+                    $created = Carbon::createFromFormat('Y-m-d', $ad->created_at_date);
+                    $endDate = Carbon::createFromFormat('Y-m-d', $ad->end_date);
 
-                DB::table('ads_meta')->insertUsing(
-                    ['ad_id', 'user_id', 'country', 'created_at_ymd', 'end_date_ymd', 'price', 'price_group'],
-                    function (Builder $query) use ($limit, $ids) {
-                        $query->select([
-                            'ads.id', 'ads.user_id', 'ads.country',
-                            Db::raw("CONCAT(
-                            right(YEAR(ads.created_at_date), 2),
-                            LPAD(MONTH(ads.created_at_date), 2, 0),
-                            LPAD(Day(ads.created_at_date), 2, 0)
-                        )"),
-                            Db::raw("CONCAT(
-                            right(YEAR(ads.end_date), 2),
-                            LPAD(MONTH(ads.end_date), 2, 0),
-                            LPAD(Day(ads.end_date), 2, 0)
-                        )"),
-                            'ads.price',
+                    $insertData[] = [
+                        'ad_id'=> $ad->id,
+                        'user_id' => $ad->user_id,
+                        'country' => $ad->country,
+                        'created_at_ymd' => $created->format('ymd'),
+                        'end_date_ymd' => $endDate->format('ymd'),
+                        'price' => $ad->price,
+                        'price_group' => ceil($ad->price / 10000),
+                    ];
+                }
 
-                            DB::raw('CEIL (ads.price / 10000) AS price_group')
-                        ])->from('ads')
-                            ->leftJoin('ads_meta', function ($join) {
-                                $join->on('ads_meta.ad_id', '=', 'ads.id')
-                                    ->whereNull('ads.deleted_at');
-                            })
-                            ->whereNull('ads_meta.ad_id')
-                            ->whereIn('id', $ids)
-                            ->limit($limit);
-                    }
-                );
+                DB::table('ads_meta')->insertOrIgnore($insertData);
 
                 $this->output->progressAdvance($limit);
 
