@@ -16,7 +16,7 @@ class UpdateAdsMeta extends Command
      *
      * @var string
      */
-    protected $signature = 'ads:meta:update {--reset=0}';
+    protected $signature = 'ads:meta:update {--reset=0} {--limit=300}';
 
     /**
      * The console command description.
@@ -58,7 +58,7 @@ class UpdateAdsMeta extends Command
         $countMeta = DB::table('ads_meta')->selectRaw('MAX(ad_id) as max')->first()->max ?? 0;
         $this->output->progressAdvance($countMeta);
 
-        $limit = 500;
+        $limit = $this->option('limit');
 
         DB::table('ads')->whereNull('deleted_at')
             ->select('id')
