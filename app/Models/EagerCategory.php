@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class EagerCategory extends Model
 {
@@ -42,6 +43,22 @@ class EagerCategory extends Model
     public function originalCategory()
     {
         return $this->belongsTo(Category::class, 'id', 'id');
+    }
+
+    public static function getRawDataArray($withTreeIndent, $asArray = true)
+    {
+        $query = DB::table('categories_tree_view')
+            ->select(
+                'id',
+                $withTreeIndent ? DB::raw("CONCAT(repeat('-', max_level),' ', name) tree_name") : 'name'
+            )
+            ->orderBy('tree_order');
+
+        if ($asArray) {
+            return $query->pluck($withTreeIndent ? 'tree_name' : 'name', 'id')->toArray();
+        }
+
+        return $query->get();
     }
 
 }
