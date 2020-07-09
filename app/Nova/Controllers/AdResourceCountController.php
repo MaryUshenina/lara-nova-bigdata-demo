@@ -4,6 +4,7 @@ namespace App\Nova\Controllers;
 
 
 use App\Nova\Ad;
+use App\Models\Ad as AdModel;
 use \Laravel\Nova\Http\Requests\ResourceIndexRequest;
 
 class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceCountController
@@ -17,7 +18,7 @@ class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceC
     public function show(ResourceIndexRequest $request)
     {
         if (!$this->isAnyFilterApplied($request)) {
-            $count = Ad::getTotalCountWithoutFiltersViaAgentsData();
+            $count = AdModel::getTotalCountWithoutFiltersViaAgentsData();
         } else {
             $request->route()->setParameter('resource', Ad::uriKey());
             $count = $request->toCount();
