@@ -7,6 +7,8 @@ use App\Nova\Metrics\AdsAvailability;
 use App\Nova\Metrics\AdsCount;
 use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\AdsTopAgent;
+use App\Nova\Requests\IsFilteredInterface;
+use App\Nova\Requests\IsFilteredTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -28,8 +30,10 @@ use Wemersonrv\InputMask\InputMask;
 
 use Klepak\NovaRouterLink\RouterLink;
 
-class Ad extends Resource
+class Ad extends Resource implements IsFilteredInterface
 {
+
+    use IsFilteredTrait;
 
     private static $allCategoriesOptions = [];
 
@@ -178,7 +182,9 @@ class Ad extends Resource
 
     protected static function applyFilters(NovaRequest $request, $query, array $filters)
     {
-        $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
+        if (self::isAnyFilterApplied($request)) {
+            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
+        }
 
         return parent::applyFilters( $request, $query, $filters);
     }
