@@ -1,4 +1,4 @@
-@servers(['web' => 'u955735785@185.224.138.7'])
+@servers(['web' => 'u955735785@185.224.138.7 -p 65002'])
 
 @setup
 $releases_dir = $server_dir . '/releases/' . $remove_dir ;
