@@ -5,10 +5,15 @@ namespace App\Nova\Controllers;
 
 use App\Nova\Ad;
 use App\Models\Ad as AdModel;
+
+use App\Nova\Requests\IsFilteredInterface;
+use App\Nova\Requests\IsFilteredTrait;
 use \Laravel\Nova\Http\Requests\ResourceIndexRequest;
 
-class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceCountController
+class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceCountController implements IsFilteredInterface
 {
+    use IsFilteredTrait;
+
     /**
      * Get the resource count for a given query.
      *
@@ -17,7 +22,7 @@ class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceC
      */
     public function show(ResourceIndexRequest $request)
     {
-        if (!$this->isAnyFilterApplied($request)) {
+        if (!self::isAnyFilterApplied($request)) {
             $count = AdModel::getTotalCountWithoutFiltersViaAgentsData();
         } else {
             $request->route()->setParameter('resource', Ad::uriKey());
@@ -27,26 +32,5 @@ class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceC
         return response()->json(['count' => $count]);
     }
 
-    /**
-     * check if any filter was applied
-     *
-     * @param ResourceIndexRequest $request
-     * @return bool
-     */
-    private function isAnyFilterApplied(ResourceIndexRequest $request)
-    {
-        if ($request->has('filters')) {
-            // Get the decoded list of filters
-            $filters = json_decode(base64_decode($filterKey = $request->filters)) ?? [];
 
-            foreach ($filters as $filter) {
-                if (empty($filter->value)) {
-                    continue;
-                }
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
