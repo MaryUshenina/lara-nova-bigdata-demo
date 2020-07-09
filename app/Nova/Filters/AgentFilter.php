@@ -17,6 +17,7 @@ class AgentFilter extends Filter
 
     public $name = 'Agent';
 
+    public $priorityInIndex = 3;
     /**
      * Apply the filter to the given query.
      *

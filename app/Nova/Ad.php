@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\AdMetaData;
 use App\Models\EagerCategory;
 use App\Nova\Metrics\AdsAvailability;
 use App\Nova\Metrics\AdsCount;
@@ -9,6 +10,7 @@ use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\AdsTopAgent;
 use App\Nova\Requests\IsFilteredInterface;
 use App\Nova\Requests\IsFilteredTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -29,6 +31,8 @@ use Treestoneit\TextWrap\TextWrap;
 use Wemersonrv\InputMask\InputMask;
 
 use Klepak\NovaRouterLink\RouterLink;
+
+use App\Models\Ad as AdModel;
 
 class Ad extends Resource implements IsFilteredInterface
 {
@@ -133,9 +137,9 @@ class Ad extends Resource implements IsFilteredInterface
     {
         return [
             new Filters\CategoriesFilter,
-            new Filters\AgentFilter,
             new Filters\PriceRangeFilter,
             new Filters\CountryFilter,
+            new Filters\AgentFilter,
             new Filters\CreatedAtFilter,
         ];
     }
@@ -182,11 +186,22 @@ class Ad extends Resource implements IsFilteredInterface
 
     protected static function applyFilters(NovaRequest $request, $query, array $filters)
     {
-        if (self::isAnyFilterApplied($request)) {
-            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
+        if ($filtersApplied = self::isAnyFilterApplied($request)) {
+            $query=AdMetaData::query();
+//            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
+        }else{
+            $query=AdModel::query();
         }
 
-        return parent::applyFilters( $request, $query, $filters);
+        $query = parent::applyFilters( $request, $query, $filters);
+        if($filtersApplied){
+
+//            Ad::query()->whereIn()
+            $query->join('ads', 'ads_meta.ad_id', '=', 'ads.id')
+                ->select('ads.*');
+        }
+
+        return $query;
     }
 
     /**
@@ -252,8 +267,13 @@ class Ad extends Resource implements IsFilteredInterface
      */
     private function getCreatedField()
     {
-        return Text::make(__('Created'), function () {
-            return $this->created_at_date->format('m.d.y');
+        $outputFormat = 'm.d.y';
+
+        return Text::make(__('Created'), function () use ($outputFormat) {
+            if(is_string($createdAt = $this->created_at_date)){
+                $createdAt = Carbon::createFromFormat('Y-m-d', $this->created_at_date);
+            }
+            return $createdAt->format($outputFormat);
         })
             ->asHtml();
     }

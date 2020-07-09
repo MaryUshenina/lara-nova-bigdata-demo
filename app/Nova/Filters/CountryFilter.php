@@ -16,6 +16,7 @@ class CountryFilter extends Filter
 
     public $name = 'Country';
 
+    public $priorityInIndex = 2;
     /**
      * Apply the filter to the given query.
      *

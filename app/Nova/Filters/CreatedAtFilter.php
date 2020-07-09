@@ -10,6 +10,8 @@ class CreatedAtFilter extends DateFilter
 {
     public $name = 'Created at';
 
+    public $priorityInIndex = 4;
+
     /**
      * Apply the filter to the given query.
      *
