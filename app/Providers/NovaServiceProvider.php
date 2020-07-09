@@ -16,8 +16,14 @@ use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
+use \App\Nova\Category;
+use \App\Nova\Ad;
+
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
+
+    protected $namespace = 'App\Nova\Controllers';
+
     /**
      * Bootstrap any application services.
      *
@@ -27,8 +33,16 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
-        Route::middleware(['nova'])->get('/nova-api/' . \App\Nova\Category::uriKey(),
-            '\App\Nova\Controllers\CategoryResourceIndexController@handle');
+        Route::middleware(['nova'])
+            ->prefix('nova-api')
+            ->namespace($this->namespace)
+            ->group(function(){
+
+                Route::get(Category::uriKey(), 'CategoryResourceIndexController@handle');
+                Route::get(Ad::uriKey().'/count', 'AdResourceCountController@show');
+
+            });
+
 
         Nova::serving(function () {
             EagerCategory::observe(EagerCategoryObserver::class);
