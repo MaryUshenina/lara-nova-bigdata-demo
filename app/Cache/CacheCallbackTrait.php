@@ -10,6 +10,10 @@ trait CacheCallbackTrait
 
     public static function getCachedOrRetrieve($cacheKey, callable $callback, $parameters = [], $expires = null, $cacheGroup = null)
     {
+        if(!config('cache.callback_trait', true)){
+            return $callback($parameters);
+        }
+
         $cacheGroup = $cacheGroup ?? self::class;
         $cacheKey =  $cacheGroup.'_'.$cacheKey;
         if (Cache::has($cacheKey)) {
