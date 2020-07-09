@@ -16,7 +16,7 @@ deploy-develop:
     refs:
       - branches
     variables:
-      - $CI_COMMIT_REF_NAME == $AUTO_DEPLOY_BRANCH
+      - $CI_COMMIT_REF_NAME == $AUTO_DEPLOY_BRANCH_ALTER
 
 
 deploy:
