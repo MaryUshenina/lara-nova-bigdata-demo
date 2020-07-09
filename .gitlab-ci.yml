@@ -10,7 +10,7 @@ deploy-develop:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - current_dir=$(pwd)
     - remove_dir=$(date +'%m%d%Y%H%M%S')
-    - scp -r "$current_dir" "$SSH_USER_NAME_ALTER"@185.224.138.7:"$SERVER_DIR_ALTER"/releases/"$remove_dir"
+    - scp -P65002 -r "$current_dir" "$SSH_USER_NAME_ALTER"@185.224.138.7:"$SERVER_DIR_ALTER"/releases/"$remove_dir"
     - envoy run deploy --remove_dir="$remove_dir" --server_dir="$SERVER_DIR_ALTER"
   only:
     refs:
@@ -28,7 +28,7 @@ deploy:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - current_dir=$(pwd)
     - remove_dir=$(date +'%m%d%Y%H%M%S')
-    - scp -r "$current_dir" "$SSH_USER_NAME_ALTER"@185.224.138.7:"$SERVER_DIR_ALTER"/releases/"$remove_dir"
+    - scp -P65002 -r "$current_dir" "$SSH_USER_NAME_ALTER"@185.224.138.7:"$SERVER_DIR_ALTER"/releases/"$remove_dir"
     - envoy run deploy --remove_dir="$remove_dir" --server_dir="$SERVER_DIR_ALTER"
   except:
     - develop
