@@ -23,7 +23,7 @@ trait FilteredBuilderMetricsTrait
                 }
                 $appliedFilters++;
                 // Create a new instance of the filter and apply the query to your model
-                $model = (new $filter->class)->apply($request, $query, $filter->value);
+                $query = (new $filter->class)->apply($request, $query, $filter->value);
             }
         }
         if (!$appliedFilters) {
