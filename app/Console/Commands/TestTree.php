@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Schema;
 
-class testTree extends Command
+class TestTree extends Command
 {
     /**
      * The name and signature of the console command.
