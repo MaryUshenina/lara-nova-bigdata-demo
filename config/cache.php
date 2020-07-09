@@ -101,4 +101,6 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
+    'callback_trait' => env('CACHE_CALLBACK_TRAIT', true)
+
 ];

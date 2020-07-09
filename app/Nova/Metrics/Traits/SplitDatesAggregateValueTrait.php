@@ -7,7 +7,7 @@ use Laravel\Nova\Nova;
 
 trait SplitDatesAggregateValueTrait
 {
-    public function aggregateSplit($request, $queryOrModel, $function, $column = null, $dateColumn = null)
+    public function aggregateSplit($request, $queryOrModel, $function, $column = null, $dateColumn = null, $dateFormat = 'Y-m-d')
     {
         $query = $queryOrModel instanceof Builder ? $queryOrModel : (new $queryOrModel)->newQuery();
 
@@ -19,13 +19,13 @@ trait SplitDatesAggregateValueTrait
 
         $previousRange = $this->previousRange($request->range, $timezone);
         $previousValue = round(with(clone $query)
-            ->whereBetween($dateColumn, [$previousRange[0]->format('Y-m-d'), $previousRange[1]->format('Y-m-d')])
+            ->whereBetween($dateColumn, [$previousRange[0]->format($dateFormat), $previousRange[1]->format($dateFormat)])
             ->{$function}($column), $this->precision);
 
         $currentRange = $this->currentRange($request->range, $timezone);
         return $this->result(
             round(with(clone $query)
-                ->whereBetween($dateColumn, [$currentRange[0]->format('Y-m-d'), $currentRange[1]->format('Y-m-d')])
+                ->whereBetween($dateColumn, [$currentRange[0]->format($dateFormat), $currentRange[1]->format($dateFormat)])
                 ->{$function}($column), $this->precision)
         )->previous($previousValue);
     }

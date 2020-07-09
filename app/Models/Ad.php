@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Ad extends Model
 {
@@ -73,6 +74,17 @@ class Ad extends Model
             'price' => $this->price,
             'price_group' => ceil($this->price / 10000),
         ]);
+
+    }
+
+    /**
+     * @return int|mixed
+     */
+    public static function getTotalCountWithoutFiltersViaAgentsData()
+    {
+        return DB::table('agents_data')
+                ->select(DB::raw('sum(ads_count) as total'))
+                ->first()->total ?? 0;
 
     }
 }

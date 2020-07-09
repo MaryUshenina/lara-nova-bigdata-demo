@@ -5,6 +5,7 @@ namespace App\Nova\Metrics;
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
 use App\Models\Ad;
+use App\Models\AdMetaData;
 use App\Nova\Metrics\Interfaces\SplitDatesAggregateValueInterface;
 use App\Nova\Metrics\Traits\SplitDatesAggregateValueTrait;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -36,7 +37,7 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
         return self::getCachedOrRetrieve($filterKey, function ($parameters) {
             list($object, $request) = $parameters;
 
-            return $object->count($request, Ad::class);
+            return $object->count($request, AdMetaData::class, 'ad_id', 'created_at_ymd');
 
         }, [$this, $request]);
     }
@@ -44,7 +45,7 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
 
     protected function aggregate($request, $model, $function, $column = null, $dateColumn = null)
     {
-        return $this->aggregateSplit($request, $model, $function, $column, $dateColumn);
+        return $this->aggregateSplit($request, $model, $function, $column, $dateColumn, 'ymd');
     }
 
     /**
