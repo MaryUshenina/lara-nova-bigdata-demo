@@ -4,19 +4,15 @@ namespace App\Providers;
 
 
 use App\Models\CompiledTreeCategory;
-
+use App\Nova\Ad;
+use App\Nova\Category;
 use App\Nova\Metrics\NewAds;
 use App\Nova\Metrics\NewUsers;
 use App\Observers\CompiledTreeCategoryObserver;
-
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
-use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
-
-use \App\Nova\Category;
-use \App\Nova\Ad;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -35,7 +31,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Route::middleware(['nova'])
             ->prefix('nova-api')
             ->namespace($this->namespace)
-            ->group(function(){
+            ->group(function () {
 
                 Route::get(Category::uriKey(), 'CategoryResourceIndexController@handle');
                 Route::get(Ad::uriKey().'/count', 'AdResourceCountController@show');
@@ -47,7 +43,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             CompiledTreeCategory::observe(CompiledTreeCategoryObserver::class);
         });
 
-        Nova::style('custom-style', public_path('css/custom.css') );
+        Nova::style('custom-style', public_path('css/custom.css'));
     }
 
     /**
@@ -58,9 +54,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**

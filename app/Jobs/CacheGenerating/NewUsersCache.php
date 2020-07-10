@@ -33,7 +33,7 @@ class NewUsersCache implements ShouldQueue
     {
 
         $newUsersMetric = new NewUsers();
-        foreach($newUsersMetric->ranges() as $range => $rangeLabel){
+        foreach ($newUsersMetric->ranges() as $range => $rangeLabel) {
             $fakeRequest = new NovaRequest();
             $fakeRequest->range = $range;
             $newUsersMetric->getCalculatedDataByRange($range, $fakeRequest);

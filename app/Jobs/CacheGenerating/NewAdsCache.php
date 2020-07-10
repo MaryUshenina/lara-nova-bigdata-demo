@@ -32,7 +32,7 @@ class NewAdsCache implements ShouldQueue
     public function handle()
     {
         $newAdsMetric = new NewAds();
-        foreach($newAdsMetric->ranges() as $range => $rangeLabel){
+        foreach ($newAdsMetric->ranges() as $range => $rangeLabel) {
             $fakeRequest = new NovaRequest();
             $fakeRequest->range = $range;
             $newAdsMetric->getCalculatedDataByRange($range, $fakeRequest);

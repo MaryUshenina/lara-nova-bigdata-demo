@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Ad;
 use App\Models\EstateRequest;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -28,12 +27,12 @@ class EstateRequestPolicy
 
     public function view(User $user, EstateRequest $estateRequest)
     {
-        return $user->isAdmin();;
+        return $user->isAdmin();
     }
 
     public function detail(User $user, EstateRequest $estateRequest)
     {
-        return $user->isAdmin();;
+        return $user->isAdmin();
     }
 
     public function update(User $user, EstateRequest $estateRequest)

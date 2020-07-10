@@ -4,11 +4,13 @@ namespace App\Nova\Metrics;
 
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
-use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Models\User;
 use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
 use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
+use DateInterval;
+use DateTimeInterface;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
@@ -33,7 +35,7 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
     /**
      * Calculate the value of the metric.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param  NovaRequest  $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
@@ -51,7 +53,7 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
      * get cached data or calculate and cache
      *
      * @param $filterKey
-     * @param Builder $query
+     * @param  Builder  $query
      * @return mixed
      */
     public static function getCalculatedData($filterKey, Builder $query)
@@ -69,9 +71,9 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
             list($query) = $parameters;
 
             return $query->join('users', 'users.id', 'ads_meta.user_id')
-                ->select( [
-                     'users.name',
-                     \DB::raw('COUNT(distinct ads_meta.ad_id) as count')
+                ->select([
+                    'users.name',
+                    DB::raw('COUNT(distinct ads_meta.ad_id) as count')
                 ])
                 ->groupBy('user_id')
                 ->orderByRaw('COUNT(ads_meta.ad_id) desc')
@@ -94,7 +96,7 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
     /**
      * Determine for how many minutes the metric should be cached.
      *
-     * @return  \DateTimeInterface|\DateInterval|float|int
+     * @return  DateTimeInterface|DateInterval|float|int
      */
     public function cacheFor()
     {

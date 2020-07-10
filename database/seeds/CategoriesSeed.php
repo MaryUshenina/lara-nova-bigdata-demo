@@ -1,13 +1,8 @@
 <?php
 
+use App\Models\Category;
 use App\Models\CompiledTreeCategory;
 use Illuminate\Database\Seeder;
-
-use \Illuminate\Support\Facades\DB;
-
-use \App\Models\Category;
-
-use Illuminate\Support\Facades\Schema;
 
 class CategoriesSeed extends Seeder
 {

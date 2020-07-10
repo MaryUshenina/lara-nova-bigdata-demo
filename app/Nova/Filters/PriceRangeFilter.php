@@ -2,8 +2,8 @@
 
 namespace App\Nova\Filters;
 
-use Illuminate\Http\Request;
 use DigitalCreative\RangeInputFilter\RangeInputFilter;
+use Illuminate\Http\Request;
 
 class PriceRangeFilter extends RangeInputFilter
 {

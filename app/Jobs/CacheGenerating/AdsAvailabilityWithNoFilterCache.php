@@ -31,6 +31,6 @@ class AdsAvailabilityWithNoFilterCache implements ShouldQueue
      */
     public function handle()
     {
-         AdsAvailability::getCalculatedData('all', AdMetaData::query());
+        AdsAvailability::getCalculatedData('all', AdMetaData::query());
     }
 }
