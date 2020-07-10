@@ -2,33 +2,30 @@
 
 namespace App\Nova;
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use App\Nova\Metrics\AdsAvailability;
 use App\Nova\Metrics\AdsCount;
 use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\AdsTopAgent;
 use App\Nova\Requests\IsFilteredInterface;
 use App\Nova\Requests\IsFilteredTrait;
+use Benjacho\BelongsToManyField\BelongsToManyField;
+use Countries;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Jfeid\NovaGoogleMaps\NovaGoogleMaps;
+use Klepak\NovaRouterLink\RouterLink;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-
-use Benjacho\BelongsToManyField\BelongsToManyField;
-
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Treestoneit\TextWrap\TextWrap;
-
 use Wemersonrv\InputMask\InputMask;
-
-use Klepak\NovaRouterLink\RouterLink;
+use function __;
 
 class Ad extends Resource implements IsFilteredInterface
 {
@@ -66,7 +63,7 @@ class Ad extends Resource implements IsFilteredInterface
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function fields(Request $request)
@@ -110,7 +107,7 @@ class Ad extends Resource implements IsFilteredInterface
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function cards(Request $request)
@@ -126,7 +123,7 @@ class Ad extends Resource implements IsFilteredInterface
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function filters(Request $request)
@@ -143,7 +140,7 @@ class Ad extends Resource implements IsFilteredInterface
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function lenses(Request $request)
@@ -154,7 +151,7 @@ class Ad extends Resource implements IsFilteredInterface
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function actions(Request $request)
@@ -170,7 +167,7 @@ class Ad extends Resource implements IsFilteredInterface
         // first element should be model object
         $modelObject = $fillFields[0];
 
-        if($modelObject->save_without_address){
+        if ($modelObject->save_without_address) {
             $modelObject->location_lat = null;
             $modelObject->location_lng = null;
         }
@@ -183,14 +180,15 @@ class Ad extends Resource implements IsFilteredInterface
     protected static function applyFilters(NovaRequest $request, $query, array $filters)
     {
         if (self::isAnyFilterApplied($request)) {
-            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
+            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id')
+                ->select('ads.*');
         }
 
-        return parent::applyFilters( $request, $query, $filters);
+        return parent::applyFilters($request, $query, $filters);
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return BelongsToManyField
      */
     private function getCategoryField(Request $request)
@@ -198,7 +196,7 @@ class Ad extends Resource implements IsFilteredInterface
         $isForm = !($request->isResourceIndexRequest() || $request->isResourceDetailRequest());
 
         if (!count(self::$allCategoriesOptions) && !$request->isResourceIndexRequest()) {
-            self::$allCategoriesOptions = EagerCategory::getRawDataArray($isForm, false);
+            self::$allCategoriesOptions = CompiledTreeCategory::getRawDataArray($isForm, false);
         }
 
         return BelongsToManyField::make(__('Categories'), 'categories', Category::class)
@@ -321,8 +319,8 @@ class Ad extends Resource implements IsFilteredInterface
      */
     private function getCountryField()
     {
-        return Select::make(\__('Country'), 'country')
-            ->options(\Countries::getList('en'))
+        return Select::make(__('Country'), 'country')
+            ->options(Countries::getList(config('app.locale')))
             ->rules('required')
             ->hideFromIndex()
             ->displayUsingLabels();
@@ -340,19 +338,21 @@ class Ad extends Resource implements IsFilteredInterface
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return NovaGoogleMaps
      */
     private function getGoogleMapFiled(Request $request)
     {
         return NovaGoogleMaps::make(__('Address'), 'location')
             ->hideFromIndex()
-            ->rules([Rule::requiredIf(function () use ($request) {
-                if ($request->location_lat) {
-                    return false;
-                }
-                return !$request->save_without_address;
-            })])
+            ->rules([
+                Rule::requiredIf(function () use ($request) {
+                    if ($request->location_lat) {
+                        return false;
+                    }
+                    return !$request->save_without_address;
+                })
+            ])
             ->hideFromDetail(function () {
                 return is_null($this->location_lat) || !$this->location_lat;
             })
@@ -367,4 +367,26 @@ class Ad extends Resource implements IsFilteredInterface
         return Boolean::make(__('Save without address'), 'save_without_address')
             ->onlyOnForms();
     }
+
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Ads');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Ad');
+    }
+
 }

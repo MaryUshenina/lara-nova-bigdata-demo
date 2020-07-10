@@ -3,9 +3,7 @@
 namespace App\Observers;
 
 use App\Jobs\RedrawTheTree;
-use App\Models\EagerCategory;
 use App\Models\Category;
-use Illuminate\Support\Facades\Auth;
 
 class CategoryObserver
 {

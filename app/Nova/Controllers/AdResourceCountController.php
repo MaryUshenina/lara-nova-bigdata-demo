@@ -3,22 +3,23 @@
 namespace App\Nova\Controllers;
 
 
-use App\Nova\Ad;
 use App\Models\Ad as AdModel;
-
+use App\Nova\Ad;
 use App\Nova\Requests\IsFilteredInterface;
 use App\Nova\Requests\IsFilteredTrait;
-use \Laravel\Nova\Http\Requests\ResourceIndexRequest;
+use Illuminate\Http\Response;
+use Laravel\Nova\Http\Controllers\ResourceCountController;
+use Laravel\Nova\Http\Requests\ResourceIndexRequest;
 
-class AdResourceCountController extends \Laravel\Nova\Http\Controllers\ResourceCountController implements IsFilteredInterface
+class AdResourceCountController extends ResourceCountController implements IsFilteredInterface
 {
     use IsFilteredTrait;
 
     /**
      * Get the resource count for a given query.
      *
-     * @param \Laravel\Nova\Http\Requests\ResourceIndexRequest $request
-     * @return \Illuminate\Http\Response
+     * @param  ResourceIndexRequest  $request
+     * @return Response
      */
     public function show(ResourceIndexRequest $request)
     {

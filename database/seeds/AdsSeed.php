@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Ad;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use \App\Models\Ad;
-use \App\Models\User;
-use \App\Models\Category;
-use \Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdsSeed extends Seeder
 {
@@ -21,7 +21,7 @@ class AdsSeed extends Seeder
 
     public function __construct()
     {
-        $this->countriesList = array_flip(\Countries::getList('en'));
+        $this->countriesList = array_flip(Countries::getList(config('app.locale')));
         $this->usersList = $users = User::whereIn('role', User::ROLES_WITH_ADS)->pluck('id');
         $this->faker = Faker\Factory::create();
 
@@ -75,13 +75,13 @@ class AdsSeed extends Seeder
     private function addCategoriesToAds()
     {
         $adsIdsCollection = DB::table('ads')
-                ->leftJoin('ads_categories', 'ads.id', '=', 'ads_categories.ad_id')
-                ->select('ads.id')
-                ->groupBy('ads.id')
-                ->having(DB::Raw('COUNT(ads_categories.category_id)'), 0)
-                ->limit(1000)
-                ->offset($this->adsWithNoCategories)
-                ->get();
+            ->leftJoin('ads_categories', 'ads.id', '=', 'ads_categories.ad_id')
+            ->select('ads.id')
+            ->groupBy('ads.id')
+            ->having(DB::Raw('COUNT(ads_categories.category_id)'), 0)
+            ->limit(1000)
+            ->offset($this->adsWithNoCategories)
+            ->get();
 
         if (!$count = $adsIdsCollection->count()) {
             return;
@@ -111,7 +111,7 @@ class AdsSeed extends Seeder
                 }
             }
             $this->command->getOutput()->progressAdvance(1);
-        };
+        }
 
         DB::table('ads_categories')->insertOrIgnore($adsCategoriesData);
         $this->command->getOutput()->progressFinish();
@@ -129,7 +129,7 @@ class AdsSeed extends Seeder
             'user_id' => $this->faker->randomElement($this->usersList),
             'title' => $this->faker->sentence,
             'description' => $this->faker->text(1000),
-            'phone' => '+1 ' . $this->faker->numerify('(###) ###-####'),
+            'phone' => '+1 '.$this->faker->numerify('(###) ###-####'),
             'country' => $this->faker->randomElement($this->countriesList),
             'price' => $this->faker->randomFloat(2, 0, 99999.99),
             'email' => $this->faker->email,

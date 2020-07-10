@@ -2,21 +2,13 @@
 
 namespace App\Jobs\CacheGenerating;
 
-use App\Models\Ad;
-use App\Models\AdMetaData;
-use App\Nova\Metrics\AdsAvailability;
-use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\NewAds;
-use App\Nova\Metrics\NewUsers;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-
-use Illuminate\Support\Facades\DB;
-use \Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class NewAdsCache implements ShouldQueue
 {
@@ -40,7 +32,7 @@ class NewAdsCache implements ShouldQueue
     public function handle()
     {
         $newAdsMetric = new NewAds();
-        foreach($newAdsMetric->ranges() as $range => $rangeLabel){
+        foreach ($newAdsMetric->ranges() as $range => $rangeLabel) {
             $fakeRequest = new NovaRequest();
             $fakeRequest->range = $range;
             $newAdsMetric->getCalculatedDataByRange($range, $fakeRequest);

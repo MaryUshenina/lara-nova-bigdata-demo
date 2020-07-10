@@ -4,10 +4,11 @@ namespace App\Nova\Metrics;
 
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
-use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Nova\Metrics\Interfaces\SplitDatesAggregateValueInterface;
 use App\Nova\Metrics\Traits\SplitDatesAggregateValueTrait;
+use DateInterval;
+use DateTimeInterface;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 
@@ -19,7 +20,7 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
     /**
      * Calculate the value of the metric.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param  NovaRequest  $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
@@ -69,7 +70,7 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
     /**
      * Determine for how many minutes the metric should be cached.
      *
-     * @return  \DateTimeInterface|\DateInterval|float|int
+     * @return  DateTimeInterface|DateInterval|float|int
      */
     public function cacheFor()
     {
@@ -84,5 +85,15 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
     public function uriKey()
     {
         return 'new-ads';
+    }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'New ads');
     }
 }

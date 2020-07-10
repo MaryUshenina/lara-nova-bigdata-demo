@@ -16,7 +16,12 @@ class Ad extends Model
     const CREATED_AT = 'created_at_date';
 
     protected $fillable = [
-        'title', 'description', 'phone', 'country_id', 'email', 'end_date'
+        'title',
+        'description',
+        'phone',
+        'country_id',
+        'email',
+        'end_date'
     ];
 
 
@@ -41,7 +46,7 @@ class Ad extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(EagerCategory::class, 'ads_categories', 'ad_id', 'category_id')
+        return $this->belongsToMany(CompiledTreeCategory::class, 'ads_categories', 'ad_id', 'category_id')
             ->using(AdsCategoryPivot::class);
     }
 
@@ -63,17 +68,17 @@ class Ad extends Model
         AdMetaData::updateOrCreate([
             //Add unique field combo to match here
             //For example, perhaps you only want one entry per user:
-            'ad_id'=> $this->id,
+            'ad_id' => $this->id,
         ],
-        [
-            'ad_id'=> $this->id,
-            'user_id' => $this->user_id,
-            'country' => $this->country,
-            'created_at_ymd' => $this->created_at_date->format('ymd'),
-            'end_date_ymd' => $this->end_date->format('ymd'),
-            'price' => $this->price,
-            'price_group' => ceil($this->price / 10000),
-        ]);
+            [
+                'ad_id' => $this->id,
+                'user_id' => $this->user_id,
+                'country' => $this->country,
+                'created_at_ymd' => $this->created_at_date->format('ymd'),
+                'end_date_ymd' => $this->end_date->format('ymd'),
+                'price' => $this->price,
+                'price_group' => ceil($this->price / 10000),
+            ]);
 
     }
 

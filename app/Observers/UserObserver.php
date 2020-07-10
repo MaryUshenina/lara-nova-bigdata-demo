@@ -21,7 +21,7 @@ class UserObserver
         }
 
         // delete calculated agent data
-        if($item->user->agentData){
+        if ($item->user->agentData) {
             $item->user->agentData()->remove();
         }
 

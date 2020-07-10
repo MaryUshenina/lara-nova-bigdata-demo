@@ -23,14 +23,15 @@ class AdObserver
         return true;
     }
 
-    public function saved(Ad $item){
+    public function saved(Ad $item)
+    {
 
         if ($item->user) {
             $item->user->updateAgentData();
         }
         $item->updateMetaData();
 
-        if($this->checkIfDataForCachingIsChanged($item)){
+        if ($this->checkIfDataForCachingIsChanged($item)) {
             dispatch(new GenerateMetricsCache());
         }
 
@@ -44,10 +45,10 @@ class AdObserver
         }
 
         Cache::flush();
-        if($item->user) {
+        if ($item->user) {
             $item->user->updateAgentData();
         }
-        if($item->metaData) {
+        if ($item->metaData) {
             $item->metaData->delete();
         }
 

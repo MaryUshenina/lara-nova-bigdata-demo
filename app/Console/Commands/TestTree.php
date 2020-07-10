@@ -4,10 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Ad;
 use App\Models\Category;
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Schema;
 
 class TestTree extends Command
@@ -83,7 +82,7 @@ class TestTree extends Command
 
     private function testIsEqualData($data)
     {
-        $items = EagerCategory::all()->keyBy('id');
+        $items = CompiledTreeCategory::all()->keyBy('id');
         foreach ($data as $id => $row) {
 
             if (!isset($items[$id])) {

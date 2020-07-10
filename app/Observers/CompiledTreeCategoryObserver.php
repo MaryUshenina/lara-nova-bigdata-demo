@@ -3,13 +3,13 @@
 namespace App\Observers;
 
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 
 
-class EagerCategoryObserver
+class CompiledTreeCategoryObserver
 {
 
-    public function deleting(EagerCategory $item)
+    public function deleting(CompiledTreeCategory $item)
     {
         if ($model = $item->originalCategory) {
             $model->delete();

@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Ad;
 use App\Models\AdMetaData;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class UpdateAdsMeta extends Command
@@ -68,12 +65,12 @@ class UpdateAdsMeta extends Command
             ->chunk($limit, function ($ads) use ($limit) {
 
                 $insertData = [];
-                foreach($ads as $ad){
+                foreach ($ads as $ad) {
                     $created = Carbon::createFromFormat('Y-m-d', $ad->created_at_date);
                     $endDate = Carbon::createFromFormat('Y-m-d', $ad->end_date);
 
                     $insertData[] = [
-                        'ad_id'=> $ad->id,
+                        'ad_id' => $ad->id,
                         'user_id' => $ad->user_id,
                         'country' => $ad->country,
                         'created_at_ymd' => $created->format('ymd'),

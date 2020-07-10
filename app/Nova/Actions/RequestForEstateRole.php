@@ -3,9 +3,8 @@
 namespace App\Nova\Actions;
 
 use App\Models\EstateRequest;
-use Brightspot\Nova\Tools\DetachedActions\DetachedAction;
-
 use App\Models\User;
+use Brightspot\Nova\Tools\DetachedActions\DetachedAction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -39,7 +38,7 @@ class RequestForEstateRole extends DetachedAction
     /**
      * Perform the action on the given models.
      *
-     * @param \Laravel\Nova\Fields\ActionFields $fields
+     * @param  ActionFields  $fields
      * @return mixed
      */
     public function handle(ActionFields $fields)

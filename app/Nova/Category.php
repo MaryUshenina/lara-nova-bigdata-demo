@@ -2,13 +2,10 @@
 
 namespace App\Nova;
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -20,7 +17,7 @@ class Category extends Resource
      *
      * @var string
      */
-    public static $model = \App\Models\EagerCategory::class;
+    public static $model = CompiledTreeCategory::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -45,7 +42,7 @@ class Category extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function fields(Request $request)
@@ -62,7 +59,7 @@ class Category extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function cards(Request $request)
@@ -73,7 +70,7 @@ class Category extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function filters(Request $request)
@@ -84,7 +81,7 @@ class Category extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function lenses(Request $request)
@@ -95,7 +92,7 @@ class Category extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function actions(Request $request)
@@ -116,7 +113,7 @@ class Category extends Resource
     {
         return $query->orderByTree();
     }
-    
+
     protected static function fillFields(NovaRequest $request, $model, $fields)
     {
         //switch to original model
@@ -125,25 +122,25 @@ class Category extends Resource
 
         $fillFields = parent::fillFields($request, $model, $fields);
 
-        //switch back to EagerCategory
-        self::$model = \App\Models\EagerCategory::class;
+        //switch back to CompiledTreeCategory
+        self::$model = CompiledTreeCategory::class;
         return $fillFields;
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Select
      */
     private function getParentField(Request $request)
     {
         if (!count(self::$allCategoriesOptions) && !$request->isResourceIndexRequest()) {
-            $all = EagerCategory::getRawDataArray(true);
+            $all = CompiledTreeCategory::getRawDataArray(true);
 
             self::$allCategoriesOptions = [0 => 'root'] + $all; // dont use array_merge to keep keys
         }
 
-        return Select::make(__('Parent'), 'pid')
+        return Select::make(__('Parent category'), 'pid')
             ->options(self::$allCategoriesOptions)
             ->rules('required', Rule::notIn([$this->id ?? -1]))
             ->onlyOnForms()
@@ -151,7 +148,7 @@ class Category extends Resource
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Text
      */
     private function getNameField(Request $request)
@@ -164,5 +161,25 @@ class Category extends Resource
             ->asHtml()
             ->sortable();
 
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Categories');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Category');
     }
 }

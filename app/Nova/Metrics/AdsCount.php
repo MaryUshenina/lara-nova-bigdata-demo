@@ -8,11 +8,11 @@ use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
 use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
+use DateInterval;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
-
-use Illuminate\Support\Facades\DB;
 
 class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBuilderMetricsInterface
 {
@@ -23,7 +23,6 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
 
     const FILTER_ALL = 'all';
 
-    public $name = 'Count';
 
     /**
      * The width of the card (1/3, 1/2, or full).
@@ -35,7 +34,7 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
     /**
      * Calculate the value of the metric.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param  NovaRequest  $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
@@ -49,7 +48,7 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
      * get cached data or calculate and cache
      *
      * @param $filterKey
-     * @param Builder $query
+     * @param  Builder  $query
      * @return mixed
      */
     public static function getCalculatedData($filterKey, Builder $query)
@@ -76,7 +75,7 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
     /**
      * Determine for how many minutes the metric should be cached.
      *
-     * @return  \DateTimeInterface|\DateInterval|float|int
+     * @return  DateTimeInterface|DateInterval|float|int
      */
     public function cacheFor()
     {
@@ -91,5 +90,15 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
     public function uriKey()
     {
         return 'ads-count';
+    }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Ads count');
     }
 }

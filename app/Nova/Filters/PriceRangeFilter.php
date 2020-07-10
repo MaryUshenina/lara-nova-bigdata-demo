@@ -2,8 +2,8 @@
 
 namespace App\Nova\Filters;
 
-use Illuminate\Http\Request;
 use DigitalCreative\RangeInputFilter\RangeInputFilter;
+use Illuminate\Http\Request;
 
 class PriceRangeFilter extends RangeInputFilter
 {
@@ -32,6 +32,17 @@ class PriceRangeFilter extends RangeInputFilter
                 return $q->where('ads_meta.price_group', '<=', $calcPriceGroup($value['to']))
                     ->where('ads_meta.price', '<=', $value['to']);
             });
+    }
+
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Price');
     }
 
 }

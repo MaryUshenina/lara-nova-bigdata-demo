@@ -1,0 +1,48 @@
+{
+    "Availability": "Доступность",
+    "Top Agent": "Топ Агент",
+    "New ads": "Новые оьбъявления",
+    "New users": "Новые пользователи",
+    "Prices": "Цены",
+    "Ads count": "Кол-во объявлений",
+    "Agent": "Агент",
+    "Created at": "Создано",
+
+    "Ads": "Объявления",
+    "Ad": "Объявление",
+
+    "Image": "Изображение",
+    "Title": "Заголовок",
+    "Created": "Создано",
+    "Description" : "Описание",
+    "Price": "Цена",
+    "Email": "Email",
+    "Phone": "Телефон",
+    "Country": "Страна",
+    "End date": "Актуально по",
+    "Address": "Адрес",
+    "Save without address": "Сохранить без адреса",
+
+    "Categories": "Категории",
+    "Category": "Категория",
+    "Name": "Название",
+    "Parent category": "Родительская категория",
+    "Children categories": "Дочерние категории",
+
+    "Estate Agent Requests": "Заявки на агенство",
+    "Estate Agent Request": "Заявка на агенство",
+    "Comment": "Комментарий",
+    "Status": "Статус",
+    "User": "Пользователь",
+
+    "Users": "Пользователи",
+
+    "Are you sure you want to grand Estate Access level for this user?": "Вы уверены что хотите наделить правами агента недвижимости этого пользователя?",
+    "All done": "Готово",
+
+    "Are you sure you want to send request to become Estate user?": "Вы уверены что хотите отправить запрос на становление агентом недвидимости?",
+    "Your request was already sent earlier, please wait for admin response": "Ваш запрос уже был отправлен ранее, пожалуйста ожидайте ответа администратора",
+    "Your request is sent to admin and will be reviewed in several days": "Ваш запрос был отправлен администратору и будет обработан в ближайшие несколько дней",
+
+    "Are you sure you want to decline/revoke Estate Access level for this user?": "Вы уверены что хотите отклонить/отозвать права агенства недвижимости у этого пользователя?"
+}

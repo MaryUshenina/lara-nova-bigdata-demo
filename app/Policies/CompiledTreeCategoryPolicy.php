@@ -3,12 +3,11 @@
 namespace App\Policies;
 
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use App\Models\User;
-
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EagerCategoryPolicy
+class CompiledTreeCategoryPolicy
 {
 
     use HandlesAuthorization;
@@ -23,7 +22,7 @@ class EagerCategoryPolicy
         //
     }
 
-    public function view(User $user, EagerCategory $category)
+    public function view(User $user, CompiledTreeCategory $category)
     {
         return true;
     }
@@ -33,12 +32,12 @@ class EagerCategoryPolicy
         return $user->isAdmin();
     }
 
-    public function update(User $user, EagerCategory $category)
+    public function update(User $user, CompiledTreeCategory $category)
     {
         return $user->isAdmin();
     }
 
-    public function delete(User $user, EagerCategory $category)
+    public function delete(User $user, CompiledTreeCategory $category)
     {
         return $user->isAdmin();
     }

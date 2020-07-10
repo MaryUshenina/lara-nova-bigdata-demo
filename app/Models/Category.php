@@ -34,7 +34,7 @@ class Category extends Model
 
     public function eagerCategory()
     {
-        return $this->belongsTo(EagerCategory::class, 'id', 'id');
+        return $this->belongsTo(CompiledTreeCategory::class, 'id', 'id');
     }
 
 

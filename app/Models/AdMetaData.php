@@ -12,7 +12,13 @@ class AdMetaData extends Model
     protected $primaryKey = 'ad_id';
 
     protected $fillable = [
-        'ad_id', 'user_id', 'country', 'created_at_ymd', 'end_date_ymd', 'price', 'price_group'
+        'ad_id',
+        'user_id',
+        'country',
+        'created_at_ymd',
+        'end_date_ymd',
+        'price',
+        'price_group'
     ];
 
     const CREATED_AT = null;

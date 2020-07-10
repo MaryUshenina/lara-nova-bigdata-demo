@@ -9,7 +9,7 @@ trait IsFilteredTrait
     /**
      * check if any filter was applied
      *
-     * @param NovaRequest $request
+     * @param  NovaRequest  $request
      * @return bool
      */
     public static function isAnyFilterApplied(NovaRequest $request)

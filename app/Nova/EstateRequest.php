@@ -9,10 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use function __;
 
 class EstateRequest extends Resource
 {
@@ -43,7 +42,7 @@ class EstateRequest extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function fields(Request $request)
@@ -63,7 +62,7 @@ class EstateRequest extends Resource
      */
     private function getStatusField()
     {
-        return Select::make(\__('Status'), 'status')->options(self::$model::STATUSES)
+        return Select::make(__('Status'), 'status')->options(self::$model::STATUSES)
             ->displayUsingLabels()
             ->sortable()
             ->rules('required', Rule::in(array_keys(self::$model::STATUSES)));
@@ -82,7 +81,7 @@ class EstateRequest extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function cards(Request $request)
@@ -93,7 +92,7 @@ class EstateRequest extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function filters(Request $request)
@@ -104,7 +103,7 @@ class EstateRequest extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function lenses(Request $request)
@@ -115,7 +114,7 @@ class EstateRequest extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      */
     public function actions(Request $request)
@@ -136,4 +135,26 @@ class EstateRequest extends Resource
     {
         return Auth::user()->isAdmin();
     }
+
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Estate Agent Requests');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Estate Agent Request');
+    }
+
 }
