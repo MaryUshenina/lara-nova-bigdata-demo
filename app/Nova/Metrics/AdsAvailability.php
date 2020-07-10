@@ -21,7 +21,6 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
 
     use FilteredBuilderMetricsTrait;
 
-    public $name = 'Availability';
 
     /**
      * The width of the card (1/3, 1/2, or full).
@@ -95,4 +94,15 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
     {
         return 'ads-availability';
     }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Availability');
+    }
+
 }

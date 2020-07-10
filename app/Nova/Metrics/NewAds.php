@@ -86,4 +86,14 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
     {
         return 'new-ads';
     }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'New ads');
+    }
 }

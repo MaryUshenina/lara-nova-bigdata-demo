@@ -22,7 +22,6 @@ class AdsPrices extends CustomPartitionValue implements CacheCallbackInterface, 
     use FilteredBuilderMetricsTrait;
 
 
-    public $name = 'Prices';
 
     /**
      * The width of the card (1/3, 1/2, or full).
@@ -102,5 +101,15 @@ class AdsPrices extends CustomPartitionValue implements CacheCallbackInterface, 
     public function uriKey()
     {
         return 'ads-prices';
+    }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Prices');
     }
 }

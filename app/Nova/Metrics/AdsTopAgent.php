@@ -22,7 +22,6 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
 
     use FilteredBuilderMetricsTrait;
 
-    public $name = 'Top Agent';
 
     const FILTER_ALL = 'all';
     /**
@@ -111,5 +110,15 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
     public function uriKey()
     {
         return 'ads-top-agent';
+    }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Top Agent');
     }
 }

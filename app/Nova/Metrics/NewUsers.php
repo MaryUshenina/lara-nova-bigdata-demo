@@ -88,4 +88,14 @@ class NewUsers extends Value implements SplitDatesAggregateValueInterface, Cache
     {
         return 'new-users';
     }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'New users');
+    }
 }
