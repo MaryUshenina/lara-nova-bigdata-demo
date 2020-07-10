@@ -44,6 +44,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         });
 
         Nova::style('custom-style', public_path('css/custom.css'));
+        
+        Nova::translations(resource_path('lang/ru.json'));
     }
 
     /**
