@@ -30,7 +30,7 @@ class AltersAdsMetaTableIndexed extends Migration
 
 
         Schema::table('ads_meta', function (Blueprint $table) {
-            $table->unique('ad_id');
+            $table->unique(['ad_id']);
         });
     }
 
@@ -42,7 +42,7 @@ class AltersAdsMetaTableIndexed extends Migration
     public function down()
     {
         Schema::table('ads_meta', function (Blueprint $table) {
-            $table->dropUnique('ad_id');
+            $table->dropUnique(['ad_id']);
         });
     }
 }
