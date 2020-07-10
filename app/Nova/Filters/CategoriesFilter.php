@@ -2,11 +2,11 @@
 
 namespace App\Nova\Filters;
 
-use App\Models\EagerCategory;
+use Angauber\NovaSelect2Filter\NovaSelect2Filter;
+use App\Models\CompiledTreeCategory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-
-use Angauber\NovaSelect2Filter\NovaSelect2Filter;
 
 class CategoriesFilter extends NovaSelect2Filter
 {
@@ -41,7 +41,7 @@ class CategoriesFilter extends NovaSelect2Filter
      */
     public function options(Request $request)
     {
-        return EagerCategory::getRawDataArray(true);
+        return CompiledTreeCategory::getRawDataArray(true);
     }
 
 

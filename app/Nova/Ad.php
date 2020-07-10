@@ -2,7 +2,7 @@
 
 namespace App\Nova;
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use App\Nova\Metrics\AdsAvailability;
 use App\Nova\Metrics\AdsCount;
 use App\Nova\Metrics\AdsPrices;
@@ -199,7 +199,7 @@ class Ad extends Resource implements IsFilteredInterface
         $isForm = !($request->isResourceIndexRequest() || $request->isResourceDetailRequest());
 
         if (!count(self::$allCategoriesOptions) && !$request->isResourceIndexRequest()) {
-            self::$allCategoriesOptions = EagerCategory::getRawDataArray($isForm, false);
+            self::$allCategoriesOptions = CompiledTreeCategory::getRawDataArray($isForm, false);
         }
 
         return BelongsToManyField::make(__('Categories'), 'categories', Category::class)

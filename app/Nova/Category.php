@@ -2,7 +2,7 @@
 
 namespace App\Nova;
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -20,7 +20,7 @@ class Category extends Resource
      *
      * @var string
      */
-    public static $model = \App\Models\EagerCategory::class;
+    public static $model = \App\Models\CompiledTreeCategory::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -116,7 +116,7 @@ class Category extends Resource
     {
         return $query->orderByTree();
     }
-    
+
     protected static function fillFields(NovaRequest $request, $model, $fields)
     {
         //switch to original model
@@ -125,8 +125,8 @@ class Category extends Resource
 
         $fillFields = parent::fillFields($request, $model, $fields);
 
-        //switch back to EagerCategory
-        self::$model = \App\Models\EagerCategory::class;
+        //switch back to CompiledTreeCategory
+        self::$model = \App\Models\CompiledTreeCategory::class;
         return $fillFields;
     }
 
@@ -138,7 +138,7 @@ class Category extends Resource
     private function getParentField(Request $request)
     {
         if (!count(self::$allCategoriesOptions) && !$request->isResourceIndexRequest()) {
-            $all = EagerCategory::getRawDataArray(true);
+            $all = CompiledTreeCategory::getRawDataArray(true);
 
             self::$allCategoriesOptions = [0 => 'root'] + $all; // dont use array_merge to keep keys
         }

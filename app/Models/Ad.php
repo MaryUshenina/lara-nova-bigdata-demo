@@ -41,7 +41,7 @@ class Ad extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(EagerCategory::class, 'ads_categories', 'ad_id', 'category_id')
+        return $this->belongsToMany(CompiledTreeCategory::class, 'ads_categories', 'ad_id', 'category_id')
             ->using(AdsCategoryPivot::class);
     }
 

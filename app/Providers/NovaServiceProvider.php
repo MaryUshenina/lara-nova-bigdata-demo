@@ -3,12 +3,11 @@
 namespace App\Providers;
 
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 
 use App\Nova\Metrics\NewAds;
 use App\Nova\Metrics\NewUsers;
-
-use App\Observers\EagerCategoryObserver;
+use App\Observers\CompiledTreeCategoryObserver;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -45,7 +44,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
 
         Nova::serving(function () {
-            EagerCategory::observe(EagerCategoryObserver::class);
+            CompiledTreeCategory::observe(CompiledTreeCategoryObserver::class);
         });
 
         Nova::style('custom-style', public_path('css/custom.css') );

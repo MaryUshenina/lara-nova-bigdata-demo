@@ -3,9 +3,9 @@
 namespace App\Nova\Controllers;
 
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use App\Nova\Category;
-use App\Observers\EagerCategoryObserver;
+use App\Observers\CompiledTreeCategoryObserver;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Contracts\RelatableField;
@@ -34,7 +34,7 @@ class CategoryResourceIndexController extends \Laravel\Nova\Http\Controllers\Res
             $idsLevel0[] = $item->id;
         });
 
-        $allChildren = EagerCategory::whereIn('min_pid', $idsLevel0)
+        $allChildren = CompiledTreeCategory::whereIn('min_pid', $idsLevel0)
             ->select('*')
             ->addSelect(DB::raw("CONCAT(repeat('-', max_level),' ', name) tree_name"))
             ->orderByTree()->get();
