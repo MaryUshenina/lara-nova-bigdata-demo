@@ -12,7 +12,7 @@ class UpdateAgentData extends Command
      *
      * @var string
      */
-    protected $signature = 'agent:data:update';
+    protected $signature = 'app:agent:data-update';
 
     /**
      * The console command description.
