@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Factory;
 */
 
 $user = User::first();
-$countries = array_flip(Countries::getList('en'));
+$countries = array_flip(Countries::getList(config('app.locale')));
 $users = User::whereIn('role', User::ROLES_WITH_ADS)->pluck('id');
 
 $factory->define(Ad::class, function (Faker $faker) use ($user, $countries, $users) {
