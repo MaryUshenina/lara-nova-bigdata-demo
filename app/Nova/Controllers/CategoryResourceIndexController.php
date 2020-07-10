@@ -3,23 +3,23 @@
 namespace App\Nova\Controllers;
 
 
-use App\Models\EagerCategory;
+use App\Models\CompiledTreeCategory;
 use App\Nova\Category;
-use App\Observers\EagerCategoryObserver;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Laravel\Nova\Contracts\RelatableField;
+use Laravel\Nova\Http\Controllers\ResourceIndexController;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
-use Laravel\Nova\TrashedStatus;
 
-class CategoryResourceIndexController extends \Laravel\Nova\Http\Controllers\ResourceIndexController
+class CategoryResourceIndexController extends ResourceIndexController
 {
 
     /**
      * List the resources for administration.
      *
-     * @param \Laravel\Nova\Http\Requests\ResourceIndexRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  ResourceIndexRequest  $request
+     * @return JsonResponse
      */
     public function handle(ResourceIndexRequest $request)
     {
@@ -34,7 +34,7 @@ class CategoryResourceIndexController extends \Laravel\Nova\Http\Controllers\Res
             $idsLevel0[] = $item->id;
         });
 
-        $allChildren = EagerCategory::whereIn('min_pid', $idsLevel0)
+        $allChildren = CompiledTreeCategory::whereIn('min_pid', $idsLevel0)
             ->select('*')
             ->addSelect(DB::raw("CONCAT(repeat('-', max_level),' ', name) tree_name"))
             ->orderByTree()->get();
@@ -42,7 +42,7 @@ class CategoryResourceIndexController extends \Laravel\Nova\Http\Controllers\Res
         $childrenPerRootLevel = [];
         $allChildren->map(function ($item) use (&$childrenPerRootLevel) {
             $childrenPerRootLevel[$item->min_pid][] = $item;
-        });;
+        });
 
         $totalData = new Collection();
         $paginator->getCollection()->map(function ($item) use (&$totalData, $request, $childrenPerRootLevel) {
@@ -69,9 +69,9 @@ class CategoryResourceIndexController extends \Laravel\Nova\Http\Controllers\Res
     /**
      * Get the paginator instance for the index request.
      *
-     * @param \Laravel\Nova\Http\Requests\ResourceIndexRequest $request
-     * @param string $resource
-     * @return \Illuminate\Pagination\Paginator
+     * @param  ResourceIndexRequest  $request
+     * @param  string  $resource
+     * @return Paginator
      */
     protected function paginator(ResourceIndexRequest $request, $resource)
     {

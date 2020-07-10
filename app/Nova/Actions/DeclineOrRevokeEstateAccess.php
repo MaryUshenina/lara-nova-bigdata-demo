@@ -4,7 +4,6 @@ namespace App\Nova\Actions;
 
 use App\Models\EstateRequest;
 use App\Models\User;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
@@ -26,13 +25,13 @@ class DeclineOrRevokeEstateAccess extends Action
     /**
      * Perform the action on the given models.
      *
-     * @param \Laravel\Nova\Fields\ActionFields $fields
-     * @param \Illuminate\Support\Collection $models
+     * @param  ActionFields  $fields
+     * @param  Collection  $models
      * @return mixed
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        foreach($models as $model){
+        foreach ($models as $model) {
             $model->user->role = User::PLAIN_USER_ROLE;
             $model->user->save();
 

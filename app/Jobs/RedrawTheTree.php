@@ -3,10 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Category;
-use App\Models\EagerCategory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -23,8 +21,8 @@ class RedrawTheTree implements ShouldQueue
      * Create a new job instance.
      *
      * RedrawTheTree constructor.
-     * @param int $child_id
-     * @param int $parent_id
+     * @param  int  $child_id
+     * @param  int  $parent_id
      */
     public function __construct(int $child_id, int $parent_id)
     {
@@ -91,8 +89,8 @@ class RedrawTheTree implements ShouldQueue
     }
 
     /**
-     * @param Category $child
-     * @param Category $parent
+     * @param  Category  $child
+     * @param  Category  $parent
      * @param $originalPid
      */
     private function moveAdsToNewCategory(Category $child, $originalPid)

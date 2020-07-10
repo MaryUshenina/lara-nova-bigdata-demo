@@ -4,15 +4,16 @@ namespace App\Nova\Metrics;
 
 use App\Cache\CacheCallbackInterface;
 use App\Cache\CacheCallbackTrait;
-use App\Models\Ad;
 use App\Models\AdMetaData;
 use App\Nova\Metrics\Interfaces\FilteredBuilderMetricsInterface;
 use App\Nova\Metrics\Traits\FilteredBuilderMetricsTrait;
 use Carbon\Carbon;
+use DateInterval;
+use DateTimeInterface;
+use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Square1\NovaMetrics\CustomValue;
-
-use \Illuminate\Database\Eloquent\Builder;
 
 class AdsAvailability extends CustomValue implements CacheCallbackInterface, FilteredBuilderMetricsInterface
 {
@@ -32,7 +33,7 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
     /**
      * Calculate the value of the metric.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param  NovaRequest  $request
      * @return mixed
      */
     public function calculate(NovaRequest $request)
@@ -47,7 +48,7 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
      * get cached data or calculate and cache
      *
      * @param $filterKey
-     * @param Builder $query
+     * @param  Builder  $query
      * @return mixed
      */
     public static function getCalculatedData($filterKey, Builder $query)
@@ -56,9 +57,9 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
 
             list($query) = $parameters;
 
-            $nowYmd= Carbon::now()->format('ymd');
+            $nowYmd = Carbon::now()->format('ymd');
             return $query->select(
-                    \DB::raw("COUNT( if (end_date_ymd > $nowYmd, 1, NULL))/COUNT(*) as available")
+                    DB::raw("COUNT( if (end_date_ymd > $nowYmd, 1, NULL))/COUNT(*) as available")
                 )->first()->available * 100 ?? 0;
 
         }, [$query], Carbon::now()->endOfDay());
@@ -78,7 +79,7 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
     /**
      * Determine for how many minutes the metric should be cached.
      *
-     * @return  \DateTimeInterface|\DateInterval|float|int
+     * @return  DateTimeInterface|DateInterval|float|int
      */
     public function cacheFor()
     {

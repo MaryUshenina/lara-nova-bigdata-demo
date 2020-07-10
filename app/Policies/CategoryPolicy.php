@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Ad;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;

@@ -11,7 +11,8 @@ class AgentData extends Model
     const CREATED_AT = null;
 
     protected $fillable = [
-        'user_id', 'ads_count'
+        'user_id',
+        'ads_count'
     ];
 
 }

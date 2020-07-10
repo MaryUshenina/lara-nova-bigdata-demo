@@ -1,13 +1,8 @@
 <?php
 
+use App\Models\Category;
+use App\Models\CompiledTreeCategory;
 use Illuminate\Database\Seeder;
-
-use \Illuminate\Support\Facades\DB;
-
-use \App\Models\Category;
-use \App\Models\EagerCategory;
-
-use Illuminate\Support\Facades\Schema;
 
 class CategoriesSeed extends Seeder
 {
@@ -51,9 +46,9 @@ class CategoriesSeed extends Seeder
                 if (!$level) {
                     return;
                 }
-                $randomParent = EagerCategory::where('max_level', '=', $level - 1)->get()->random(1)->first();
+                $randomParent = CompiledTreeCategory::where('max_level', '=', $level - 1)->get()->random(1)->first();
                 if (!$randomParent) {
-                    $randomParent = EagerCategory::first();
+                    $randomParent = CompiledTreeCategory::first();
                 }
 
                 $category->pid = $randomParent->id;
