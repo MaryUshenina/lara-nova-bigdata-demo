@@ -49,6 +49,6 @@ class CountryFilter extends Filter
      */
     public function name()
     {
-        return __( 'Categories');
+        return __( 'Country');
     }
 }
