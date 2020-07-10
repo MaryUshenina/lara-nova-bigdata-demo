@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccd461aeeb1ad5d3d71b8386ef2b52e5",
+    "content-hash": "e3998abc4f999266a021d8ecf053c46a",
     "packages": [
         {
             "name": "angauber/nova-select2-filter",
@@ -288,6 +288,51 @@
                 "time"
             ],
             "time": "2020-05-26T01:27:20+00:00"
+        },
+        {
+            "name": "coderello/laravel-nova-lang",
+            "version": "1.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coderello/laravel-nova-lang.git",
+                "reference": "17a6633d467e4756531806556439c89108d652e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coderello/laravel-nova-lang/zipball/17a6633d467e4756531806556439c89108d652e2",
+                "reference": "17a6633d467e4756531806556439c89108d652e2",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0",
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Coderello\\LaravelNovaLang\\Providers\\LaravelNovaLangServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Coderello\\LaravelNovaLang\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Language support for Laravel Nova.",
+            "keywords": [
+                "lang",
+                "language",
+                "laravel",
+                "nova",
+                "support"
+            ],
+            "time": "2020-06-03T22:48:45+00:00"
         },
         {
             "name": "digital-creative/nova-range-input-filter",
