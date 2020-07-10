@@ -135,4 +135,26 @@ class EstateRequest extends Resource
     {
         return Auth::user()->isAdmin();
     }
+
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Estate Agent Requests');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Estate Agent Request');
+    }
+
 }

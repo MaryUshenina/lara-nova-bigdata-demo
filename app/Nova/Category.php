@@ -140,7 +140,7 @@ class Category extends Resource
             self::$allCategoriesOptions = [0 => 'root'] + $all; // dont use array_merge to keep keys
         }
 
-        return Select::make(__('Parent'), 'pid')
+        return Select::make(__('Parent category'), 'pid')
             ->options(self::$allCategoriesOptions)
             ->rules('required', Rule::notIn([$this->id ?? -1]))
             ->onlyOnForms()
@@ -161,5 +161,25 @@ class Category extends Resource
             ->asHtml()
             ->sortable();
 
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Categories');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Category');
     }
 }

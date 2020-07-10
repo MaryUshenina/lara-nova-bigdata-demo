@@ -23,7 +23,6 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
 
     const FILTER_ALL = 'all';
 
-    public $name = 'Count';
 
     /**
      * The width of the card (1/3, 1/2, or full).
@@ -91,5 +90,15 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
     public function uriKey()
     {
         return 'ads-count';
+    }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Ads count');
     }
 }

@@ -320,7 +320,7 @@ class Ad extends Resource implements IsFilteredInterface
     private function getCountryField()
     {
         return Select::make(__('Country'), 'country')
-            ->options(Countries::getList('en'))
+            ->options(Countries::getList(config('app.locale')))
             ->rules('required')
             ->hideFromIndex()
             ->displayUsingLabels();
@@ -367,4 +367,26 @@ class Ad extends Resource implements IsFilteredInterface
         return Boolean::make(__('Save without address'), 'save_without_address')
             ->onlyOnForms();
     }
+
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label()
+    {
+        return __('Ads');
+    }
+
+    /**
+     * Get the displayable singular label of the resource.
+     *
+     * @return string
+     */
+    public static function singularLabel()
+    {
+        return __('Ad');
+    }
+
 }

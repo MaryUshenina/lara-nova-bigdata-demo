@@ -39,6 +39,16 @@ class CountryFilter extends Filter
      */
     public function options(Request $request)
     {
-        return array_flip(Countries::getList('en'));
+        return array_flip(Countries::getList(config('app.locale')));
+    }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Categories');
     }
 }

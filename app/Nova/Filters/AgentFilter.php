@@ -43,4 +43,15 @@ class AgentFilter extends Filter
             ->orderBy('name')
             ->get()->pluck('id', 'name')->toArray();
     }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Agent');
+    }
+
 }

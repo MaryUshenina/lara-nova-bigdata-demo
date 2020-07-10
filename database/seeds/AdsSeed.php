@@ -21,7 +21,7 @@ class AdsSeed extends Seeder
 
     public function __construct()
     {
-        $this->countriesList = array_flip(Countries::getList('en'));
+        $this->countriesList = array_flip(Countries::getList(config('app.locale')));
         $this->usersList = $users = User::whereIn('role', User::ROLES_WITH_ADS)->pluck('id');
         $this->faker = Faker\Factory::create();
 
