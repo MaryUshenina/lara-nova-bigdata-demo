@@ -21,7 +21,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -30,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -93,13 +96,12 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-
     /**
      * update related calculated Data
      */
     public function updateAgentData()
     {
-        if(!in_array($this->role, self::ROLES_WITH_ADS)){
+        if (!in_array($this->role, self::ROLES_WITH_ADS)) {
             return;
         }
 
