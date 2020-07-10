@@ -16,14 +16,14 @@ class TestTree extends Command
      *
      * @var string
      */
-    protected $signature = 'test:tree';
+    protected $signature = 'app:test-tree';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'test the category tree';
+    protected $description = 'test the category tree(will delete existing data)';
 
     /**
      * Create a new command instance.

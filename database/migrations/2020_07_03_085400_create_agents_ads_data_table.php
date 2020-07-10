@@ -27,7 +27,7 @@ class CreateAgentsAdsDataTable extends Migration
             $table->timestamp('updated_at', 0)->nullable();
         });
 
-        Artisan::call('agent:data:update');
+        Artisan::call('app:agent:data-update');
 
     }
 

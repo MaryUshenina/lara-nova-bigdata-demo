@@ -12,14 +12,14 @@ class RefreshCache extends Command
      *
      * @var string
      */
-    protected $signature = 'app:cache:refresh';
+    protected $signature = 'app:custom-cache:refresh';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'refresh cached data';
+    protected $description = 'refresh cached custion data';
 
     /**
      * Create a new command instance.

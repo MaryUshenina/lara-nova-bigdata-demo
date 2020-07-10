@@ -14,7 +14,7 @@ class UpdateAdsMeta extends Command
      *
      * @var string
      */
-    protected $signature = 'ads:meta:update {--reset=0} {--limit=300}';
+    protected $signature = 'app:ads:meta-update {--reset=0} {--limit=300}';
 
     /**
      * The console command description.
