@@ -34,4 +34,15 @@ class PriceRangeFilter extends RangeInputFilter
             });
     }
 
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Price');
+    }
+
 }

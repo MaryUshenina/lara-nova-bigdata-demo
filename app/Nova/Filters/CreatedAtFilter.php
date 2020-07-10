@@ -25,4 +25,14 @@ class CreatedAtFilter extends DateFilter
 
         return $query->where('ads_meta.created_at_ymd', $value);
     }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Created at');
+    }
 }

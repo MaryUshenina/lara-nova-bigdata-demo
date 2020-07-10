@@ -41,4 +41,14 @@ class CountryFilter extends Filter
     {
         return array_flip(Countries::getList(config('app.locale')));
     }
+
+    /**
+     * Get the displayable name of the filter.
+     *
+     * @return string
+     */
+    public function name()
+    {
+        return __( 'Categories');
+    }
 }
