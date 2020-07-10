@@ -183,7 +183,8 @@ class Ad extends Resource implements IsFilteredInterface
     protected static function applyFilters(NovaRequest $request, $query, array $filters)
     {
         if (self::isAnyFilterApplied($request)) {
-            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id');
+            $query->join('ads_meta', 'ads_meta.ad_id', '=', 'ads.id')
+                ->select('ads.*');
         }
 
         return parent::applyFilters( $request, $query, $filters);
