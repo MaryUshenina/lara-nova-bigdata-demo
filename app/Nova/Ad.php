@@ -9,6 +9,8 @@ use App\Nova\Metrics\AdsPrices;
 use App\Nova\Metrics\AdsTopAgent;
 use App\Nova\Requests\IsFilteredInterface;
 use App\Nova\Requests\IsFilteredTrait;
+use App\Nova\Requests\PostSizeInterface;
+use App\Nova\Requests\PostSizeTrait;
 use Benjacho\BelongsToManyField\BelongsToManyField;
 use Countries;
 use Illuminate\Http\Request;
@@ -27,10 +29,11 @@ use Treestoneit\TextWrap\TextWrap;
 use Wemersonrv\InputMask\InputMask;
 use function __;
 
-class Ad extends Resource implements IsFilteredInterface
+class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
 {
 
     use IsFilteredTrait;
+    use PostSizeTrait;
 
     private static $allCategoriesOptions = [];
 
@@ -215,6 +218,7 @@ class Ad extends Resource implements IsFilteredInterface
             ->displayUsing(function () {
                 return $this->photo ?? 'no_image.png';
             })
+            ->rules("image", "max:".self::getMaxPostSizeInKiloBytes())
             ->disableDownload();
     }
 
