@@ -2,11 +2,17 @@
 
 namespace App\Exceptions;
 
+use App\Nova\Ad;
+use App\Nova\Requests\PostSizeInterface;
+use App\Nova\Requests\PostSizeTrait;
+use App\Nova\User;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
-class Handler extends ExceptionHandler
+class Handler extends ExceptionHandler implements PostSizeInterface
 {
+    use PostSizeTrait;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -50,6 +56,36 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof \Illuminate\Http\Exceptions\PostTooLargeException) {
+
+            $filedName = $this->getReferrerResourceField($request) ?? 'image';
+
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    $filedName => ["The $filedName may not be greater than ".self::getMaxPostSizeInKiloBytes()." kilobytes."],
+                ]
+            ], 422);
+        }
+
         return parent::render($request, $exception);
+    }
+
+    private function getReferrerResourceField($request)
+    {
+        $keys = [
+            User::uriKey() => 'avatar',
+            Ad::uriKey() => 'photo',
+        ];
+
+        if ($referer = $request->headers->get('referer')) {
+            foreach ($keys as $key => $imageField) {
+                if (strpos($referer, $key) !== false) {
+                    return $imageField;
+                }
+            }
+        }
+
+        return null;
     }
 }
