@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Nova\Actions\RequestForEstateRole;
+use App\Nova\Requests\PostSizeInterface;
+use App\Nova\Requests\PostSizeTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -14,8 +16,10 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use function __;
 
-class User extends Resource
+class User extends Resource implements PostSizeInterface
 {
+    use PostSizeTrait;
+
     /**
      * The model the resource corresponds to.
      *
@@ -74,6 +78,7 @@ class User extends Resource
     private function getAvatarField()
     {
         return Avatar::make(__('Avatar'), 'avatar')
+            ->rules("image", "max:".self::getMaxPostSizeInKiloBytes())
             ->disableDownload();
     }
 
