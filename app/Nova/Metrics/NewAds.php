@@ -94,6 +94,6 @@ class NewAds extends Value implements SplitDatesAggregateValueInterface, CacheCa
      */
     public function name()
     {
-        return __( 'New ads');
+        return __('metrics.new_ads');
     }
 }

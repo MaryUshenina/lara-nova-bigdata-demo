@@ -119,6 +119,6 @@ class AdsTopAgent extends CustomValue implements CacheCallbackInterface, Filtere
      */
     public function name()
     {
-        return __( 'Top Agent');
+        return __('metrics.top_agent');
     }
 }

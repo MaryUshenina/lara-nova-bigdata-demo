@@ -99,6 +99,6 @@ class AdsCount extends CustomValue implements CacheCallbackInterface, FilteredBu
      */
     public function name()
     {
-        return __( 'Ads count');
+        return __('metrics.ads_count');
     }
 }
