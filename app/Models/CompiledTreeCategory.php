@@ -45,7 +45,20 @@ class CompiledTreeCategory extends Model
             $childrenPerRootLevel[$item->min_pid][] = $item;
         });
 
-        return $childrenPerRootLevel;
+        // merge data to root items
+        $totalData = new Collection();
+        $collectionCompiledCategory->map(function ($item) use (&$totalData, $childrenPerRootLevel) {
+            $totalData->add($item);
+
+            // add nested tree for current root category
+            if (isset($childrenPerRootLevel[$item->id])) {
+                $totalData = $totalData->merge(
+                    collect($childrenPerRootLevel[$item->id])
+                );
+            }
+        });
+
+        return $totalData;
     }
 
     public function getTreeNameAttribute()

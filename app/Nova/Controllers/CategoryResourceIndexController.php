@@ -30,19 +30,7 @@ class CategoryResourceIndexController extends ResourceIndexController
             $request, $resource = $request->resource()
         );
 
-        $childrenPerRootLevel = CompiledTreeCategory::getChildrenGroupsForRootLevel($paginator->getCollection());
-
-        $totalData = new Collection();
-        $paginator->getCollection()->map(function ($item) use (&$totalData, $request, $childrenPerRootLevel) {
-            $totalData->add($item);
-
-            // add nested tree for current root category
-            if (isset($childrenPerRootLevel[$item->id])) {
-                $totalData = $totalData->merge(
-                    collect($childrenPerRootLevel[$item->id])
-                );
-            }
-        });
+        $totalData = CompiledTreeCategory::getChildrenGroupsForRootLevel($paginator->getCollection());
 
         return response()->json([
             'label' => $resource::label(),
