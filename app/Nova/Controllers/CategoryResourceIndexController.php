@@ -23,31 +23,20 @@ class CategoryResourceIndexController extends ResourceIndexController
      */
     public function handle(ResourceIndexRequest $request)
     {
+        // hack to get the right resource
         $request->route()->setParameter('resource', Category::uriKey());
 
         $paginator = $this->paginator(
             $request, $resource = $request->resource()
         );
 
-        $idsLevel0 = [];
-        $paginator->getCollection()->map(function ($item) use (&$idsLevel0) {
-            $idsLevel0[] = $item->id;
-        });
-
-        $allChildren = CompiledTreeCategory::whereIn('min_pid', $idsLevel0)
-            ->select('*')
-            ->addSelect(DB::raw("CONCAT(repeat('-', max_level),' ', name) tree_name"))
-            ->orderByTree()->get();
-
-        $childrenPerRootLevel = [];
-        $allChildren->map(function ($item) use (&$childrenPerRootLevel) {
-            $childrenPerRootLevel[$item->min_pid][] = $item;
-        });
+        $childrenPerRootLevel = CompiledTreeCategory::getChildrenGroupsForRootLevel($paginator->getCollection());
 
         $totalData = new Collection();
         $paginator->getCollection()->map(function ($item) use (&$totalData, $request, $childrenPerRootLevel) {
             $totalData->add($item);
 
+            // add nested tree for current root category
             if (isset($childrenPerRootLevel[$item->id])) {
                 $totalData = $totalData->merge(
                     collect($childrenPerRootLevel[$item->id])
@@ -66,19 +55,4 @@ class CategoryResourceIndexController extends ResourceIndexController
         ]);
     }
 
-    /**
-     * Get the paginator instance for the index request.
-     *
-     * @param  ResourceIndexRequest  $request
-     * @param  string  $resource
-     * @return Paginator
-     */
-    protected function paginator(ResourceIndexRequest $request, $resource)
-    {
-        return $request->toQuery()->simplePaginate(
-            $request->viaRelationship()
-                ? $resource::$perPageViaRelationship
-                : ($request->perPage ?? $resource::perPageOptions()[0])
-        );
-    }
 }
