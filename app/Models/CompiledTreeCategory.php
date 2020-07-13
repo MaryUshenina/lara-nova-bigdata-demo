@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -25,6 +26,26 @@ class CompiledTreeCategory extends Model
         }
 
         return $query->get();
+    }
+
+    public static function getChildrenGroupsForRootLevel(Collection $collectionCompiledCategory)
+    {
+        // get root level ids
+        $idsLevel0 = $collectionCompiledCategory->pluck('id')->toArray();
+
+        $allChildren = CompiledTreeCategory::whereIn('min_pid', $idsLevel0)
+            ->select('*')
+            ->addSelect(DB::raw("CONCAT(repeat('-', max_level),' ', name) tree_name"))
+            ->orderByTree()
+            ->get();
+
+        // group by parent in root level
+        $childrenPerRootLevel = [];
+        $allChildren->map(function ($item) use (&$childrenPerRootLevel) {
+            $childrenPerRootLevel[$item->min_pid][] = $item;
+        });
+
+        return $childrenPerRootLevel;
     }
 
     public function getTreeNameAttribute()
