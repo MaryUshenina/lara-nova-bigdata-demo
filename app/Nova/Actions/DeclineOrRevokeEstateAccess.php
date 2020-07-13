@@ -16,11 +16,21 @@ class DeclineOrRevokeEstateAccess extends Action
 
     public $showOnTableRow = true;
 
-    public $confirmButtonText = 'Yes';
+    public $confirmButtonText = 'admin.revoke_agent_access.confirm';
 
-    public $cancelButtonText = 'No';
+    public $cancelButtonText = 'admin.revoke_agent_access.cancel';
 
-    public $confirmText = 'Are you sure you want to decline/revoke Estate Access level for this user?';
+    public $confirmText = 'admin.revoke_agent_access.confirmText';
+
+    /**
+     * Get the displayable label of the button.
+     *
+     * @return string
+     */
+    public function label()
+    {
+        return __('admin.revoke_agent_access.label');
+    }
 
     /**
      * Perform the action on the given models.
@@ -38,7 +48,7 @@ class DeclineOrRevokeEstateAccess extends Action
             $model->status = EstateRequest::DECLINED_STATUS;
             $model->save();
         }
-        return Action::message(__('All done'));
+        return Action::message(__('admin.revoke_agent_access.complete'));
     }
 
     /**

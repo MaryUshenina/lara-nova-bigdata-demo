@@ -52,7 +52,7 @@ class Category extends Resource
 
             $this->getNameField($request),
 
-            HasMany::make(__('Children categories'), 'childrenCategories', Category::class),
+            HasMany::make(__('resource.categories.children_categories'), 'childrenCategories', Category::class),
         ];
     }
 
@@ -140,7 +140,7 @@ class Category extends Resource
             self::$allCategoriesOptions = [0 => 'root'] + $all; // dont use array_merge to keep keys
         }
 
-        return Select::make(__('Parent category'), 'pid')
+        return Select::make(__('resource.categories.parent_category'), 'pid')
             ->options(self::$allCategoriesOptions)
             ->rules('required', Rule::notIn([$this->id ?? -1]))
             ->onlyOnForms()
@@ -153,7 +153,7 @@ class Category extends Resource
      */
     private function getNameField(Request $request)
     {
-        return Text::make(__('Name'), 'name')
+        return Text::make(__('resource.categories.name'), 'name')
             ->displayUsing(function () use ($request) {
                 return $request->isResourceIndexRequest() ? $this->tree_name : $this->name;
             })
@@ -170,7 +170,7 @@ class Category extends Resource
      */
     public static function label()
     {
-        return __('Categories');
+        return __('resource.categories.multiple_label');
     }
 
     /**
@@ -180,6 +180,6 @@ class Category extends Resource
      */
     public static function singularLabel()
     {
-        return __('Category');
+        return __('resource.categories.singular_label');
     }
 }

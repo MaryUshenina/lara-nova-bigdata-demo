@@ -110,6 +110,6 @@ class AdsPrices extends CustomPartitionValue implements CacheCallbackInterface, 
      */
     public function name()
     {
-        return __( 'Prices');
+        return __('metrics.prices');
     }
 }

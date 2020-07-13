@@ -48,7 +48,7 @@ class EstateRequest extends Resource
     public function fields(Request $request)
     {
         return [
-            BelongsTo::make(__('User'), 'user', User::class)
+            BelongsTo::make(__('resource.estate_request.user'), 'user', User::class)
                 ->readonly(),
 
             $this->getStatusField(),
@@ -62,7 +62,7 @@ class EstateRequest extends Resource
      */
     private function getStatusField()
     {
-        return Select::make(__('Status'), 'status')->options(self::$model::STATUSES)
+        return Select::make(__('resource.estate_request.status'), 'status')->options(self::$model::STATUSES)
             ->displayUsingLabels()
             ->sortable()
             ->rules('required', Rule::in(array_keys(self::$model::STATUSES)));
@@ -73,7 +73,7 @@ class EstateRequest extends Resource
      */
     private function getCommentField()
     {
-        return Textarea::make(__('Comment'), 'comment')
+        return Textarea::make(__('resource.estate_request.Comment'), 'comment')
             ->alwaysShow()
             ->rules('max:255');
     }
@@ -144,7 +144,7 @@ class EstateRequest extends Resource
      */
     public static function label()
     {
-        return __('Estate Agent Requests');
+        return __('resource.estate_request.multiple_label');
     }
 
     /**
@@ -154,7 +154,7 @@ class EstateRequest extends Resource
      */
     public static function singularLabel()
     {
-        return __('Estate Agent Request');
+        return __('resource.estate_request.singular_label');
     }
 
 }
