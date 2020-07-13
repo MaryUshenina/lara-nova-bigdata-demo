@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class PriceRangeFilter extends RangeInputFilter
 {
-    public $name = 'Price';
 
     public function __construct()
     {
@@ -42,7 +41,7 @@ class PriceRangeFilter extends RangeInputFilter
      */
     public function name()
     {
-        return __( 'Price');
+        return __( 'filters.price');
     }
 
 }

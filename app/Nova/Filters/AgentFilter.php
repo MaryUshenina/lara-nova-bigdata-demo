@@ -16,8 +16,6 @@ class AgentFilter extends Filter
      */
     public $component = 'select-filter';
 
-    public $name = 'Agent';
-
     /**
      * Apply the filter to the given query.
      *
@@ -51,7 +49,7 @@ class AgentFilter extends Filter
      */
     public function name()
     {
-        return __( 'Agent');
+        return __( 'filters.agent');
     }
 
 }

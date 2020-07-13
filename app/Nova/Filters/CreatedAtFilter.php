@@ -9,7 +9,6 @@ use Laravel\Nova\Filters\DateFilter;
 
 class CreatedAtFilter extends DateFilter
 {
-    public $name = 'Created at';
 
     /**
      * Apply the filter to the given query.
@@ -33,6 +32,6 @@ class CreatedAtFilter extends DateFilter
      */
     public function name()
     {
-        return __( 'Created at');
+        return __( 'filters.created_at');
     }
 }
