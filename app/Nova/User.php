@@ -77,7 +77,7 @@ class User extends Resource implements PostSizeInterface
      */
     private function getAvatarField()
     {
-        return Avatar::make(__('Avatar'), 'avatar')
+        return Avatar::make(__('resource.user.avatar'), 'avatar')
             ->rules("image", "max:".self::getMaxPostSizeInKiloBytes())
             ->disableDownload();
     }
@@ -87,7 +87,7 @@ class User extends Resource implements PostSizeInterface
      */
     private function getNameField()
     {
-        return Text::make('Name')
+        return Text::make(__('resource.user.name'), 'name')
             ->sortable()
             ->rules('required', 'max:255');
     }
@@ -97,7 +97,7 @@ class User extends Resource implements PostSizeInterface
      */
     private function getEmailField()
     {
-        return Text::make('Email')
+        return Text::make(__('resource.user.email'), 'email')
             ->sortable()
             ->rules('required', 'email', 'max:254')
             ->creationRules('unique:users,email')
@@ -109,7 +109,7 @@ class User extends Resource implements PostSizeInterface
      */
     private function getPasswordField()
     {
-        return Password::make('Password')
+        return Password::make(__('resource.user.password'))
             ->onlyOnForms()
             ->updateRules('nullable', 'confirmed', 'string', 'min:8');
     }
@@ -119,7 +119,7 @@ class User extends Resource implements PostSizeInterface
      */
     private function getPasswordConfirmField()
     {
-        return PasswordConfirmation::make(__('Password Confirmation'));
+        return PasswordConfirmation::make(__('resource.user.password_confirmation'));
     }
 
     /**
@@ -127,7 +127,7 @@ class User extends Resource implements PostSizeInterface
      */
     private function getRoleField()
     {
-        return Select::make(__('Role'), 'role')->options(self::$model::ROLES)
+        return Select::make(__('resource.user.role'), 'role')->options(self::$model::ROLES)
             ->displayUsingLabels()
             ->onlyOnIndex()
             ->readonly()
@@ -197,7 +197,7 @@ class User extends Resource implements PostSizeInterface
      */
     public static function label()
     {
-        return __('Users');
+        return __('resource.user.multiple_label');
     }
 
     /**
@@ -207,7 +207,7 @@ class User extends Resource implements PostSizeInterface
      */
     public static function singularLabel()
     {
-        return __('User');
+        return __('resource.user.singular_label');
     }
 
 }
