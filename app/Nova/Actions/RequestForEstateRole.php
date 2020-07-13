@@ -18,11 +18,11 @@ class RequestForEstateRole extends DetachedAction
 
     public $showOnIndexToolbar = false;
 
-    public $confirmButtonText = 'Send';
+    public $confirmButtonText = 'agent.estate_access_request.confirm';
 
-    public $cancelButtonText = 'Cancel';
+    public $cancelButtonText = 'agent.estate_access_request.cancel';
 
-    public $confirmText = 'Are you sure you want to send request to become Estate user?';
+    public $confirmText = 'agent.estate_access_request.confirmText';
 
 
     /**
@@ -32,7 +32,7 @@ class RequestForEstateRole extends DetachedAction
      */
     public function label()
     {
-        return __('Send request for Estate role');
+        return __('agent.estate_access_request.label');
     }
 
     /**
@@ -44,12 +44,12 @@ class RequestForEstateRole extends DetachedAction
     public function handle(ActionFields $fields)
     {
         if (!Auth::user()->can('runEstateRequest', User::class)) {
-            return DetachedAction::danger(__('Your request was already sent earlier, please wait for admin response'));
+            return DetachedAction::danger(__('agent.estate_access_request.already_sent'));
         }
 
         EstateRequest::create(['user_id' => Auth::user()->id]);
 
-        return DetachedAction::message(__('Your request is sent to admin and will be reviewed in several days'));
+        return DetachedAction::danger(__('agent.estate_access_request.sent'));
     }
 
     /**

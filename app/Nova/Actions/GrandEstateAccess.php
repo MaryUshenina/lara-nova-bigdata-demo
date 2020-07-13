@@ -17,11 +17,22 @@ class GrandEstateAccess extends Action
 
     public $showOnTableRow = true;
 
-    public $confirmButtonText = 'Yes';
+    public $confirmButtonText = 'admin.estate_access_request.confirm';
 
-    public $cancelButtonText = 'No';
+    public $cancelButtonText = 'admin.estate_access_request.cancel';
 
-    public $confirmText = 'Are you sure you want to grand Estate Access level for this user?';
+    public $confirmText = 'admin.estate_access_request.confirmText';
+
+
+    /**
+     * Get the displayable label of the button.
+     *
+     * @return string
+     */
+    public function label()
+    {
+        return __('admin.estate_access_request.label');
+    }
 
     /**
      * Perform the action on the given models.
@@ -40,7 +51,7 @@ class GrandEstateAccess extends Action
             $model->save();
         }
 
-        return Action::message(__('All done'));
+        return Action::message(__('admin.estate_access_request.complete'));
     }
 
     /**
