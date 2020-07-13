@@ -96,6 +96,6 @@ class NewUsers extends Value implements SplitDatesAggregateValueInterface, Cache
      */
     public function name()
     {
-        return __( 'New users');
+        return __('metrics.new_users');
     }
 }

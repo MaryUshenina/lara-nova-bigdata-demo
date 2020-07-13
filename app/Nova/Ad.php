@@ -202,7 +202,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
             self::$allCategoriesOptions = CompiledTreeCategory::getRawDataArray($isForm, false);
         }
 
-        return BelongsToManyField::make(__('Categories'), 'categories', Category::class)
+        return BelongsToManyField::make(__( 'resource.ads.categories'), 'categories', Category::class)
             ->options(self::$allCategoriesOptions)
             ->optionsLabel($isForm ? 'tree_name' : 'name')
             ->rules('nullable')
@@ -214,7 +214,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getMainImageField()
     {
-        return Image::make(__('Image'), 'photo')
+        return Image::make(__('resource.ads.photo'), 'photo')
             ->displayUsing(function () {
                 return $this->photo ?? 'no_image.png';
             })
@@ -227,7 +227,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getTitleLinkField()
     {
-        return RouterLink::make(__('Title'), 'title')
+        return RouterLink::make(__('resource.ads.title'), 'title')
             ->route('detail',
                 [
                     'resourceName' => 'ads',
@@ -243,7 +243,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getTitleField()
     {
-        return Text::make(__('Title'), 'title')
+        return Text::make(__('resource.ads.title'), 'title')
             ->hideFromIndex()
             ->rules('required', 'max:255');
 
@@ -254,7 +254,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getCreatedField()
     {
-        return Text::make(__('Created'), function () {
+        return Text::make(__('resource.ads.created'), function () {
             return $this->created_at_date->format('m.d.y');
         })
             ->asHtml();
@@ -267,7 +267,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getDescriptionIndexField()
     {
-        return TextWrap::make(__('Description'), 'description')
+        return TextWrap::make(__('resource.ads.description'), 'description')
             ->rules('required', 'max:1000')
             ->displayUsing(function ($str) {
                 return Str::limit($str, 255);
@@ -282,7 +282,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getDescriptionOtherField()
     {
-        return Textarea::make(__('Description'), 'description')
+        return Textarea::make(__('resource.ads.description'), 'description')
             ->alwaysShow()
             ->rules('required', 'max:1000');
     }
@@ -292,7 +292,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getPriceField()
     {
-        return Text::make(__('Price'), 'price')
+        return Text::make(__('resource.ads.price'), 'price')
             ->hideFromIndex()
             ->rules('required', 'numeric', 'between:0,99999.99', 'regex:/^\d+(\.\d{1,2})?$/');
     }
@@ -302,7 +302,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getEmailField()
     {
-        return Text::make(__('Email'), 'email')
+        return Text::make(__('resource.ads.email'), 'email')
             ->hideFromIndex()
             ->rules('required', 'email', 'max:254');
     }
@@ -312,7 +312,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getPhoneField()
     {
-        return InputMask::make(__('Phone'), 'phone')
+        return InputMask::make(__('resource.ads.phone'), 'phone')
             ->mask('+1 (###) ###-####')
             ->hideFromIndex()
             ->rules('required');
@@ -323,7 +323,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getCountryField()
     {
-        return Select::make(__('Country'), 'country')
+        return Select::make(__('resource.ads.country'), 'country')
             ->options(Countries::getList(config('app.locale')))
             ->rules('required')
             ->hideFromIndex()
@@ -336,7 +336,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getEndDateField()
     {
-        return Date::make(__('End date'), 'end_date')
+        return Date::make(__('resource.ads.end_date'), 'end_date')
             ->onlyOnForms()
             ->rules('required', 'date_format:Y-m-d');
     }
@@ -347,7 +347,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getGoogleMapFiled(Request $request)
     {
-        return NovaGoogleMaps::make(__('Address'), 'location')
+        return NovaGoogleMaps::make(__('resource.ads.address'), 'location')
             ->hideFromIndex()
             ->rules([
                 Rule::requiredIf(function () use ($request) {
@@ -368,7 +368,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     private function getWithoutAddressField()
     {
-        return Boolean::make(__('Save without address'), 'save_without_address')
+        return Boolean::make(__('resource.ads.save_without_address'), 'save_without_address')
             ->onlyOnForms();
     }
 
@@ -380,7 +380,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     public static function label()
     {
-        return __('Ads');
+        return __('resource.ads.multiple_label');
     }
 
     /**
@@ -390,7 +390,7 @@ class Ad extends Resource implements IsFilteredInterface, PostSizeInterface
      */
     public static function singularLabel()
     {
-        return __('Ad');
+        return __('resource.ads.singular_label');
     }
 
 }

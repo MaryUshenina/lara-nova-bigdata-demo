@@ -102,7 +102,7 @@ class AdsAvailability extends CustomValue implements CacheCallbackInterface, Fil
      */
     public function name()
     {
-        return __( 'Availability');
+        return __('metrics.availability');
     }
 
 }

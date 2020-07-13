@@ -16,8 +16,6 @@ class CountryFilter extends Filter
      */
     public $component = 'select-filter';
 
-    public $name = 'Country';
-
     /**
      * Apply the filter to the given query.
      *
@@ -49,6 +47,6 @@ class CountryFilter extends Filter
      */
     public function name()
     {
-        return __( 'Country');
+        return __( 'filters.country');
     }
 }

@@ -17,8 +17,6 @@ class CategoriesFilter extends NovaSelect2Filter
      */
     public $component = 'nova-select2-filter';
 
-    public $name = 'Categories';
-
     /**
      * Apply the filter to the given query.
      *
@@ -52,7 +50,7 @@ class CategoriesFilter extends NovaSelect2Filter
      */
     public function name()
     {
-        return __( 'Categories');
+        return __( 'filters.categories');
     }
 
 }
